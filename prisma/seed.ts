@@ -6,7 +6,8 @@ import { PrismaClient } from "../src/generated/prisma/client";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
-const prisma = new (PrismaClient as never)({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const prisma = new (PrismaClient as any)({
   adapter,
 }) as InstanceType<typeof PrismaClient>;
 
