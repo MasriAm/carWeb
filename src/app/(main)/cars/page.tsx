@@ -12,8 +12,9 @@ import type { VehicleFilterInput } from "@/lib/validations/vehicle";
 import { Car } from "lucide-react";
 
 export const metadata = {
-  title: "Cars — Royal Cars",
-  description: "Browse all luxury vehicles available in Jordan.",
+  title: "Browse Cars",
+  description:
+    "Search and filter luxury vehicles available in Jordan. Mercedes, BMW, Porsche, Toyota, and more from trusted dealers.",
 };
 
 interface CarsPageProps {

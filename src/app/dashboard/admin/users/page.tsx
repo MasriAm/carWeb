@@ -2,7 +2,7 @@ import { requireRole } from "@/lib/auth-utils";
 import { getAllUsers } from "@/lib/actions/admin";
 import UsersAdminTable from "@/components/dashboard/admin/users-table";
 
-export const metadata = { title: "Manage Users — Royal Cars Admin" };
+export const metadata = { title: "Manage Users" };
 
 export default async function AdminUsersPage() {
   await requireRole(["ADMIN"]);

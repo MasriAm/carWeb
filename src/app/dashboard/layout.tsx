@@ -2,7 +2,7 @@ import { requireAuth } from "@/lib/auth-utils";
 import DashboardShell from "@/components/dashboard/dashboard-shell";
 
 export const metadata = {
-  title: "Dashboard — Royal Cars",
+  title: "Dashboard",
 };
 
 export default async function DashboardLayout({

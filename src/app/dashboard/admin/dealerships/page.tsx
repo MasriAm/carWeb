@@ -2,7 +2,7 @@ import { requireRole } from "@/lib/auth-utils";
 import { getAllDealerships } from "@/lib/actions/admin";
 import DealershipsAdminTable from "@/components/dashboard/admin/dealerships-table";
 
-export const metadata = { title: "Manage Dealerships — Royal Cars Admin" };
+export const metadata = { title: "Manage Dealerships" };
 
 export default async function AdminDealershipsPage() {
   await requireRole(["ADMIN"]);

@@ -2,7 +2,7 @@ import { requireRole } from "@/lib/auth-utils";
 import { getMyDealership } from "@/lib/actions/dealership";
 import DealershipForm from "@/components/dashboard/dealership-form";
 
-export const metadata = { title: "Dealership Profile — Royal Cars" };
+export const metadata = { title: "Dealership Profile" };
 
 export default async function DealershipPage() {
   await requireRole(["DEALER", "ADMIN"]);

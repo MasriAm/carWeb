@@ -3,7 +3,7 @@ import { getMyVehicles } from "@/lib/actions/dealership";
 import VehicleTable from "@/components/dashboard/vehicle-table";
 import { Car } from "lucide-react";
 
-export const metadata = { title: "My Vehicles — Royal Cars" };
+export const metadata = { title: "My Vehicles" };
 
 export default async function MyVehiclesPage() {
   await requireRole(["DEALER", "ADMIN"]);

@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import CarCard from "@/components/cars/car-card";
 import { Heart } from "lucide-react";
 
-export const metadata = { title: "Saved Cars — Royal Cars" };
+export const metadata = { title: "Saved Cars" };
 
 export default async function SavedPage() {
   const user = await requireAuth();
