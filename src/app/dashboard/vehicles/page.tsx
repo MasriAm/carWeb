@@ -13,8 +13,8 @@ export default async function MyVehiclesPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900 mb-1">My Vehicles</h1>
-          <p className="text-neutral-500">
+          <h1 className="text-2xl font-bold text-zinc-100 mb-1">My Vehicles</h1>
+          <p className="text-zinc-400">
             {vehicles.length} listing{vehicles.length !== 1 ? "s" : ""} total.
           </p>
         </div>
@@ -22,11 +22,11 @@ export default async function MyVehiclesPage() {
 
       {vehicles.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Car className="h-16 w-16 text-neutral-300 mb-4" />
-          <h2 className="text-xl font-semibold text-neutral-700 mb-2">
+          <Car className="h-16 w-16 text-zinc-700 mb-4" />
+          <h2 className="text-xl font-semibold text-zinc-300 mb-2">
             No vehicles listed yet
           </h2>
-          <p className="text-neutral-500">
+          <p className="text-zinc-500">
             Your vehicle listings will appear here.
           </p>
         </div>

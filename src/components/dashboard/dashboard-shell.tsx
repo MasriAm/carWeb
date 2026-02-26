@@ -15,6 +15,8 @@ import {
   Menu,
   X,
   Crown,
+  ArrowLeft,
+  UserCog,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -29,6 +31,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: <LayoutDashboard className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
   { label: "Saved Cars", href: "/dashboard/saved", icon: <Heart className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
+  { label: "Profile Settings", href: "/dashboard/profile", icon: <UserCog className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
   { label: "My Vehicles", href: "/dashboard/vehicles", icon: <Car className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
   { label: "Dealership", href: "/dashboard/dealership", icon: <Building2 className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
   { label: "All Users", href: "/dashboard/admin/users", icon: <Users className="h-4 w-4" />, roles: ["ADMIN"] },
@@ -52,23 +55,33 @@ export default function DashboardShell({
     href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
 
   const navContent = (
-    <nav className="flex flex-col gap-1 flex-1">
-      {filteredNav.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href}
-          onClick={() => setMobileOpen(false)}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-            isActive(item.href)
-              ? "bg-amber-500 text-zinc-950"
-              : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-          }`}
-        >
-          {item.icon}
-          {item.label}
-        </Link>
-      ))}
-    </nav>
+    <>
+      <Link
+        href="/"
+        onClick={() => setMobileOpen(false)}
+        className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-amber-500 hover:bg-amber-500/10 transition-colors mb-2"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to Marketplace
+      </Link>
+      <nav className="flex flex-col gap-1 flex-1">
+        {filteredNav.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            onClick={() => setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              isActive(item.href)
+                ? "bg-amber-500 text-zinc-950"
+                : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+            }`}
+          >
+            {item.icon}
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+    </>
   );
 
   return (

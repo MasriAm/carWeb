@@ -10,8 +10,8 @@ export default async function AdminUsersPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-neutral-900 mb-1">All Users</h1>
-      <p className="text-neutral-500 mb-8">
+      <h1 className="text-2xl font-bold text-zinc-100 mb-1">All Users</h1>
+      <p className="text-zinc-400 mb-8">
         {users.length} registered user{users.length !== 1 ? "s" : ""}.
       </p>
       <UsersAdminTable users={users} />

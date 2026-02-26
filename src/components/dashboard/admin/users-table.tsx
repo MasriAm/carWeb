@@ -68,36 +68,36 @@ export default function UsersAdminTable({ users }: { users: UserRow[] }) {
   const roleBadgeColor = (role: Role) => {
     switch (role) {
       case "ADMIN":
-        return "bg-purple-100 text-purple-700 hover:bg-purple-100";
+        return "bg-purple-500/10 text-purple-400 border-purple-500/20";
       case "DEALER":
-        return "bg-blue-100 text-blue-700 hover:bg-blue-100";
+        return "bg-blue-500/10 text-blue-400 border-blue-500/20";
       default:
-        return "bg-neutral-100 text-neutral-700 hover:bg-neutral-100";
+        return "bg-zinc-700 text-zinc-300";
     }
   };
 
   return (
     <>
-      <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Vehicles</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Joined</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+            <TableRow className="border-zinc-800 hover:bg-zinc-900">
+              <TableHead className="text-zinc-400">Name</TableHead>
+              <TableHead className="text-zinc-400">Email</TableHead>
+              <TableHead className="text-zinc-400">Role</TableHead>
+              <TableHead className="text-zinc-400">Vehicles</TableHead>
+              <TableHead className="text-zinc-400">Status</TableHead>
+              <TableHead className="text-zinc-400">Joined</TableHead>
+              <TableHead className="text-right text-zinc-400">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users.map((u) => (
-              <TableRow key={u.id}>
-                <TableCell className="font-medium">
+              <TableRow key={u.id} className="border-zinc-800 hover:bg-zinc-800/50">
+                <TableCell className="font-medium text-zinc-200">
                   {u.name || "—"}
                 </TableCell>
-                <TableCell className="text-sm text-neutral-500">
+                <TableCell className="text-sm text-zinc-400">
                   {u.email}
                 </TableCell>
                 <TableCell>
@@ -105,50 +105,50 @@ export default function UsersAdminTable({ users }: { users: UserRow[] }) {
                     value={u.role}
                     onValueChange={(v) => handleRoleChange(u.id, v)}
                   >
-                    <SelectTrigger className="w-28 h-8 text-xs">
+                    <SelectTrigger className="w-28 h-8 text-xs bg-zinc-800 border-zinc-700 text-zinc-200">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-zinc-900 border-zinc-700">
                       <SelectItem value="USER">User</SelectItem>
                       <SelectItem value="DEALER">Dealer</SelectItem>
                       <SelectItem value="ADMIN">Admin</SelectItem>
                     </SelectContent>
                   </Select>
                 </TableCell>
-                <TableCell>{u._count.vehicles}</TableCell>
+                <TableCell className="text-zinc-400">{u._count.vehicles}</TableCell>
                 <TableCell>
                   <Badge
                     variant="secondary"
                     className={
                       u.isSuspended
-                        ? "bg-red-100 text-red-700 hover:bg-red-100"
-                        : "bg-green-100 text-green-700 hover:bg-green-100"
+                        ? "bg-red-500/10 text-red-400 border-red-500/20"
+                        : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                     }
                   >
                     {u.isSuspended ? "Suspended" : "Active"}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-sm text-neutral-500">
+                <TableCell className="text-sm text-zinc-500">
                   {new Date(u.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="text-right space-x-1">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8"
+                    className="h-8 w-8 hover:bg-zinc-700"
                     onClick={() => handleToggleSuspend(u.id)}
                     title={u.isSuspended ? "Unsuspend" : "Suspend"}
                   >
                     {u.isSuspended ? (
-                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <CheckCircle className="h-4 w-4 text-emerald-500" />
                     ) : (
-                      <Ban className="h-4 w-4 text-orange-500" />
+                      <Ban className="h-4 w-4 text-orange-400" />
                     )}
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-red-500 hover:text-red-700"
+                    className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-zinc-700"
                     onClick={() => setDeleteId(u.id)}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -161,15 +161,15 @@ export default function UsersAdminTable({ users }: { users: UserRow[] }) {
       </div>
 
       <Dialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-        <DialogContent>
+        <DialogContent className="bg-zinc-900 border-zinc-800">
           <DialogHeader>
-            <DialogTitle>Delete User</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-zinc-100">Delete User</DialogTitle>
+            <DialogDescription className="text-zinc-400">
               This will permanently delete this user and all their data. This cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteId(null)}>
+            <Button variant="outline" onClick={() => setDeleteId(null)} className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleDelete} disabled={loading}>

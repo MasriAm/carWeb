@@ -10,10 +10,10 @@ export default async function DealershipPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-neutral-900 mb-1">
+      <h1 className="text-2xl font-bold text-zinc-100 mb-1">
         {dealership ? "Dealership Profile" : "Create Your Dealership"}
       </h1>
-      <p className="text-neutral-500 mb-8">
+      <p className="text-zinc-400 mb-8">
         {dealership
           ? "Update your dealership information."
           : "Set up your dealership to start listing vehicles."}

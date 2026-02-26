@@ -25,16 +25,16 @@ export default async function SavedPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-neutral-900 mb-1">Saved Cars</h1>
-      <p className="text-neutral-500 mb-8">
+      <h1 className="text-2xl font-bold text-zinc-100 mb-1">Saved Cars</h1>
+      <p className="text-zinc-400 mb-8">
         {saved.length} vehicle{saved.length !== 1 ? "s" : ""} in your wishlist.
       </p>
 
       {saved.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Heart className="h-16 w-16 text-neutral-300 mb-4" />
-          <h2 className="text-xl font-semibold text-neutral-700 mb-2">No saved cars yet</h2>
-          <p className="text-neutral-500 max-w-md">
+          <Heart className="h-16 w-16 text-zinc-700 mb-4" />
+          <h2 className="text-xl font-semibold text-zinc-300 mb-2">No saved cars yet</h2>
+          <p className="text-zinc-500 max-w-md">
             Browse our collection and tap the heart icon to save vehicles you like.
           </p>
         </div>

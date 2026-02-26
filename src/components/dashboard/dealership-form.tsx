@@ -60,93 +60,100 @@ export default function DealershipForm({
   };
 
   return (
-    <Card className="bg-white">
+    <Card className="bg-zinc-900 border-zinc-800">
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg">
+            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg">
               {error}
             </div>
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Dealership Name *</Label>
+              <Label htmlFor="name" className="text-zinc-200">Dealership Name *</Label>
               <Input
                 id="name"
                 name="name"
                 required
                 defaultValue={dealership?.name ?? ""}
                 placeholder="Amman Luxury Motors"
+                className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="slug">URL Slug *</Label>
+              <Label htmlFor="slug" className="text-zinc-200">URL Slug *</Label>
               <Input
                 id="slug"
                 name="slug"
                 required
                 defaultValue={dealership?.slug ?? ""}
                 placeholder="amman-luxury-motors"
+                className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description" className="text-zinc-200">Description</Label>
             <Textarea
               id="description"
               name="description"
               rows={3}
               defaultValue={dealership?.description ?? ""}
               placeholder="Tell buyers about your dealership..."
+              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="logoUrl">Logo URL</Label>
+            <Label htmlFor="logoUrl" className="text-zinc-200">Logo URL</Label>
             <Input
               id="logoUrl"
               name="logoUrl"
               type="url"
               defaultValue={dealership?.logoUrl ?? ""}
               placeholder="https://..."
+              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
+              <Label htmlFor="phone" className="text-zinc-200">Phone</Label>
               <Input
                 id="phone"
                 name="phone"
                 defaultValue={dealership?.phone ?? ""}
                 placeholder="+962791234567"
+                className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="website">Website</Label>
+              <Label htmlFor="website" className="text-zinc-200">Website</Label>
               <Input
                 id="website"
                 name="website"
                 type="url"
                 defaultValue={dealership?.website ?? ""}
                 placeholder="https://example.com"
+                className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="address">Address</Label>
+            <Label htmlFor="address" className="text-zinc-200">Address</Label>
             <Input
               id="address"
               name="address"
               defaultValue={dealership?.address ?? ""}
               placeholder="Abdali Boulevard, Amman, Jordan"
+              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
             />
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+          <Button type="submit" disabled={loading} className="w-full sm:w-auto bg-amber-500 text-zinc-950 hover:bg-amber-400">
             {loading
               ? "Saving..."
               : dealership

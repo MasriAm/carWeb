@@ -3,9 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Crown, Menu, LogIn, UserPlus, LayoutDashboard } from "lucide-react";
+import { Crown, Menu, LogIn, UserPlus, LayoutDashboard, LogOut, User } from "lucide-react";
 import { useSession } from "@/lib/session-provider";
 
 const navLinks = [
@@ -25,6 +33,15 @@ export default function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "U";
 
   return (
     <header
@@ -66,15 +83,40 @@ export default function Header() {
 
           <div className="hidden md:flex items-center gap-2">
             {user ? (
-              <Link href="/dashboard">
-                <Button
-                  size="sm"
-                  className="rounded-full bg-amber-500 text-zinc-950 hover:bg-amber-400"
-                >
-                  <LayoutDashboard className="mr-2 h-4 w-4" />
-                  Dashboard
-                </Button>
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 rounded-full bg-zinc-800 border border-zinc-700 pl-3 pr-1 py-1 hover:bg-zinc-700 transition-colors">
+                    <span className="text-sm font-medium text-zinc-300 max-w-[120px] truncate">
+                      {user.name || "Account"}
+                    </span>
+                    <div className="h-7 w-7 rounded-full bg-amber-500 text-zinc-950 flex items-center justify-center text-xs font-bold shrink-0">
+                      {initials}
+                    </div>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 bg-zinc-900 border-zinc-800">
+                  <DropdownMenuItem asChild className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer">
+                    <Link href="/dashboard" className="flex items-center gap-2">
+                      <LayoutDashboard className="h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer">
+                    <Link href="/dashboard/profile" className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      Profile Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-zinc-800" />
+                  <DropdownMenuItem
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="text-red-400 focus:bg-zinc-800 focus:text-red-300 cursor-pointer"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <>
                 <Link href="/login">
@@ -132,13 +174,31 @@ export default function Header() {
                 ))}
                 <div className="border-t border-zinc-800 my-4" />
                 {user ? (
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setOpen(false)}
-                    className="px-4 py-3 rounded-lg text-sm font-medium bg-amber-500 text-zinc-950 text-center"
-                  >
-                    Dashboard
-                  </Link>
+                  <>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setOpen(false)}
+                      className="px-4 py-3 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-900 hover:text-white"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      href="/dashboard/profile"
+                      onClick={() => setOpen(false)}
+                      className="px-4 py-3 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-900 hover:text-white"
+                    >
+                      Profile Settings
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setOpen(false);
+                        signOut({ callbackUrl: "/" });
+                      }}
+                      className="px-4 py-3 rounded-lg text-sm font-medium text-red-400 hover:bg-zinc-900 text-left"
+                    >
+                      Sign Out
+                    </button>
+                  </>
                 ) : (
                   <>
                     <Link

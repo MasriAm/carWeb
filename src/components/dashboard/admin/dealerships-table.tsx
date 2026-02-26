@@ -51,44 +51,44 @@ export default function DealershipsAdminTable({
 
   return (
     <>
-      <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Slug</TableHead>
-              <TableHead>Owner</TableHead>
-              <TableHead>Vehicles</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+            <TableRow className="border-zinc-800 hover:bg-zinc-900">
+              <TableHead className="text-zinc-400">Name</TableHead>
+              <TableHead className="text-zinc-400">Slug</TableHead>
+              <TableHead className="text-zinc-400">Owner</TableHead>
+              <TableHead className="text-zinc-400">Vehicles</TableHead>
+              <TableHead className="text-zinc-400">Phone</TableHead>
+              <TableHead className="text-zinc-400">Created</TableHead>
+              <TableHead className="text-right text-zinc-400">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {dealerships.map((d) => (
-              <TableRow key={d.id}>
-                <TableCell className="font-medium">{d.name}</TableCell>
+              <TableRow key={d.id} className="border-zinc-800 hover:bg-zinc-800/50">
+                <TableCell className="font-medium text-zinc-200">{d.name}</TableCell>
                 <TableCell>
-                  <Badge variant="secondary" className="text-xs font-mono">
+                  <Badge variant="secondary" className="text-xs font-mono bg-zinc-800 text-zinc-300 border-zinc-700">
                     {d.slug}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-sm">
-                  <span className="block">{d.user.name || "—"}</span>
-                  <span className="text-xs text-neutral-400">{d.user.email}</span>
+                  <span className="block text-zinc-300">{d.user.name || "—"}</span>
+                  <span className="text-xs text-zinc-500">{d.user.email}</span>
                 </TableCell>
-                <TableCell>{d._count.vehicles}</TableCell>
-                <TableCell className="text-sm text-neutral-500">
+                <TableCell className="text-zinc-400">{d._count.vehicles}</TableCell>
+                <TableCell className="text-sm text-zinc-400">
                   {d.phone || "—"}
                 </TableCell>
-                <TableCell className="text-sm text-neutral-500">
+                <TableCell className="text-sm text-zinc-500">
                   {new Date(d.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="text-right">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-red-500 hover:text-red-700"
+                    className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-zinc-700"
                     onClick={() => setDeleteId(d.id)}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -101,15 +101,15 @@ export default function DealershipsAdminTable({
       </div>
 
       <Dialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-        <DialogContent>
+        <DialogContent className="bg-zinc-900 border-zinc-800">
           <DialogHeader>
-            <DialogTitle>Delete Dealership</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-zinc-100">Delete Dealership</DialogTitle>
+            <DialogDescription className="text-zinc-400">
               This will remove the dealership profile. Vehicle listings from this dealership will remain but lose their dealership association.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteId(null)}>
+            <Button variant="outline" onClick={() => setDeleteId(null)} className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleDelete} disabled={loading}>
