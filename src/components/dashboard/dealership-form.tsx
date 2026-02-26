@@ -17,6 +17,7 @@ type DealershipData = {
   logoUrl: string | null;
   address: string | null;
   phone: string | null;
+  whatsappNumber: string | null;
   website: string | null;
 } | null;
 
@@ -42,6 +43,7 @@ export default function DealershipForm({
       logoUrl: (form.get("logoUrl") as string) || "",
       address: (form.get("address") as string) || "",
       phone: (form.get("phone") as string) || "",
+      whatsappNumber: (form.get("whatsappNumber") as string) || "",
       website: (form.get("website") as string) || "",
     };
 
@@ -130,16 +132,28 @@ export default function DealershipForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="website" className="text-zinc-200">Website</Label>
+              <Label htmlFor="whatsappNumber" className="text-zinc-200">WhatsApp Number</Label>
               <Input
-                id="website"
-                name="website"
-                type="url"
-                defaultValue={dealership?.website ?? ""}
-                placeholder="https://example.com"
+                id="whatsappNumber"
+                name="whatsappNumber"
+                defaultValue={dealership?.whatsappNumber ?? ""}
+                placeholder="962791234567"
                 className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
               />
+              <p className="text-xs text-zinc-600">Country code without + (e.g. 962791234567)</p>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="website" className="text-zinc-200">Website</Label>
+            <Input
+              id="website"
+              name="website"
+              type="url"
+              defaultValue={dealership?.website ?? ""}
+              placeholder="https://example.com"
+              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+            />
           </div>
 
           <div className="space-y-2">

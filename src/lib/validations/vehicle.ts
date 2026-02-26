@@ -57,6 +57,8 @@ export const createVehicleSchema = z.object({
     .max(new Date().getFullYear() + 1),
 
   detailedSpecs: z.array(z.string()).optional().default([]),
+
+  specificWhatsapp: z.string().max(20).optional().or(z.literal("")),
 });
 
 export const updateVehicleSchema = createVehicleSchema.partial().extend({

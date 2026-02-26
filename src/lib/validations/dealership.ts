@@ -18,6 +18,11 @@ export const createDealershipSchema = z.object({
     .regex(/^\+?[0-9]{7,15}$/, "Invalid phone number")
     .optional()
     .or(z.literal("")),
+  whatsappNumber: z
+    .string()
+    .regex(/^[0-9]{7,15}$/, "WhatsApp number: digits only, no + prefix")
+    .optional()
+    .or(z.literal("")),
   website: z.string().url().optional().or(z.literal("")),
 });
 

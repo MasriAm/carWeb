@@ -12,6 +12,7 @@ import {
 } from "@/lib/validations/vehicle";
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@/generated/prisma/client";
+import { formatJordanPhone } from "@/lib/format-jordan-phone";
 
 // ─── READ ──────────────────────────────────────────────────────
 
@@ -64,8 +65,8 @@ export async function getVehicles(rawFilters: Partial<VehicleFilterInput> = {}) 
       skip,
       take: limit,
       include: {
-        dealership: { select: { name: true, slug: true } },
-        user: { select: { name: true } },
+        dealership: { select: { name: true, slug: true, whatsappNumber: true, phone: true } },
+        user: { select: { name: true, phone: true } },
       },
     }),
     db.vehicle.count({ where }),
@@ -129,6 +130,7 @@ export async function createVehicle(input: CreateVehicleInput) {
     data: {
       ...data,
       videoUrl: data.videoUrl || null,
+      specificWhatsapp: data.specificWhatsapp ? formatJordanPhone(data.specificWhatsapp) : null,
       userId: session.user.id,
       detailedSpecs: data.detailedSpecs ?? [],
     },
@@ -162,6 +164,9 @@ export async function updateVehicle(id: string, input: UpdateVehicleInput) {
     data: {
       ...parsed.data,
       videoUrl: parsed.data.videoUrl ?? undefined,
+      specificWhatsapp: parsed.data.specificWhatsapp !== undefined
+        ? (parsed.data.specificWhatsapp ? formatJordanPhone(parsed.data.specificWhatsapp) : null)
+        : undefined,
       detailedSpecs: parsed.data.detailedSpecs ?? undefined,
     },
   });

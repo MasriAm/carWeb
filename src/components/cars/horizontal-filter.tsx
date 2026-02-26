@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
+import { motion } from "framer-motion";
 import { getModelsByBrand } from "@/lib/actions/vehicles";
 import {
   Select,
@@ -16,8 +17,15 @@ import { X } from "lucide-react";
 const BRANDS = [
   "Mercedes-Benz", "BMW", "Porsche", "Audi", "Toyota",
   "Range Rover", "Lexus", "Kia", "Ferrari", "Lamborghini",
+  "Hyundai", "BYD", "Changan", "Neta", "MG",
 ];
-const ORIGINS = ["EUROPEAN", "CHINESE", "JORDANIAN", "AMERICAN", "GULF"];
+const ORIGINS = [
+  { value: "GULF", label: "Gulf Spec" },
+  { value: "AMERICAN", label: "US Spec" },
+  { value: "EUROPEAN", label: "European" },
+  { value: "JORDANIAN", label: "Jordanian" },
+  { value: "CHINESE", label: "Chinese" },
+];
 const PRICE_RANGES = [
   { label: "Under 20K", min: "0", max: "20000" },
   { label: "20K – 50K", min: "20000", max: "50000" },
@@ -32,6 +40,8 @@ const SORT_OPTIONS = [
   { value: "year_desc", label: "Year ↓" },
 ];
 
+const pillSpring = { type: "spring" as const, stiffness: 500, damping: 30 };
+
 export default function HorizontalFilter({ brands }: { brands: string[] }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -42,6 +52,7 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
 
   const [models, setModels] = useState<string[]>([]);
   const currentBrand = searchParams.get("brand") || "";
+  const currentOrigin = searchParams.get("originSpec") || "";
 
   useEffect(() => {
     if (currentBrand) {
@@ -109,9 +120,34 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
 
   return (
     <div className="sticky top-16 z-40 bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800">
-      <div className="max-w-[1400px] mx-auto px-4 py-3">
+      <div className="max-w-[1400px] mx-auto px-4 py-3 space-y-3">
+        {/* Origin spec pills with sliding background */}
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
+          {[{ value: "", label: "All Specs" }, ...ORIGINS].map((origin) => {
+            const isActive = currentOrigin === origin.value;
+            return (
+              <button
+                key={origin.value}
+                onClick={() => updateFilter("originSpec", origin.value || "all")}
+                className="relative px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors"
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeFilterPill"
+                    className="absolute inset-0 rounded-full bg-amber-500"
+                    transition={pillSpring}
+                  />
+                )}
+                <span className={`relative z-10 ${isActive ? "text-zinc-950" : "text-zinc-400 hover:text-zinc-200"}`}>
+                  {origin.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Dropdowns row */}
         <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
-          {/* Brand */}
           <Select value={searchParams.get("brand") || "all"} onValueChange={(v) => updateFilter("brand", v)}>
             <SelectTrigger className="w-[160px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
               <SelectValue placeholder="Brand" />
@@ -124,7 +160,6 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
             </SelectContent>
           </Select>
 
-          {/* Model (reactive) */}
           {models.length > 0 && (
             <Select value={searchParams.get("model") || "all"} onValueChange={(v) => updateFilter("model", v)}>
               <SelectTrigger className="w-[140px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
@@ -139,7 +174,6 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
             </Select>
           )}
 
-          {/* Price Range */}
           <Select value={currentPriceRange} onValueChange={updatePriceRange}>
             <SelectTrigger className="w-[140px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
               <SelectValue placeholder="Price" />
@@ -154,20 +188,6 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
             </SelectContent>
           </Select>
 
-          {/* Origin Spec */}
-          <Select value={searchParams.get("originSpec") || "all"} onValueChange={(v) => updateFilter("originSpec", v)}>
-            <SelectTrigger className="w-[140px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
-              <SelectValue placeholder="Origin" />
-            </SelectTrigger>
-            <SelectContent className="bg-zinc-900 border-zinc-700">
-              <SelectItem value="all">Any Origin</SelectItem>
-              {ORIGINS.map((o) => (
-                <SelectItem key={o} value={o}>{o}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {/* Sort */}
           <Select value={searchParams.get("sortBy") || "newest"} onValueChange={(v) => updateFilter("sortBy", v)}>
             <SelectTrigger className="w-[120px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
               <SelectValue placeholder="Sort" />

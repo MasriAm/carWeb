@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { requireRole } from "@/lib/auth-utils";
 import { getMyVehicles } from "@/lib/actions/dealership";
 import VehicleTable from "@/components/dashboard/vehicle-table";
-import { Car } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Car, Plus } from "lucide-react";
 
 export const metadata = { title: "My Vehicles" };
 
@@ -18,6 +20,12 @@ export default async function MyVehiclesPage() {
             {vehicles.length} listing{vehicles.length !== 1 ? "s" : ""} total.
           </p>
         </div>
+        <Link href="/dashboard/vehicles/new">
+          <Button className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Vehicle
+          </Button>
+        </Link>
       </div>
 
       {vehicles.length === 0 ? (
@@ -26,9 +34,15 @@ export default async function MyVehiclesPage() {
           <h2 className="text-xl font-semibold text-zinc-300 mb-2">
             No vehicles listed yet
           </h2>
-          <p className="text-zinc-500">
+          <p className="text-zinc-500 mb-6">
             Your vehicle listings will appear here.
           </p>
+          <Link href="/dashboard/vehicles/new">
+            <Button className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Your First Vehicle
+            </Button>
+          </Link>
         </div>
       ) : (
         <VehicleTable vehicles={vehicles} />

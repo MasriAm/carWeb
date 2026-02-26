@@ -6,7 +6,7 @@ import {
 } from "@/lib/actions/vehicles";
 import { auth } from "@/lib/auth";
 import HorizontalFilter from "@/components/cars/horizontal-filter";
-import CarCard from "@/components/cars/car-card";
+import CarGrid from "@/components/cars/car-grid";
 import Pagination from "@/components/cars/pagination";
 import type { VehicleFilterInput } from "@/lib/validations/vehicle";
 import { Car } from "lucide-react";
@@ -93,17 +93,11 @@ export default async function CarsPage({ searchParams }: CarsPageProps) {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {vehicles.map((v) => (
-                <CarCard
-                  key={v.id}
-                  vehicle={v}
-                  isSaved={savedIds.includes(v.id)}
-                  isLoggedIn={isLoggedIn}
-                />
-              ))}
-            </div>
-
+            <CarGrid
+              vehicles={vehicles}
+              savedIds={savedIds}
+              isLoggedIn={isLoggedIn}
+            />
             <Pagination currentPage={page} totalPages={totalPages} />
           </>
         )}

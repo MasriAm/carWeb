@@ -117,17 +117,18 @@ model User {
 }
 
 model Dealership {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  description String?  @db.Text
-  logoUrl     String?
-  address     String?
-  phone       String?
-  website     String?
-  userId      String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(cuid())
+  name            String
+  slug            String   @unique
+  description     String?  @db.Text
+  logoUrl         String?
+  address         String?
+  phone           String?
+  whatsappNumber  String?
+  website         String?
+  userId          String   @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   vehicles Vehicle[]
@@ -142,6 +143,9 @@ model Vehicle {
   // Media
   videoUrl         String?
   imageUrls        String[]
+
+  // Direct contact override
+  specificWhatsapp String?
 
   // Basic Info
   brand            String

@@ -9,6 +9,7 @@ import {
   type CreateDealershipInput,
   type UpdateDealershipInput,
 } from "@/lib/validations/dealership";
+import { formatJordanPhone } from "@/lib/format-jordan-phone";
 
 export async function getMyDealership() {
   const session = await auth();
@@ -50,6 +51,7 @@ export async function createDealership(input: CreateDealershipInput) {
       description: parsed.data.description || null,
       address: parsed.data.address || null,
       phone: parsed.data.phone || null,
+      whatsappNumber: parsed.data.whatsappNumber ? formatJordanPhone(parsed.data.whatsappNumber) : null,
       website: parsed.data.website || null,
       userId: session.user.id,
     },
@@ -99,6 +101,9 @@ export async function updateDealership(input: UpdateDealershipInput) {
       description: parsed.data.description ?? undefined,
       address: parsed.data.address ?? undefined,
       phone: parsed.data.phone ?? undefined,
+      whatsappNumber: parsed.data.whatsappNumber !== undefined
+        ? (parsed.data.whatsappNumber ? formatJordanPhone(parsed.data.whatsappNumber) : null)
+        : undefined,
       website: parsed.data.website ?? undefined,
     },
   });

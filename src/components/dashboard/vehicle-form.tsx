@@ -37,6 +37,7 @@ type VehicleData = {
   imageUrls: string[];
   detailedSpecs: unknown;
   dealershipId: string | null;
+  specificWhatsapp: string | null;
 } | null;
 
 const BODY_TYPES = ["SUV", "SEDAN", "COUPE", "HATCHBACK", "CONVERTIBLE", "PICKUP", "VAN", "WAGON"];
@@ -86,6 +87,7 @@ export default function VehicleForm({ vehicle }: { vehicle: VehicleData }) {
       videoUrl: (form.get("videoUrl") as string) || "",
       imageUrls,
       detailedSpecs: specs,
+      specificWhatsapp: (form.get("specificWhatsapp") as string) || "",
       status: (form.get("status") as "ON_SALE" | "SOLD") || undefined,
       dealershipId: (form.get("dealershipId") as string) || undefined,
     };
@@ -240,6 +242,12 @@ export default function VehicleForm({ vehicle }: { vehicle: VehicleData }) {
           <div className="space-y-2">
             <Label htmlFor="detailedSpecs" className={labelCls}>Detailed Specs (one per line)</Label>
             <Textarea id="detailedSpecs" name="detailedSpecs" rows={4} defaultValue={existingSpecs} placeholder={"360° Camera System\nAdaptive Cruise Control\nBurmester Surround Sound"} className={inputCls} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="specificWhatsapp" className={labelCls}>Direct WhatsApp for this car (optional)</Label>
+            <Input id="specificWhatsapp" name="specificWhatsapp" defaultValue={vehicle?.specificWhatsapp ?? ""} placeholder="079XXXXXXX or 962791234567" className={inputCls} />
+            <p className="text-xs text-zinc-600">Leave blank to use the dealership default.</p>
           </div>
 
           <Button type="submit" disabled={loading} className="bg-amber-500 text-zinc-950 hover:bg-amber-400">

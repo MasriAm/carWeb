@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +25,7 @@ import {
   Info,
   Heart,
   MessageCircle,
+  ShieldCheck,
 } from "lucide-react";
 import { toggleSaveVehicle } from "@/lib/actions/vehicles";
 
@@ -46,9 +48,12 @@ type VehicleCard = {
   originSpec: string;
   productionYear: number;
   detailedSpecs: unknown;
-  dealership?: { name: string; slug: string } | null;
+  specificWhatsapp?: string | null;
+  dealership?: { name: string; slug: string; whatsappNumber?: string | null; phone?: string | null } | null;
   user?: { name: string | null; phone?: string | null } | null;
 };
+
+const tactileSpring = { type: "spring" as const, stiffness: 400, damping: 17 };
 
 function MediaSlider({
   videoUrl,
@@ -91,33 +96,39 @@ function MediaSlider({
           preload="metadata"
         />
       ) : (
-        <Image
-          src={slides[current].url}
-          alt={`${brand} ${model}`}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
+        <motion.div
+          className="h-full w-full"
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <Image
+            src={slides[current].url}
+            alt={`${brand} ${model}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </motion.div>
       )}
 
       {slides.length > 1 && (
         <>
           <button
             onClick={prev}
-            className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+            className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 z-10"
             aria-label="Previous slide"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={next}
-            className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+            className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 z-10"
             aria-label="Next slide"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
 
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
             {slides.map((_, i) => (
               <button
                 key={i}
@@ -133,7 +144,7 @@ function MediaSlider({
       )}
 
       {slides[current].type === "video" && (
-        <Badge className="absolute top-2 left-2 bg-amber-500 text-zinc-950 text-[10px]">
+        <Badge className="absolute top-2 left-2 bg-amber-500 text-zinc-950 text-[10px] z-10">
           VIDEO
         </Badge>
       )}
@@ -168,9 +179,9 @@ export default function CarCard({
     }
   };
 
-  const dealerPhone = vehicle.user?.phone || vehicle.dealership?.slug;
-  const whatsappUrl = dealerPhone
-    ? `https://wa.me/${dealerPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi, I'm interested in the ${vehicle.brand} ${vehicle.model} listed on Royal Cars.`)}`
+  const contactNumber = vehicle.specificWhatsapp || vehicle.dealership?.whatsappNumber || vehicle.dealership?.phone || vehicle.user?.phone;
+  const whatsappUrl = contactNumber
+    ? `https://wa.me/${contactNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`I am interested in your ${vehicle.brand} ${vehicle.model}.`)}`
     : null;
 
   return (
@@ -184,7 +195,7 @@ export default function CarCard({
         />
 
         <Badge
-          className={`absolute top-2 right-2 text-[10px] font-semibold ${
+          className={`absolute top-2 right-2 text-[10px] font-semibold z-10 ${
             vehicle.status === "SOLD"
               ? "bg-red-600 text-white"
               : "bg-emerald-600 text-white"
@@ -193,11 +204,16 @@ export default function CarCard({
           {vehicle.status === "SOLD" ? "SOLD" : "ON SALE"}
         </Badge>
 
+        <Badge className="absolute top-2 left-2 text-[9px] font-bold bg-zinc-900/80 text-amber-400 border border-amber-500/30 z-10 animate-shimmer">
+          <ShieldCheck className="h-3 w-3 mr-1" />
+          VERIFIED
+        </Badge>
+
         {isLoggedIn && (
           <button
             onClick={handleSave}
             disabled={saving}
-            className="absolute top-2 right-20 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+            className="absolute top-10 right-2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors z-10"
             aria-label={saved ? "Unsave" : "Save"}
           >
             <Heart
@@ -270,10 +286,12 @@ export default function CarCard({
           {specs.length > 0 && (
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white">
-                  <Info className="mr-2 h-3.5 w-3.5" />
-                  Details
-                </Button>
+                <motion.div className="flex-1" whileTap={{ scale: 0.97 }} transition={tactileSpring}>
+                  <Button variant="outline" size="sm" className="w-full border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white">
+                    <Info className="mr-2 h-3.5 w-3.5" />
+                    Details
+                  </Button>
+                </motion.div>
               </DialogTrigger>
               <DialogContent className="max-w-md bg-zinc-900 border-zinc-800">
                 <DialogHeader>
@@ -297,9 +315,12 @@ export default function CarCard({
           )}
           {whatsappUrl && (
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white">
-                <MessageCircle className="h-3.5 w-3.5" />
-              </Button>
+              <motion.div whileTap={{ scale: 0.97 }} transition={tactileSpring}>
+                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white">
+                  <MessageCircle className="mr-1.5 h-3.5 w-3.5" />
+                  WhatsApp
+                </Button>
+              </motion.div>
             </a>
           )}
         </div>
