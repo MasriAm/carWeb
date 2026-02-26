@@ -31,11 +31,9 @@ export default function Pagination({
   } else {
     pageNumbers.push(1);
     if (currentPage > 3) pageNumbers.push("...");
-
     const start = Math.max(2, currentPage - 1);
     const end = Math.min(totalPages - 1, currentPage + 1);
     for (let i = start; i <= end; i++) pageNumbers.push(i);
-
     if (currentPage < totalPages - 2) pageNumbers.push("...");
     pageNumbers.push(totalPages);
   }
@@ -45,7 +43,7 @@ export default function Pagination({
       <Button
         variant="outline"
         size="icon"
-        className="h-9 w-9"
+        className="h-9 w-9 border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white"
         disabled={currentPage <= 1}
         onClick={() => goToPage(currentPage - 1)}
         aria-label="Previous page"
@@ -55,15 +53,17 @@ export default function Pagination({
 
       {pageNumbers.map((p, i) =>
         p === "..." ? (
-          <span key={`ellipsis-${i}`} className="px-2 text-neutral-400 text-sm">
-            ...
-          </span>
+          <span key={`ellipsis-${i}`} className="px-2 text-zinc-600 text-sm">...</span>
         ) : (
           <Button
             key={p}
             variant={p === currentPage ? "default" : "outline"}
             size="icon"
-            className="h-9 w-9 text-sm"
+            className={`h-9 w-9 text-sm ${
+              p === currentPage
+                ? "bg-amber-500 text-zinc-950 hover:bg-amber-400"
+                : "border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+            }`}
             onClick={() => goToPage(p)}
             aria-label={`Page ${p}`}
           >
@@ -75,7 +75,7 @@ export default function Pagination({
       <Button
         variant="outline"
         size="icon"
-        className="h-9 w-9"
+        className="h-9 w-9 border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white"
         disabled={currentPage >= totalPages}
         onClick={() => goToPage(currentPage + 1)}
         aria-label="Next page"

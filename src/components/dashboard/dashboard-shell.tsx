@@ -27,48 +27,13 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  {
-    label: "Overview",
-    href: "/dashboard",
-    icon: <LayoutDashboard className="h-4 w-4" />,
-    roles: ["USER", "DEALER", "ADMIN"],
-  },
-  {
-    label: "Saved Cars",
-    href: "/dashboard/saved",
-    icon: <Heart className="h-4 w-4" />,
-    roles: ["USER", "DEALER", "ADMIN"],
-  },
-  {
-    label: "My Vehicles",
-    href: "/dashboard/vehicles",
-    icon: <Car className="h-4 w-4" />,
-    roles: ["DEALER", "ADMIN"],
-  },
-  {
-    label: "Dealership",
-    href: "/dashboard/dealership",
-    icon: <Building2 className="h-4 w-4" />,
-    roles: ["DEALER", "ADMIN"],
-  },
-  {
-    label: "All Users",
-    href: "/dashboard/admin/users",
-    icon: <Users className="h-4 w-4" />,
-    roles: ["ADMIN"],
-  },
-  {
-    label: "All Vehicles",
-    href: "/dashboard/admin/vehicles",
-    icon: <ShieldCheck className="h-4 w-4" />,
-    roles: ["ADMIN"],
-  },
-  {
-    label: "All Dealerships",
-    href: "/dashboard/admin/dealerships",
-    icon: <Building2 className="h-4 w-4" />,
-    roles: ["ADMIN"],
-  },
+  { label: "Overview", href: "/dashboard", icon: <LayoutDashboard className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
+  { label: "Saved Cars", href: "/dashboard/saved", icon: <Heart className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
+  { label: "My Vehicles", href: "/dashboard/vehicles", icon: <Car className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
+  { label: "Dealership", href: "/dashboard/dealership", icon: <Building2 className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
+  { label: "All Users", href: "/dashboard/admin/users", icon: <Users className="h-4 w-4" />, roles: ["ADMIN"] },
+  { label: "All Vehicles", href: "/dashboard/admin/vehicles", icon: <ShieldCheck className="h-4 w-4" />, roles: ["ADMIN"] },
+  { label: "All Dealerships", href: "/dashboard/admin/dealerships", icon: <Building2 className="h-4 w-4" />, roles: ["ADMIN"] },
 ];
 
 export default function DashboardShell({
@@ -84,9 +49,7 @@ export default function DashboardShell({
   const filteredNav = NAV_ITEMS.filter((item) => item.roles.includes(role));
 
   const isActive = (href: string) =>
-    href === "/dashboard"
-      ? pathname === "/dashboard"
-      : pathname.startsWith(href);
+    href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
 
   const navContent = (
     <nav className="flex flex-col gap-1 flex-1">
@@ -97,8 +60,8 @@ export default function DashboardShell({
           onClick={() => setMobileOpen(false)}
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
             isActive(item.href)
-              ? "bg-neutral-900 text-white"
-              : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+              ? "bg-amber-500 text-zinc-950"
+              : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
           }`}
         >
           {item.icon}
@@ -109,27 +72,23 @@ export default function DashboardShell({
   );
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-zinc-950">
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 w-64 bg-white border-r border-neutral-200 hidden lg:flex flex-col z-30">
-        <div className="px-6 py-5 border-b border-neutral-200">
-          <Link href="/" className="flex items-center gap-2">
-            <Crown className="h-6 w-6 text-neutral-900" />
-            <span className="font-bold text-lg text-neutral-900">Royal Cars</span>
+      <aside className="fixed inset-y-0 left-0 w-64 bg-zinc-900 border-r border-zinc-800 hidden lg:flex flex-col z-30">
+        <div className="px-6 py-5 border-b border-zinc-800">
+          <Link href="/" className="flex items-center gap-2.5">
+            <Crown className="h-6 w-6 text-amber-500" />
+            <span className="font-bold text-lg text-white">Royal Cars</span>
           </Link>
-          <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider">
+          <p className="text-xs text-amber-500/60 mt-1 uppercase tracking-wider">
             {role} Dashboard
           </p>
         </div>
-
-        <div className="flex-1 px-3 py-4 overflow-y-auto">
-          {navContent}
-        </div>
-
-        <div className="px-3 py-4 border-t border-neutral-200">
+        <div className="flex-1 px-3 py-4 overflow-y-auto">{navContent}</div>
+        <div className="px-3 py-4 border-t border-zinc-800">
           <Button
             variant="ghost"
-            className="w-full justify-start gap-3 text-neutral-600 hover:text-red-600"
+            className="w-full justify-start gap-3 text-zinc-400 hover:text-red-400 hover:bg-zinc-800"
             onClick={() => signOut({ callbackUrl: "/" })}
           >
             <LogOut className="h-4 w-4" />
@@ -139,15 +98,12 @@ export default function DashboardShell({
       </aside>
 
       {/* Mobile header */}
-      <header className="lg:hidden fixed top-0 inset-x-0 h-14 bg-white border-b border-neutral-200 flex items-center justify-between px-4 z-40">
+      <header className="lg:hidden fixed top-0 inset-x-0 h-14 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between px-4 z-40">
         <Link href="/" className="flex items-center gap-2">
-          <Crown className="h-5 w-5 text-neutral-900" />
-          <span className="font-bold text-neutral-900">Royal Cars</span>
+          <Crown className="h-5 w-5 text-amber-500" />
+          <span className="font-bold text-white">Royal Cars</span>
         </Link>
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 rounded-lg hover:bg-neutral-100"
-        >
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 rounded-lg hover:bg-zinc-800 text-white">
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </header>
@@ -155,22 +111,17 @@ export default function DashboardShell({
       {/* Mobile drawer */}
       {mobileOpen && (
         <>
-          <div
-            className="fixed inset-0 bg-black/30 z-40 lg:hidden"
-            onClick={() => setMobileOpen(false)}
-          />
-          <aside className="fixed inset-y-0 left-0 w-64 bg-white z-50 lg:hidden flex flex-col shadow-xl">
-            <div className="px-6 py-5 border-b border-neutral-200">
-              <span className="font-bold text-lg text-neutral-900">Dashboard</span>
-              <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wider">
-                {role}
-              </p>
+          <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
+          <aside className="fixed inset-y-0 left-0 w-64 bg-zinc-900 z-50 lg:hidden flex flex-col shadow-xl border-r border-zinc-800">
+            <div className="px-6 py-5 border-b border-zinc-800">
+              <span className="font-bold text-lg text-white">Dashboard</span>
+              <p className="text-xs text-amber-500/60 mt-1 uppercase tracking-wider">{role}</p>
             </div>
             <div className="flex-1 px-3 py-4 overflow-y-auto">{navContent}</div>
-            <div className="px-3 py-4 border-t border-neutral-200">
+            <div className="px-3 py-4 border-t border-zinc-800">
               <Button
                 variant="ghost"
-                className="w-full justify-start gap-3 text-neutral-600 hover:text-red-600"
+                className="w-full justify-start gap-3 text-zinc-400 hover:text-red-400 hover:bg-zinc-800"
                 onClick={() => signOut({ callbackUrl: "/" })}
               >
                 <LogOut className="h-4 w-4" />

@@ -32,19 +32,19 @@ export default function BrandStrip() {
   };
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-zinc-950 border-t border-zinc-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-sm font-semibold uppercase tracking-widest text-neutral-400 mb-10">
+        <h2 className="text-center text-sm font-semibold uppercase tracking-widest text-amber-500/60 mb-10">
           Shop by Brand
         </h2>
 
         <div className="relative group">
           <button
             onClick={() => scroll("left")}
-            className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg border border-neutral-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-neutral-50"
+            className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-zinc-800"
             aria-label="Scroll left"
           >
-            <ChevronLeft className="h-5 w-5 text-neutral-600" />
+            <ChevronLeft className="h-5 w-5 text-zinc-400" />
           </button>
 
           <div
@@ -64,17 +64,17 @@ export default function BrandStrip() {
                   href={`/cars?brand=${encodeURIComponent(brand.slug)}`}
                   className="flex flex-col items-center gap-3 min-w-[100px] group/brand"
                 >
-                  <div className="relative h-20 w-20 rounded-full bg-neutral-50 border-2 border-neutral-100 flex items-center justify-center overflow-hidden transition-all group-hover/brand:border-neutral-300 group-hover/brand:shadow-md">
+                  <div className="relative h-20 w-20 rounded-full bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center overflow-hidden transition-all group-hover/brand:border-amber-500/50 group-hover/brand:shadow-lg group-hover/brand:shadow-amber-500/10">
                     <Image
                       src={brand.logo}
                       alt={brand.name}
                       width={48}
                       height={48}
-                      className="object-contain p-1"
+                      className="object-contain p-1 brightness-0 invert opacity-60 group-hover/brand:opacity-100 transition-opacity"
                       unoptimized
                     />
                   </div>
-                  <span className="text-xs font-medium text-neutral-600 group-hover/brand:text-neutral-900 transition-colors whitespace-nowrap">
+                  <span className="text-xs font-medium text-zinc-500 group-hover/brand:text-amber-500 transition-colors whitespace-nowrap">
                     {brand.name}
                   </span>
                 </Link>
@@ -84,10 +84,10 @@ export default function BrandStrip() {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg border border-neutral-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-neutral-50"
+            className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-zinc-800"
             aria-label="Scroll right"
           >
-            <ChevronRight className="h-5 w-5 text-neutral-600" />
+            <ChevronRight className="h-5 w-5 text-zinc-400" />
           </button>
         </div>
       </div>

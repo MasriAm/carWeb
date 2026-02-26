@@ -5,7 +5,7 @@ import {
   getSavedVehicleIds,
 } from "@/lib/actions/vehicles";
 import { auth } from "@/lib/auth";
-import SidebarFilter from "@/components/cars/sidebar-filter";
+import HorizontalFilter from "@/components/cars/horizontal-filter";
 import CarCard from "@/components/cars/car-card";
 import Pagination from "@/components/cars/pagination";
 import type { VehicleFilterInput } from "@/lib/validations/vehicle";
@@ -64,60 +64,49 @@ export default async function CarsPage({ searchParams }: CarsPageProps) {
   const isLoggedIn = !!session?.user;
 
   return (
-    <section className="min-h-screen bg-neutral-50">
+    <section className="min-h-screen bg-zinc-950">
+      <Suspense fallback={<div className="h-12 bg-zinc-950" />}>
+        <HorizontalFilter brands={brands} />
+      </Suspense>
+
       <div className="max-w-[1400px] mx-auto px-4 py-8">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-900">
-            {filters.brand
-              ? `${filters.brand} Cars`
-              : "Browse All Cars"}
-          </h1>
-          <p className="text-neutral-500 mt-1">
-            {total} vehicle{total !== 1 ? "s" : ""} found
-          </p>
+        <div className="flex items-baseline justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-white">
+              {filters.brand ? `${filters.brand} Cars` : "Browse All Cars"}
+            </h1>
+            <p className="text-zinc-500 mt-1">
+              {total} vehicle{total !== 1 ? "s" : ""} found
+            </p>
+          </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar */}
-          <div className="w-full lg:w-[280px] shrink-0">
-            <div className="lg:sticky lg:top-24 bg-white rounded-xl border border-neutral-200 p-5">
-              <Suspense fallback={<div className="h-96 animate-pulse bg-neutral-100 rounded" />}>
-                <SidebarFilter brands={brands} />
-              </Suspense>
+        {vehicles.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <Car className="h-16 w-16 text-zinc-700 mb-4" />
+            <h2 className="text-xl font-semibold text-zinc-300 mb-2">
+              No vehicles found
+            </h2>
+            <p className="text-zinc-500 max-w-md">
+              Try adjusting your filters or search for a different brand.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {vehicles.map((v) => (
+                <CarCard
+                  key={v.id}
+                  vehicle={v}
+                  isSaved={savedIds.includes(v.id)}
+                  isLoggedIn={isLoggedIn}
+                />
+              ))}
             </div>
-          </div>
 
-          {/* Results */}
-          <div className="flex-1">
-            {vehicles.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-24 text-center">
-                <Car className="h-16 w-16 text-neutral-300 mb-4" />
-                <h2 className="text-xl font-semibold text-neutral-700 mb-2">
-                  No vehicles found
-                </h2>
-                <p className="text-neutral-500 max-w-md">
-                  Try adjusting your filters or search for a different brand.
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {vehicles.map((v) => (
-                    <CarCard
-                      key={v.id}
-                      vehicle={v}
-                      isSaved={savedIds.includes(v.id)}
-                      isLoggedIn={isLoggedIn}
-                    />
-                  ))}
-                </div>
-
-                <Pagination currentPage={page} totalPages={totalPages} />
-              </>
-            )}
-          </div>
-        </div>
+            <Pagination currentPage={page} totalPages={totalPages} />
+          </>
+        )}
       </div>
     </section>
   );

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Car, Menu, LogIn, UserPlus, LayoutDashboard } from "lucide-react";
+import { Crown, Menu, LogIn, UserPlus, LayoutDashboard } from "lucide-react";
 import { useSession } from "@/lib/session-provider";
 
 const navLinks = [
@@ -30,25 +30,22 @@ export default function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-neutral-200/50"
+          ? "bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800 shadow-lg shadow-black/20"
           : "bg-transparent"
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <Car
-              className={`h-7 w-7 transition-colors ${
-                scrolled ? "text-neutral-900" : "text-white"
-              }`}
-            />
-            <span
-              className={`text-xl font-bold tracking-tight transition-colors ${
-                scrolled ? "text-neutral-900" : "text-white"
-              }`}
-            >
-              Royal Cars
-            </span>
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <Crown className="h-6 w-6 text-amber-500 transition-transform group-hover:scale-110" />
+            <div className="flex flex-col leading-none">
+              <span className="text-lg font-bold tracking-tight text-white">
+                Royal Cars
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-amber-500/80 font-medium">
+                Jordan
+              </span>
+            </div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -58,12 +55,8 @@ export default function Header() {
                 href={link.href}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   pathname === link.href
-                    ? scrolled
-                      ? "bg-neutral-900 text-white"
-                      : "bg-white text-neutral-900"
-                    : scrolled
-                      ? "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
-                      : "text-white/80 hover:text-white hover:bg-white/10"
+                    ? "bg-amber-500 text-zinc-950"
+                    : "text-zinc-400 hover:text-white hover:bg-zinc-800"
                 }`}
               >
                 {link.label}
@@ -75,9 +68,8 @@ export default function Header() {
             {user ? (
               <Link href="/dashboard">
                 <Button
-                  variant={scrolled ? "default" : "secondary"}
                   size="sm"
-                  className="rounded-full"
+                  className="rounded-full bg-amber-500 text-zinc-950 hover:bg-amber-400"
                 >
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   Dashboard
@@ -89,11 +81,7 @@ export default function Header() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className={`rounded-full ${
-                      scrolled
-                        ? "text-neutral-600 hover:text-neutral-900"
-                        : "text-white/80 hover:text-white hover:bg-white/10"
-                    }`}
+                    className="rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800"
                   >
                     <LogIn className="mr-2 h-4 w-4" />
                     Sign In
@@ -101,9 +89,8 @@ export default function Header() {
                 </Link>
                 <Link href="/register">
                   <Button
-                    variant={scrolled ? "default" : "secondary"}
                     size="sm"
-                    className="rounded-full"
+                    className="rounded-full bg-amber-500 text-zinc-950 hover:bg-amber-400"
                   >
                     <UserPlus className="mr-2 h-4 w-4" />
                     Register
@@ -118,15 +105,15 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className={scrolled ? "text-neutral-900" : "text-white"}
+                className="text-white hover:bg-zinc-800"
               >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72">
-              <div className="flex items-center gap-2 mb-8 mt-4">
-                <Car className="h-6 w-6" />
-                <span className="text-lg font-bold">Royal Cars</span>
+            <SheetContent side="right" className="w-72 bg-zinc-950 border-zinc-800">
+              <div className="flex items-center gap-2.5 mb-8 mt-4">
+                <Crown className="h-6 w-6 text-amber-500" />
+                <span className="text-lg font-bold text-white">Royal Cars</span>
               </div>
               <nav className="flex flex-col gap-1">
                 {navLinks.map((link) => (
@@ -136,19 +123,19 @@ export default function Header() {
                     onClick={() => setOpen(false)}
                     className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                       pathname === link.href
-                        ? "bg-neutral-100 text-neutral-900"
-                        : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
+                        ? "bg-amber-500/10 text-amber-500"
+                        : "text-zinc-400 hover:bg-zinc-900 hover:text-white"
                     }`}
                   >
                     {link.label}
                   </Link>
                 ))}
-                <div className="border-t my-4" />
+                <div className="border-t border-zinc-800 my-4" />
                 {user ? (
                   <Link
                     href="/dashboard"
                     onClick={() => setOpen(false)}
-                    className="px-4 py-3 rounded-lg text-sm font-medium bg-neutral-900 text-white text-center"
+                    className="px-4 py-3 rounded-lg text-sm font-medium bg-amber-500 text-zinc-950 text-center"
                   >
                     Dashboard
                   </Link>
@@ -157,14 +144,14 @@ export default function Header() {
                     <Link
                       href="/login"
                       onClick={() => setOpen(false)}
-                      className="px-4 py-3 rounded-lg text-sm font-medium text-neutral-600 hover:bg-neutral-50 text-center"
+                      className="px-4 py-3 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-900 text-center"
                     >
                       Sign In
                     </Link>
                     <Link
                       href="/register"
                       onClick={() => setOpen(false)}
-                      className="px-4 py-3 rounded-lg text-sm font-medium bg-neutral-900 text-white text-center"
+                      className="px-4 py-3 rounded-lg text-sm font-medium bg-amber-500 text-zinc-950 text-center"
                     >
                       Register
                     </Link>

@@ -12,17 +12,17 @@ export default function StatCard({
   subtitle?: string;
 }) {
   return (
-    <Card className="bg-white">
+    <Card className="bg-zinc-900 border-zinc-800">
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-sm font-medium text-neutral-500">{title}</p>
-            <p className="text-3xl font-bold text-neutral-900 mt-1">{value}</p>
+            <p className="text-sm font-medium text-zinc-400">{title}</p>
+            <p className="text-3xl font-bold text-white mt-1">{value}</p>
             {subtitle && (
-              <p className="text-xs text-neutral-400 mt-1">{subtitle}</p>
+              <p className="text-xs text-zinc-500 mt-1">{subtitle}</p>
             )}
           </div>
-          <div className="h-10 w-10 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-600">
+          <div className="h-10 w-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
             {icon}
           </div>
         </div>

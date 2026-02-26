@@ -1,5 +1,8 @@
-import { auth } from "@/lib/auth";
+import NextAuth from "next-auth";
+import { authConfig } from "@/lib/auth.config";
 import { NextResponse } from "next/server";
+
+const { auth } = NextAuth(authConfig);
 
 const protectedRoutes = ["/dashboard"];
 const protectedApiRoutes = ["/api/protected"];
@@ -8,7 +11,7 @@ const authRoutes = ["/login", "/register"];
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-  const isSuspended = req.auth?.user?.isSuspended;
+  const isSuspended = (req.auth?.user as Record<string, unknown>)?.isSuspended;
 
   const isProtectedRoute = protectedRoutes.some((route) =>
     nextUrl.pathname.startsWith(route)
