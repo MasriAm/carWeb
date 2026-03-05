@@ -11,16 +11,18 @@ const authRoutes = ["/login", "/register"];
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-  const isSuspended = (req.auth?.user as Record<string, unknown>)?.isSuspended;
+  const user = req.auth?.user as Record<string, unknown> | undefined;
+  const isSuspended = user?.isSuspended;
+  const role = user?.role as string | undefined;
 
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    nextUrl.pathname.startsWith(route)
+  const isProtectedRoute = protectedRoutes.some((r) =>
+    nextUrl.pathname.startsWith(r)
   );
-  const isProtectedApi = protectedApiRoutes.some((route) =>
-    nextUrl.pathname.startsWith(route)
+  const isProtectedApi = protectedApiRoutes.some((r) =>
+    nextUrl.pathname.startsWith(r)
   );
-  const isAuthRoute = authRoutes.some((route) =>
-    nextUrl.pathname.startsWith(route)
+  const isAuthRoute = authRoutes.some((r) =>
+    nextUrl.pathname.startsWith(r)
   );
 
   if (isSuspended) {
@@ -36,6 +38,26 @@ export default auth((req) => {
       return NextResponse.redirect(
         new URL(`/login?callbackUrl=${callbackUrl}`, nextUrl)
       );
+    }
+
+    if (nextUrl.pathname.startsWith("/dashboard/admin") && role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/dashboard", nextUrl));
+    }
+
+    if (
+      nextUrl.pathname.startsWith("/dashboard/dealership") &&
+      role !== "DEALER" &&
+      role !== "ADMIN"
+    ) {
+      return NextResponse.redirect(new URL("/dashboard", nextUrl));
+    }
+
+    if (
+      nextUrl.pathname.startsWith("/dashboard/vehicles") &&
+      role !== "DEALER" &&
+      role !== "ADMIN"
+    ) {
+      return NextResponse.redirect(new URL("/dashboard", nextUrl));
     }
   }
 

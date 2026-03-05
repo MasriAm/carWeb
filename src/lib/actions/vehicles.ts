@@ -147,11 +147,8 @@ export async function updateVehicle(id: string, input: UpdateVehicleInput) {
   const existing = await db.vehicle.findUnique({ where: { id } });
   if (!existing) return { success: false as const, error: "Vehicle not found" };
 
-  if (
-    existing.userId !== session.user.id &&
-    session.user.role !== "ADMIN"
-  ) {
-    return { success: false as const, error: "You can only edit your own vehicles" };
+  if (existing.userId !== session.user.id && session.user.role !== "ADMIN") {
+    throw new Error("Unauthorized");
   }
 
   const parsed = updateVehicleSchema.safeParse(input);
@@ -182,11 +179,8 @@ export async function deleteVehicle(id: string) {
   const existing = await db.vehicle.findUnique({ where: { id } });
   if (!existing) return { success: false as const, error: "Vehicle not found" };
 
-  if (
-    existing.userId !== session.user.id &&
-    session.user.role !== "ADMIN"
-  ) {
-    return { success: false as const, error: "You can only delete your own vehicles" };
+  if (existing.userId !== session.user.id && session.user.role !== "ADMIN") {
+    throw new Error("Unauthorized");
   }
 
   await db.vehicle.delete({ where: { id } });
