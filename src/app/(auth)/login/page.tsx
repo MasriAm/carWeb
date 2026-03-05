@@ -7,7 +7,7 @@ import { loginAction } from "@/lib/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Crown, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Crown, Eye, EyeOff, Loader2, Timer } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -76,8 +76,17 @@ export default function LoginPage() {
           </p>
 
           {error && (
-            <div className="mb-6 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
-              {error}
+            <div
+              className={`mb-6 rounded-xl px-4 py-4 text-sm flex items-start gap-3 ${
+                error.includes("Too many requests")
+                  ? "bg-amber-500/10 border border-amber-500/30 text-amber-400"
+                  : "bg-red-500/10 border border-red-500/20 text-red-400"
+              }`}
+            >
+              {error.includes("Too many requests") && (
+                <Timer className="h-5 w-5 shrink-0 mt-0.5" />
+              )}
+              <span>{error}</span>
             </div>
           )}
 

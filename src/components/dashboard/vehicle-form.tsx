@@ -92,20 +92,23 @@ export default function VehicleForm({ vehicle }: { vehicle: VehicleData }) {
       dealershipId: (form.get("dealershipId") as string) || undefined,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = vehicle
-      ? await updateVehicle(vehicle.id, data as any)
-      : await createVehicle(data as any);
-
-    setLoading(false);
-
-    if (!result.success) {
-      setError(result.error || "Something went wrong");
-      return;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = vehicle
+        ? await updateVehicle(vehicle.id, data as any)
+        : await createVehicle(data as any);
+      setLoading(false);
+      if (!result.success) {
+        setError(result.error || "Something went wrong");
+        return;
+      }
+      router.push("/dashboard/admin/vehicles");
+      router.refresh();
+    } catch (err) {
+      setLoading(false);
+      const message = err instanceof Error ? err.message : "Something went wrong";
+      setError(message);
     }
-
-    router.push("/dashboard/admin/vehicles");
-    router.refresh();
   };
 
   const existingSpecs = Array.isArray(vehicle?.detailedSpecs)
@@ -119,7 +122,13 @@ export default function VehicleForm({ vehicle }: { vehicle: VehicleData }) {
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg">
+            <div
+              className={`rounded-xl px-4 py-3 text-sm ${
+                /rate limit/i.test(error)
+                  ? "bg-amber-500/10 border border-amber-500/30 text-amber-400"
+                  : "bg-red-500/10 border border-red-500/20 text-red-400"
+              }`}
+            >
               {error}
             </div>
           )}

@@ -13,6 +13,7 @@ import {
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@/generated/prisma/client";
 import { formatJordanPhone } from "@/lib/format-jordan-phone";
+import { actionRateLimit } from "@/lib/rate-limit";
 
 // ─── READ ──────────────────────────────────────────────────────
 
@@ -115,6 +116,9 @@ export async function createVehicle(input: CreateVehicleInput) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
 
+  const { success } = await actionRateLimit.limit(session.user.id);
+  if (!success) throw new Error("Rate limit exceeded. Please slow down.");
+
   const parsed = createVehicleSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false as const, error: parsed.error.issues[0].message };
@@ -143,6 +147,9 @@ export async function createVehicle(input: CreateVehicleInput) {
 export async function updateVehicle(id: string, input: UpdateVehicleInput) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
+
+  const { success } = await actionRateLimit.limit(session.user.id);
+  if (!success) throw new Error("Rate limit exceeded. Please slow down.");
 
   const existing = await db.vehicle.findUnique({ where: { id } });
   if (!existing) return { success: false as const, error: "Vehicle not found" };
@@ -175,6 +182,9 @@ export async function updateVehicle(id: string, input: UpdateVehicleInput) {
 export async function deleteVehicle(id: string) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
+
+  const { success } = await actionRateLimit.limit(session.user.id);
+  if (!success) throw new Error("Rate limit exceeded. Please slow down.");
 
   const existing = await db.vehicle.findUnique({ where: { id } });
   if (!existing) return { success: false as const, error: "Vehicle not found" };

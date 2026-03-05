@@ -65,24 +65,35 @@ export default function DealerVehicleForm() {
       specificWhatsapp: (form.get("specificWhatsapp") as string) || "",
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = await createVehicle(data as any);
-
-    setLoading(false);
-
-    if (!result.success) {
-      setError(result.error || "Something went wrong");
-      return;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = await createVehicle(data as any);
+      setLoading(false);
+      if (!result.success) {
+        setError(result.error || "Something went wrong");
+        return;
+      }
+      router.push("/dashboard/vehicles");
+      router.refresh();
+    } catch (err) {
+      setLoading(false);
+      const message = err instanceof Error ? err.message : "Something went wrong";
+      setError(message);
     }
-
-    router.push("/dashboard/vehicles");
-    router.refresh();
   };
 
   return (
     <form onSubmit={handleSubmit}>
       {error && (
-        <div className="mb-6 bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg">
+        <div
+          className={`mb-6 rounded-xl px-4 py-3 text-sm ${
+            /rate limit/i.test(error)
+              ? "bg-amber-500/10 border border-amber-500/30 text-amber-400"
+              : /unauthorized/i.test(error)
+                ? "bg-red-500/10 border border-red-500/20 text-red-400"
+                : "bg-red-500/10 border border-red-500/20 text-red-400"
+          }`}
+        >
           {error}
         </div>
       )}
