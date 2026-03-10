@@ -2,16 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   ChevronLeft,
   ChevronRight,
@@ -19,13 +13,12 @@ import {
   Gauge,
   Calendar,
   Cog,
-  Users,
-  Globe,
   Car,
-  Info,
   Heart,
   MessageCircle,
   ShieldCheck,
+  Star,
+  BadgeCheck,
 } from "lucide-react";
 import { toggleSaveVehicle } from "@/lib/actions/vehicles";
 
@@ -40,14 +33,14 @@ type VehicleCard = {
   shortDescription: string;
   condition: string;
   bodyType: string;
-  seats: number;
   transmission: string;
   engineCapacityCC: number;
   fuelType: string;
   mileageKm: number;
-  originSpec: string;
   productionYear: number;
   detailedSpecs: unknown;
+  isPromoted?: boolean;
+  waredWakaleh?: boolean;
   specificWhatsapp?: string | null;
   dealership?: { name: string; slug: string; whatsappNumber?: string | null; phone?: string | null } | null;
   user?: { name: string | null; phone?: string | null } | null;
@@ -67,7 +60,6 @@ function MediaSlider({
   model: string;
 }) {
   const slides: { type: "video" | "image"; url: string }[] = [];
-
   if (videoUrl) slides.push({ type: "video", url: videoUrl });
   imageUrls.forEach((url) => slides.push({ type: "image", url }));
 
@@ -114,14 +106,14 @@ function MediaSlider({
       {slides.length > 1 && (
         <>
           <button
-            onClick={prev}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); prev(); }}
             className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 z-10"
             aria-label="Previous slide"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
-            onClick={next}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); next(); }}
             className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 z-10"
             aria-label="Next slide"
           >
@@ -132,7 +124,7 @@ function MediaSlider({
             {slides.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setCurrent(i)}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrent(i); }}
                 className={`h-1.5 rounded-full transition-all ${
                   i === current ? "w-4 bg-amber-500" : "w-1.5 bg-white/50"
                 }`}
@@ -164,11 +156,9 @@ export default function CarCard({
   const [saved, setSaved] = useState(initialSaved);
   const [saving, setSaving] = useState(false);
 
-  const specs = Array.isArray(vehicle.detailedSpecs)
-    ? (vehicle.detailedSpecs as string[])
-    : [];
-
-  const handleSave = async () => {
+  const handleSave = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!isLoggedIn) return;
     setSaving(true);
     try {
@@ -185,146 +175,134 @@ export default function CarCard({
     : null;
 
   return (
-    <div className="bg-zinc-900 rounded-xl border border-zinc-800 hover:border-zinc-700 transition-all overflow-hidden flex flex-col group/card">
-      <div className="relative">
-        <MediaSlider
-          videoUrl={vehicle.videoUrl}
-          imageUrls={vehicle.imageUrls}
-          brand={vehicle.brand}
-          model={vehicle.model}
-        />
+    <Link href={`/cars/${vehicle.id}`} className="block">
+      <div className={`bg-zinc-900 rounded-xl border hover:border-zinc-700 transition-all overflow-hidden flex flex-col group/card ${
+        vehicle.isPromoted ? "border-amber-500/40 shadow-lg shadow-amber-500/5" : "border-zinc-800"
+      }`}>
+        <div className="relative">
+          <MediaSlider
+            videoUrl={vehicle.videoUrl}
+            imageUrls={vehicle.imageUrls}
+            brand={vehicle.brand}
+            model={vehicle.model}
+          />
 
-        <Badge
-          className={`absolute top-2 right-2 text-[10px] font-semibold z-10 ${
-            vehicle.status === "SOLD"
-              ? "bg-red-600 text-white"
-              : "bg-emerald-600 text-white"
-          }`}
-        >
-          {vehicle.status === "SOLD" ? "SOLD" : "ON SALE"}
-        </Badge>
-
-        <Badge className="absolute top-2 left-2 text-[9px] font-bold bg-zinc-900/80 text-amber-400 border border-amber-500/30 z-10 animate-shimmer">
-          <ShieldCheck className="h-3 w-3 mr-1" />
-          VERIFIED
-        </Badge>
-
-        {isLoggedIn && (
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="absolute top-10 right-2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors z-10"
-            aria-label={saved ? "Unsave" : "Save"}
+          <Badge
+            className={`absolute top-2 right-2 text-[10px] font-semibold z-10 ${
+              vehicle.status === "SOLD"
+                ? "bg-red-600 text-white"
+                : "bg-emerald-600 text-white"
+            }`}
           >
-            <Heart
-              className={`h-4 w-4 ${saved ? "fill-red-500 text-red-500" : ""}`}
-            />
-          </button>
-        )}
-      </div>
+            {vehicle.status === "SOLD" ? "SOLD" : "ON SALE"}
+          </Badge>
 
-      <div className="p-4 flex-1 flex flex-col">
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <h3 className="font-bold text-lg text-white leading-tight">
-            {vehicle.brand} {vehicle.model}
-          </h3>
-          <span className="text-lg font-bold text-amber-500 whitespace-nowrap">
-            {vehicle.price.toLocaleString()} <span className="text-xs font-normal text-zinc-500">JOD</span>
-          </span>
+          {vehicle.isPromoted && (
+            <Badge className="absolute top-2 left-2 text-[9px] font-bold bg-amber-500 text-zinc-950 z-10">
+              <Star className="h-3 w-3 mr-1 fill-current" />
+              SPONSORED
+            </Badge>
+          )}
+
+          {!vehicle.isPromoted && (
+            <Badge className="absolute top-2 left-2 text-[9px] font-bold bg-zinc-900/80 text-amber-400 border border-amber-500/30 z-10 animate-shimmer">
+              <ShieldCheck className="h-3 w-3 mr-1" />
+              VERIFIED
+            </Badge>
+          )}
+
+          {isLoggedIn && (
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="absolute top-10 right-2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors z-10"
+              aria-label={saved ? "Unsave" : "Save"}
+            >
+              <Heart className={`h-4 w-4 ${saved ? "fill-red-500 text-red-500" : ""}`} />
+            </button>
+          )}
         </div>
 
-        <p className="text-sm text-zinc-400 mb-3 line-clamp-2">
-          {vehicle.shortDescription}
-        </p>
+        <div className="p-4 flex-1 flex flex-col">
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <h3 className="font-bold text-lg text-white leading-tight">
+              {vehicle.brand} {vehicle.model}
+            </h3>
+            <span className="text-lg font-bold text-amber-500 whitespace-nowrap">
+              {vehicle.price.toLocaleString()} <span className="text-xs font-normal text-zinc-500">JOD</span>
+            </span>
+          </div>
 
-        {vehicle.dealership && (
-          <p className="text-xs text-zinc-500 mb-3">
-            by <span className="font-medium text-zinc-300">{vehicle.dealership.name}</span>
+          <p className="text-sm text-zinc-400 mb-3 line-clamp-2">
+            {vehicle.shortDescription}
           </p>
-        )}
 
-        <div className="grid grid-cols-3 gap-2 text-xs text-zinc-400 mb-4">
-          <div className="flex items-center gap-1">
-            <Calendar className="h-3 w-3 text-zinc-600" />
-            {vehicle.productionYear}
+          <div className="flex items-center gap-2 mb-3">
+            {vehicle.dealership && (
+              <p className="text-xs text-zinc-500">
+                by <span className="font-medium text-zinc-300">{vehicle.dealership.name}</span>
+              </p>
+            )}
+            {vehicle.waredWakaleh && (
+              <Badge className="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <BadgeCheck className="h-3 w-3 mr-0.5" />
+                Agency
+              </Badge>
+            )}
           </div>
-          <div className="flex items-center gap-1">
-            <Gauge className="h-3 w-3 text-zinc-600" />
-            {vehicle.mileageKm.toLocaleString()} km
-          </div>
-          <div className="flex items-center gap-1">
-            <Fuel className="h-3 w-3 text-zinc-600" />
-            {vehicle.fuelType}
-          </div>
-          <div className="flex items-center gap-1">
-            <Cog className="h-3 w-3 text-zinc-600" />
-            {vehicle.transmission}
-          </div>
-          <div className="flex items-center gap-1">
-            <Users className="h-3 w-3 text-zinc-600" />
-            {vehicle.seats} seats
-          </div>
-          <div className="flex items-center gap-1">
-            <Globe className="h-3 w-3 text-zinc-600" />
-            {vehicle.originSpec}
-          </div>
-        </div>
 
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          <Badge variant="secondary" className="text-[10px] bg-zinc-800 text-zinc-300 border-zinc-700">
-            {vehicle.condition}
-          </Badge>
-          <Badge variant="secondary" className="text-[10px] bg-zinc-800 text-zinc-300 border-zinc-700">
-            {vehicle.bodyType}
-          </Badge>
-          <Badge variant="secondary" className="text-[10px] bg-zinc-800 text-zinc-300 border-zinc-700">
-            {vehicle.engineCapacityCC} CC
-          </Badge>
-        </div>
+          <div className="grid grid-cols-3 gap-2 text-xs text-zinc-400 mb-4">
+            <div className="flex items-center gap-1">
+              <Calendar className="h-3 w-3 text-zinc-600" />
+              {vehicle.productionYear}
+            </div>
+            <div className="flex items-center gap-1">
+              <Gauge className="h-3 w-3 text-zinc-600" />
+              {vehicle.mileageKm.toLocaleString()} km
+            </div>
+            <div className="flex items-center gap-1">
+              <Fuel className="h-3 w-3 text-zinc-600" />
+              {vehicle.fuelType}
+            </div>
+            <div className="flex items-center gap-1">
+              <Cog className="h-3 w-3 text-zinc-600" />
+              {vehicle.transmission}
+            </div>
+            <div className="flex items-center gap-1">
+              <Car className="h-3 w-3 text-zinc-600" />
+              {vehicle.bodyType}
+            </div>
+            <div className="flex items-center gap-1">
+              <Gauge className="h-3 w-3 text-zinc-600" />
+              {vehicle.engineCapacityCC} CC
+            </div>
+          </div>
 
-        <div className="mt-auto flex gap-2">
-          {specs.length > 0 && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <motion.div className="flex-1" whileTap={{ scale: 0.97 }} transition={tactileSpring}>
-                  <Button variant="outline" size="sm" className="w-full border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white">
-                    <Info className="mr-2 h-3.5 w-3.5" />
-                    Details
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            <Badge variant="secondary" className="text-[10px] bg-zinc-800 text-zinc-300 border-zinc-700">
+              {vehicle.condition}
+            </Badge>
+          </div>
+
+          <div className="mt-auto flex gap-2">
+            {whatsappUrl && (
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <motion.div whileTap={{ scale: 0.97 }} transition={tactileSpring}>
+                  <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white">
+                    <MessageCircle className="mr-1.5 h-3.5 w-3.5" />
+                    WhatsApp
                   </Button>
                 </motion.div>
-              </DialogTrigger>
-              <DialogContent className="max-w-md bg-zinc-900 border-zinc-800">
-                <DialogHeader>
-                  <DialogTitle className="text-white">
-                    {vehicle.brand} {vehicle.model} — Specs & Features
-                  </DialogTitle>
-                </DialogHeader>
-                <ul className="grid gap-2 mt-4">
-                  {specs.map((spec, i) => (
-                    <li
-                      key={i}
-                      className="flex items-center gap-2 text-sm text-zinc-300"
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
-                      {spec}
-                    </li>
-                  ))}
-                </ul>
-              </DialogContent>
-            </Dialog>
-          )}
-          {whatsappUrl && (
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-              <motion.div whileTap={{ scale: 0.97 }} transition={tactileSpring}>
-                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white">
-                  <MessageCircle className="mr-1.5 h-3.5 w-3.5" />
-                  WhatsApp
-                </Button>
-              </motion.div>
-            </a>
-          )}
+              </a>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

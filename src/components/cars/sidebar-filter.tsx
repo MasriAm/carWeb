@@ -33,13 +33,11 @@ const BODY_TYPES = ["SUV", "SEDAN", "COUPE", "HATCHBACK", "CONVERTIBLE", "PICKUP
 const FUEL_TYPES = ["GAS", "ELECTRIC", "DIESEL", "HYBRID"];
 const TRANSMISSIONS = ["AUTO", "MANUAL"];
 const CONDITIONS = ["NEW", "USED"];
-const ORIGINS = ["EUROPEAN", "CHINESE", "JORDANIAN", "AMERICAN", "GULF"];
 const SORT_OPTIONS = [
   { value: "newest", label: "Newest First" },
+  { value: "oldest", label: "Oldest First" },
   { value: "price_asc", label: "Price: Low to High" },
   { value: "price_desc", label: "Price: High to Low" },
-  { value: "year_desc", label: "Year: Newest" },
-  { value: "year_asc", label: "Year: Oldest" },
 ];
 
 export default function SidebarFilter({ brands }: { brands: string[] }) {
@@ -229,20 +227,6 @@ export default function SidebarFilter({ brands }: { brands: string[] }) {
             <SelectItem value="all">Any</SelectItem>
             {TRANSMISSIONS.map((t) => (
               <SelectItem key={t} value={t}>{t}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Origin Spec */}
-      <div className="space-y-2">
-        <Label className="text-xs text-neutral-500">Origin Spec</Label>
-        <Select value={val("originSpec") || "all"} onValueChange={(v) => updateFilter("originSpec", v)}>
-          <SelectTrigger className="w-full"><SelectValue placeholder="Any" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Any</SelectItem>
-            {ORIGINS.map((o) => (
-              <SelectItem key={o} value={o}>{o}</SelectItem>
             ))}
           </SelectContent>
         </Select>

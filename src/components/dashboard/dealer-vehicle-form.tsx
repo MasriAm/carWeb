@@ -19,7 +19,6 @@ import ImageDropzone from "@/components/dashboard/image-dropzone";
 
 const BODY_TYPES = ["SUV", "SEDAN", "COUPE", "HATCHBACK", "CONVERTIBLE", "PICKUP", "VAN", "WAGON"];
 const FUEL_TYPES = ["GAS", "ELECTRIC", "DIESEL", "HYBRID"];
-const ORIGINS = ["EUROPEAN", "CHINESE", "JORDANIAN", "AMERICAN", "GULF"];
 
 const inputCls = "bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 h-10";
 const labelCls = "text-zinc-300 text-sm font-medium";
@@ -52,17 +51,18 @@ export default function DealerVehicleForm() {
       shortDescription: form.get("shortDescription") as string,
       condition: form.get("condition") as "NEW" | "USED",
       bodyType: form.get("bodyType") as string,
-      seats: Number(form.get("seats")),
       transmission: form.get("transmission") as "AUTO" | "MANUAL",
       engineCapacityCC: Number(form.get("engineCapacityCC")),
       fuelType: form.get("fuelType") as string,
       mileageKm: Number(form.get("mileageKm")),
-      originSpec: form.get("originSpec") as string,
       productionYear: Number(form.get("productionYear")),
       videoUrl: (form.get("videoUrl") as string) || "",
+      instagramVideoUrl: (form.get("instagramVideoUrl") as string) || "",
       imageUrls,
       detailedSpecs: specs,
       specificWhatsapp: (form.get("specificWhatsapp") as string) || "",
+      fa7s: (form.get("fa7s") as string) || "",
+      waredWakaleh: form.get("waredWakaleh") === "on",
     };
 
     try {
@@ -99,7 +99,6 @@ export default function DealerVehicleForm() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* Left: Media zone */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
             <h2 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Media</h2>
@@ -107,6 +106,10 @@ export default function DealerVehicleForm() {
             <div className="mt-4 space-y-2">
               <Label htmlFor="videoUrl" className={labelCls}>Video URL (optional)</Label>
               <Input id="videoUrl" name="videoUrl" type="url" placeholder="https://youtube.com/..." className={inputCls} />
+            </div>
+            <div className="mt-4 space-y-2">
+              <Label htmlFor="instagramVideoUrl" className={labelCls}>Instagram Reel URL (optional)</Label>
+              <Input id="instagramVideoUrl" name="instagramVideoUrl" type="url" placeholder="https://www.instagram.com/reel/..." className={inputCls} />
             </div>
           </div>
 
@@ -117,13 +120,16 @@ export default function DealerVehicleForm() {
               <Textarea id="shortDescription" name="shortDescription" rows={3} required placeholder="Gulf-spec 2024 G63 AMG, matte black, full carbon package..." className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500" />
             </div>
             <div className="mt-4 space-y-2">
+              <Label htmlFor="fa7s" className={labelCls}>Inspection Report — فحص (optional)</Label>
+              <Textarea id="fa7s" name="fa7s" rows={3} placeholder="Vehicle inspection details..." className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500" />
+            </div>
+            <div className="mt-4 space-y-2">
               <Label htmlFor="detailedSpecs" className={labelCls}>Features & Specs (one per line)</Label>
               <Textarea id="detailedSpecs" name="detailedSpecs" rows={5} placeholder={"360° Camera\nAdaptive Cruise Control\nBurmester Sound"} className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500" />
             </div>
           </div>
         </div>
 
-        {/* Right: Specification inputs */}
         <div className="lg:col-span-3 space-y-6">
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
             <h2 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Vehicle Info</h2>
@@ -188,19 +194,14 @@ export default function DealerVehicleForm() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label className={labelCls}>Origin Spec *</Label>
-                <Select name="originSpec" defaultValue="GULF">
-                  <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                    {ORIGINS.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="seats" className={labelCls}>Seats *</Label>
-                <Input id="seats" name="seats" type="number" required defaultValue={5} className={inputCls} />
-              </div>
+              <label className="flex items-center gap-2 cursor-pointer col-span-2 sm:col-span-1 self-end pb-2">
+                <input
+                  type="checkbox"
+                  name="waredWakaleh"
+                  className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-amber-500 focus:ring-amber-500"
+                />
+                <span className="text-sm text-zinc-200">Agency Import</span>
+              </label>
             </div>
           </div>
 

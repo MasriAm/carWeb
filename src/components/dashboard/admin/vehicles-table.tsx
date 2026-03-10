@@ -6,6 +6,7 @@ import Link from "next/link";
 import {
   adminDeleteVehicle,
   adminToggleVehicleStatus,
+  adminTogglePromoted,
 } from "@/lib/actions/admin";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Trash2, ToggleLeft, ToggleRight, Pencil } from "lucide-react";
+import { Trash2, ToggleLeft, ToggleRight, Pencil, Star } from "lucide-react";
 
 type AdminVehicleRow = {
   id: string;
@@ -35,6 +36,7 @@ type AdminVehicleRow = {
   status: string;
   productionYear: number;
   imageUrls: string[];
+  isPromoted: boolean;
   user: { name: string | null; email: string | null } | null;
   dealership: { name: string } | null;
 };
@@ -117,6 +119,15 @@ export default function AdminVehicleTable({
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right space-x-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 hover:bg-zinc-700"
+                    onClick={() => adminTogglePromoted(v.id)}
+                    title={v.isPromoted ? "Remove promotion" : "Promote listing"}
+                  >
+                    <Star className={`h-4 w-4 ${v.isPromoted ? "fill-amber-500 text-amber-500" : "text-zinc-500"}`} />
+                  </Button>
                   <Link href={`/dashboard/admin/vehicles/${v.id}/edit`}>
                     <Button
                       variant="ghost"

@@ -15,8 +15,6 @@ import type { Prisma } from "@/generated/prisma/client";
 import { formatJordanPhone } from "@/lib/format-jordan-phone";
 import { actionRateLimit } from "@/lib/rate-limit";
 
-// ─── READ ──────────────────────────────────────────────────────
-
 export async function getVehicles(rawFilters: Partial<VehicleFilterInput> = {}) {
   const parsed = vehicleFilterSchema.safeParse(rawFilters);
   const filters = parsed.success ? parsed.data : ({} as VehicleFilterInput);
@@ -29,7 +27,6 @@ export async function getVehicles(rawFilters: Partial<VehicleFilterInput> = {}) 
   if (filters.bodyType) where.bodyType = filters.bodyType;
   if (filters.transmission) where.transmission = filters.transmission;
   if (filters.fuelType) where.fuelType = filters.fuelType;
-  if (filters.originSpec) where.originSpec = filters.originSpec;
   if (filters.status) where.status = filters.status;
 
   if (filters.minPrice || filters.maxPrice) {
@@ -38,22 +35,25 @@ export async function getVehicles(rawFilters: Partial<VehicleFilterInput> = {}) 
     if (filters.maxPrice) where.price.lte = filters.maxPrice;
   }
 
-  if (filters.minYear || filters.maxYear) {
+  if (filters.year) {
+    where.productionYear = filters.year;
+  } else if (filters.minYear || filters.maxYear) {
     where.productionYear = {};
-    if (filters.minYear) where.productionYear.gte = filters.minYear;
-    if (filters.maxYear) where.productionYear.lte = filters.maxYear;
+    if (filters.minYear) (where.productionYear as Prisma.IntFilter).gte = filters.minYear;
+    if (filters.maxYear) (where.productionYear as Prisma.IntFilter).lte = filters.maxYear;
   }
 
-  const orderBy: Prisma.VehicleOrderByWithRelationInput =
-    filters.sortBy === "price_asc"
-      ? { price: "asc" }
+  const dateSort: Prisma.SortOrder =
+    filters.sortBy === "oldest" ? "asc" : "desc";
+
+  const orderBy: Prisma.VehicleOrderByWithRelationInput[] = [
+    { isPromoted: "desc" },
+    ...(filters.sortBy === "price_asc"
+      ? [{ price: "asc" as const }]
       : filters.sortBy === "price_desc"
-        ? { price: "desc" }
-        : filters.sortBy === "year_desc"
-          ? { productionYear: "desc" }
-          : filters.sortBy === "year_asc"
-            ? { productionYear: "asc" }
-            : { publicationDate: "desc" };
+        ? [{ price: "desc" as const }]
+        : [{ publicationDate: dateSort }]),
+  ];
 
   const limit = filters.limit ?? 12;
   const page = filters.page ?? 1;
@@ -73,12 +73,7 @@ export async function getVehicles(rawFilters: Partial<VehicleFilterInput> = {}) 
     db.vehicle.count({ where }),
   ]);
 
-  return {
-    vehicles,
-    total,
-    page,
-    totalPages: Math.ceil(total / limit),
-  };
+  return { vehicles, total, page, totalPages: Math.ceil(total / limit) };
 }
 
 export async function getVehicleById(id: string) {
@@ -110,8 +105,6 @@ export async function getModelsByBrand(brand: string) {
   return result.map((r) => r.model);
 }
 
-// ─── WRITE ─────────────────────────────────────────────────────
-
 export async function createVehicle(input: CreateVehicleInput) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
@@ -126,15 +119,14 @@ export async function createVehicle(input: CreateVehicleInput) {
 
   const data = parsed.data;
 
-  if (data.videoUrl) {
-    data.imageUrls = data.imageUrls;
-  }
-
   const vehicle = await db.vehicle.create({
     data: {
       ...data,
       videoUrl: data.videoUrl || null,
+      instagramVideoUrl: data.instagramVideoUrl || null,
       specificWhatsapp: data.specificWhatsapp ? formatJordanPhone(data.specificWhatsapp) : null,
+      fa7s: data.fa7s || null,
+      waredWakaleh: data.waredWakaleh ?? false,
       userId: session.user.id,
       detailedSpecs: data.detailedSpecs ?? [],
     },
@@ -168,9 +160,11 @@ export async function updateVehicle(id: string, input: UpdateVehicleInput) {
     data: {
       ...parsed.data,
       videoUrl: parsed.data.videoUrl ?? undefined,
+      instagramVideoUrl: parsed.data.instagramVideoUrl ?? undefined,
       specificWhatsapp: parsed.data.specificWhatsapp !== undefined
         ? (parsed.data.specificWhatsapp ? formatJordanPhone(parsed.data.specificWhatsapp) : null)
         : undefined,
+      fa7s: parsed.data.fa7s ?? undefined,
       detailedSpecs: parsed.data.detailedSpecs ?? undefined,
     },
   });
@@ -197,8 +191,6 @@ export async function deleteVehicle(id: string) {
   revalidatePath("/cars");
   return { success: true as const };
 }
-
-// ─── FAVORITES ─────────────────────────────────────────────────
 
 export async function toggleSaveVehicle(vehicleId: string) {
   const session = await auth();

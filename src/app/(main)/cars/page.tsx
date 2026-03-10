@@ -42,7 +42,7 @@ function filtersFromParams(
     bodyType: str("bodyType") as VehicleFilterInput["bodyType"],
     transmission: str("transmission") as VehicleFilterInput["transmission"],
     fuelType: str("fuelType") as VehicleFilterInput["fuelType"],
-    originSpec: str("originSpec") as VehicleFilterInput["originSpec"],
+    year: num("year"),
     sortBy: (str("sortBy") as VehicleFilterInput["sortBy"]) ?? "newest",
     page: num("page") ?? 1,
     limit: 12,

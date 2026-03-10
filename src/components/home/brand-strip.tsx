@@ -20,12 +20,14 @@ const brands: Brand[] = [
   { name: "BMW", slug: "BMW", logo: "https://www.carlogos.org/car-logos/bmw-logo.png" },
   { name: "Porsche", slug: "Porsche", logo: "https://www.carlogos.org/car-logos/porsche-logo.png" },
   { name: "Range Rover", slug: "Range Rover", logo: "https://www.carlogos.org/car-logos/land-rover-logo.png" },
+  { name: "Audi", slug: "Audi", logo: "https://www.carlogos.org/car-logos/audi-logo.png" },
+  { name: "Lexus", slug: "Lexus", logo: "https://www.carlogos.org/car-logos/lexus-logo.png" },
   { name: "Ferrari", slug: "Ferrari", logo: "https://www.carlogos.org/car-logos/ferrari-logo.png" },
   { name: "Lamborghini", slug: "Lamborghini", logo: "https://www.carlogos.org/car-logos/lamborghini-logo.png" },
-  { name: "BYD", slug: "BYD" },
-  { name: "Changan", slug: "Changan" },
+  { name: "BYD", slug: "BYD", logo: "https://www.carlogos.org/car-logos/byd-logo.png" },
+  { name: "Changan", slug: "Changan", logo: "https://www.carlogos.org/car-logos/changan-logo.png" },
   { name: "Neta", slug: "Neta" },
-  { name: "MG", slug: "MG" },
+  { name: "MG", slug: "MG", logo: "https://www.carlogos.org/car-logos/mg-logo.png" },
 ];
 
 function BrandLogo({ brand }: { brand: Brand }) {
@@ -51,7 +53,7 @@ function BrandLogo({ brand }: { brand: Brand }) {
       alt={brand.name}
       width={48}
       height={48}
-      className="object-contain p-1 brightness-0 invert opacity-60 group-hover/brand:opacity-100 transition-opacity"
+      className="object-contain p-1 opacity-80 group-hover/brand:opacity-100 transition-opacity drop-shadow-lg"
       unoptimized
       onError={() => setImgError(true)}
     />

@@ -53,7 +53,13 @@ export default function DashboardShell({
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const filteredNav = NAV_ITEMS.filter((item) => item.roles.includes(role));
+  const filteredNav = NAV_ITEMS.filter((item) => {
+    if (!item.roles.includes(role)) return false;
+    if (role === "DEALER" && (item.href === "/dashboard" || item.href === "/dashboard/saved")) {
+      return false;
+    }
+    return true;
+  });
 
   const isActive = (href: string) =>
     href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
@@ -122,16 +128,16 @@ export default function DashboardShell({
               </Button>
             </Link>
           )}
-          <button className="relative h-9 w-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-zinc-700 transition-colors">
+          <button type="button" className="relative h-9 w-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-zinc-700 transition-colors">
             <Bell className="h-4 w-4" />
           </button>
-          <button
-            onClick={() => signOut({ callbackUrl: "/" })}
+          <Link
+            href="/dashboard/profile"
             className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-zinc-950 text-xs font-bold shadow-lg shadow-amber-500/20"
             title={`Signed in as ${userName || role}`}
           >
             {initials}
-          </button>
+          </Link>
         </div>
       </header>
 

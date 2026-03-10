@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import { motion } from "framer-motion";
 import { getModelsByBrand } from "@/lib/actions/vehicles";
 import {
   Select,
@@ -19,13 +18,7 @@ const BRANDS = [
   "Range Rover", "Lexus", "Kia", "Ferrari", "Lamborghini",
   "Hyundai", "BYD", "Changan", "Neta", "MG",
 ];
-const ORIGINS = [
-  { value: "GULF", label: "Gulf Spec" },
-  { value: "AMERICAN", label: "US Spec" },
-  { value: "EUROPEAN", label: "European" },
-  { value: "JORDANIAN", label: "Jordanian" },
-  { value: "CHINESE", label: "Chinese" },
-];
+
 const PRICE_RANGES = [
   { label: "Under 20K", min: "0", max: "20000" },
   { label: "20K – 50K", min: "20000", max: "50000" },
@@ -33,14 +26,16 @@ const PRICE_RANGES = [
   { label: "100K – 200K", min: "100000", max: "200000" },
   { label: "200K+", min: "200000", max: "" },
 ];
+
 const SORT_OPTIONS = [
-  { value: "newest", label: "Newest" },
+  { value: "newest", label: "Newest First" },
+  { value: "oldest", label: "Oldest First" },
   { value: "price_asc", label: "Price ↑" },
   { value: "price_desc", label: "Price ↓" },
-  { value: "year_desc", label: "Year ↓" },
 ];
 
-const pillSpring = { type: "spring" as const, stiffness: 500, damping: 30 };
+const currentYear = new Date().getFullYear();
+const YEARS = Array.from({ length: currentYear - 2009 }, (_, i) => currentYear - i);
 
 export default function HorizontalFilter({ brands }: { brands: string[] }) {
   const router = useRouter();
@@ -52,7 +47,6 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
 
   const [models, setModels] = useState<string[]>([]);
   const currentBrand = searchParams.get("brand") || "";
-  const currentOrigin = searchParams.get("originSpec") || "";
 
   useEffect(() => {
     if (currentBrand) {
@@ -85,9 +79,7 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
         params.delete("minPrice");
         params.delete("maxPrice");
       } else {
-        const range = PRICE_RANGES.find(
-          (r) => `${r.min}-${r.max}` === value
-        );
+        const range = PRICE_RANGES.find((r) => `${r.min}-${r.max}` === value);
         if (range) {
           if (range.min) params.set("minPrice", range.min);
           else params.delete("minPrice");
@@ -120,33 +112,7 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
 
   return (
     <div className="sticky top-16 z-40 bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800">
-      <div className="max-w-[1400px] mx-auto px-4 py-3 space-y-3">
-        {/* Origin spec pills with sliding background */}
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
-          {[{ value: "", label: "All Specs" }, ...ORIGINS].map((origin) => {
-            const isActive = currentOrigin === origin.value;
-            return (
-              <button
-                key={origin.value}
-                onClick={() => updateFilter("originSpec", origin.value || "all")}
-                className="relative px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors"
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="activeFilterPill"
-                    className="absolute inset-0 rounded-full bg-amber-500"
-                    transition={pillSpring}
-                  />
-                )}
-                <span className={`relative z-10 ${isActive ? "text-zinc-950" : "text-zinc-400 hover:text-zinc-200"}`}>
-                  {origin.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Dropdowns row */}
+      <div className="max-w-[1400px] mx-auto px-4 py-3">
         <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
           <Select value={searchParams.get("brand") || "all"} onValueChange={(v) => updateFilter("brand", v)}>
             <SelectTrigger className="w-[160px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
@@ -174,6 +140,18 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
             </Select>
           )}
 
+          <Select value={searchParams.get("year") || "all"} onValueChange={(v) => updateFilter("year", v)}>
+            <SelectTrigger className="w-[120px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
+              <SelectValue placeholder="Year" />
+            </SelectTrigger>
+            <SelectContent className="bg-zinc-900 border-zinc-700 max-h-60">
+              <SelectItem value="all">Any Year</SelectItem>
+              {YEARS.map((y) => (
+                <SelectItem key={y} value={String(y)}>{y}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           <Select value={currentPriceRange} onValueChange={updatePriceRange}>
             <SelectTrigger className="w-[140px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
               <SelectValue placeholder="Price" />
@@ -189,7 +167,7 @@ export default function HorizontalFilter({ brands }: { brands: string[] }) {
           </Select>
 
           <Select value={searchParams.get("sortBy") || "newest"} onValueChange={(v) => updateFilter("sortBy", v)}>
-            <SelectTrigger className="w-[120px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
+            <SelectTrigger className="w-[140px] shrink-0 bg-zinc-900 border-zinc-700 text-zinc-200 h-9 text-sm">
               <SelectValue placeholder="Sort" />
             </SelectTrigger>
             <SelectContent className="bg-zinc-900 border-zinc-700">

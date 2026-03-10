@@ -7,8 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// ─── ENUMS ──────────────────────────────────────────────────────
-
 enum Role {
   ADMIN
   DEALER
@@ -48,16 +46,6 @@ enum FuelType {
   HYBRID
 }
 
-enum OriginSpec {
-  EUROPEAN
-  CHINESE
-  JORDANIAN
-  AMERICAN
-  GULF
-}
-
-// ─── AUTH.JS MODELS ─────────────────────────────────────────────
-
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -93,8 +81,6 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
-
-// ─── CORE MODELS ────────────────────────────────────────────────
 
 model User {
   id            String    @id @default(cuid())
@@ -140,34 +126,31 @@ model Vehicle {
   dealershipId     String?
   status           VehicleStatus @default(ON_SALE)
 
-  // Media
   videoUrl         String?
   imageUrls        String[]
+  instagramVideoUrl String?
 
-  // Direct contact override
   specificWhatsapp String?
 
-  // Basic Info
   brand            String
   model            String
   price            Int
   shortDescription String        @db.Text
 
-  // Specs
   condition        Condition
   bodyType         BodyType
-  seats            Int
   transmission     Transmission
   engineCapacityCC Int
   fuelType         FuelType
   mileageKm        Int
-  originSpec       OriginSpec
   productionYear   Int
 
-  // Features
+  fa7s             String?       @db.Text
+  waredWakaleh     Boolean       @default(false)
+  isPromoted       Boolean       @default(false)
+
   detailedSpecs    Json          @default("[]")
 
-  // Timestamps
   publicationDate  DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
@@ -177,7 +160,6 @@ model Vehicle {
 
   @@index([brand])
   @@index([price])
-  @@index([originSpec])
   @@index([status])
   @@index([dealershipId])
   @@index([userId])
@@ -185,6 +167,7 @@ model Vehicle {
   @@index([condition])
   @@index([bodyType])
   @@index([fuelType])
+  @@index([isPromoted])
 }
 
 model SavedVehicle {

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { deleteVehicle, updateVehicle } from "@/lib/actions/vehicles";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Trash2, ToggleLeft, ToggleRight } from "lucide-react";
+import { Trash2, ToggleLeft, ToggleRight, Pencil } from "lucide-react";
 
 type VehicleRow = {
   id: string;
@@ -104,6 +105,16 @@ export default function VehicleTable({ vehicles }: { vehicles: VehicleRow[] }) {
                 </TableCell>
                 <TableCell className="text-zinc-400">{v._count.savedBy}</TableCell>
                 <TableCell className="text-right space-x-1">
+                  <Link href={`/dashboard/vehicles/${v.id}/edit`}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 hover:bg-zinc-700"
+                      title="Edit vehicle"
+                    >
+                      <Pencil className="h-4 w-4 text-amber-500" />
+                    </Button>
+                  </Link>
                   <Button
                     variant="ghost"
                     size="icon"

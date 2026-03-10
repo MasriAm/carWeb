@@ -116,7 +116,7 @@ export async function getAllDealerships() {
   return db.dealership.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      user: { select: { name: true, email: true } },
+      user: { select: { id: true, name: true, email: true } },
       _count: { select: { vehicles: true } },
     },
   });
@@ -127,6 +127,69 @@ export async function adminDeleteDealership(dealershipId: string) {
   await db.dealership.delete({ where: { id: dealershipId } });
   revalidatePath("/dashboard/admin/dealerships");
   return { success: true as const };
+}
+
+export async function adminUpdateDealership(
+  dealershipId: string,
+  data: { name?: string; slug?: string; phone?: string; website?: string; address?: string; description?: string; whatsappNumber?: string }
+) {
+  await requireAdmin();
+  const existing = await db.dealership.findUnique({ where: { id: dealershipId } });
+  if (!existing) return { success: false as const, error: "Dealership not found" };
+
+  if (data.slug && data.slug !== existing.slug) {
+    const taken = await db.dealership.findUnique({ where: { slug: data.slug } });
+    if (taken) return { success: false as const, error: "Slug already taken" };
+  }
+
+  await db.dealership.update({
+    where: { id: dealershipId },
+    data: {
+      name: data.name ?? undefined,
+      slug: data.slug ?? undefined,
+      phone: data.phone ?? undefined,
+      website: data.website ?? undefined,
+      address: data.address ?? undefined,
+      description: data.description ?? undefined,
+      whatsappNumber: data.whatsappNumber ?? undefined,
+    },
+  });
+
+  revalidatePath("/dashboard/admin/dealerships");
+  return { success: true as const };
+}
+
+export async function adminResetDealerPassword(userId: string, newPassword: string) {
+  await requireAdmin();
+  if (!newPassword || newPassword.length < 6) {
+    return { success: false as const, error: "Password must be at least 6 characters" };
+  }
+
+  const { hash } = await import("bcryptjs");
+  const hashed = await hash(newPassword, 12);
+
+  await db.user.update({
+    where: { id: userId },
+    data: { password: hashed },
+  });
+
+  revalidatePath("/dashboard/admin/dealerships");
+  return { success: true as const };
+}
+
+export async function adminTogglePromoted(vehicleId: string) {
+  await requireAdmin();
+  const vehicle = await db.vehicle.findUnique({ where: { id: vehicleId } });
+  if (!vehicle) return { success: false as const, error: "Vehicle not found" };
+
+  await db.vehicle.update({
+    where: { id: vehicleId },
+    data: { isPromoted: !vehicle.isPromoted },
+  });
+
+  revalidatePath("/dashboard/admin/vehicles");
+  revalidatePath("/cars");
+  return { success: true as const, isPromoted: !vehicle.isPromoted };
 }
 
 // ─── STATS ─────────────────────────────────────────────────────
