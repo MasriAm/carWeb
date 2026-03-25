@@ -18,7 +18,12 @@ import { Loader2, Send } from "lucide-react";
 import ImageDropzone from "@/components/dashboard/image-dropzone";
 
 const BODY_TYPES = ["SUV", "SEDAN", "COUPE", "HATCHBACK", "CONVERTIBLE", "PICKUP", "VAN", "WAGON"];
-const FUEL_TYPES = ["GAS", "ELECTRIC", "DIESEL", "HYBRID"];
+const FUEL_OPTIONS = [
+  { value: "GAS", label: "Gasoline" },
+  { value: "DIESEL", label: "Diesel" },
+  { value: "ELECTRIC", label: "Electric" },
+  { value: "HYBRID", label: "Hybrid" },
+];
 
 const inputCls = "bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 h-10";
 const labelCls = "text-zinc-300 text-sm font-medium";
@@ -190,7 +195,7 @@ export default function DealerVehicleForm() {
                 <Select name="fuelType" defaultValue="GAS">
                   <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-zinc-900 border-zinc-700">
-                    {FUEL_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                    {FUEL_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>

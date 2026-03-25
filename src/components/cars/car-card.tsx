@@ -175,10 +175,10 @@ export default function CarCard({
     : null;
 
   return (
-    <Link href={`/cars/${vehicle.id}`} className="block">
-      <div className={`bg-zinc-900 rounded-xl border hover:border-zinc-700 transition-all overflow-hidden flex flex-col group/card ${
-        vehicle.isPromoted ? "border-amber-500/40 shadow-lg shadow-amber-500/5" : "border-zinc-800"
-      }`}>
+    <div className={`bg-zinc-900 rounded-xl border hover:border-zinc-700 transition-all overflow-hidden flex flex-col group/card ${
+      vehicle.isPromoted ? "border-amber-500/40 shadow-lg shadow-amber-500/5" : "border-zinc-800"
+    }`}>
+      <Link href={`/cars/${vehicle.id}`} className="block flex-1 flex flex-col min-h-0">
         <div className="relative">
           <MediaSlider
             videoUrl={vehicle.videoUrl}
@@ -213,7 +213,12 @@ export default function CarCard({
 
           {isLoggedIn && (
             <button
-              onClick={handleSave}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                void handleSave(e);
+              }}
               disabled={saving}
               className="absolute top-10 right-2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors z-10"
               aria-label={saved ? "Unsave" : "Save"}
@@ -283,26 +288,25 @@ export default function CarCard({
               {vehicle.condition}
             </Badge>
           </div>
-
-          <div className="mt-auto flex gap-2">
-            {whatsappUrl && (
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <motion.div whileTap={{ scale: 0.97 }} transition={tactileSpring}>
-                  <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white">
-                    <MessageCircle className="mr-1.5 h-3.5 w-3.5" />
-                    WhatsApp
-                  </Button>
-                </motion.div>
-              </a>
-            )}
-          </div>
         </div>
+      </Link>
+
+      <div className="px-4 pb-4 flex gap-2">
+        {whatsappUrl && (
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <motion.div whileTap={{ scale: 0.97 }} transition={tactileSpring}>
+              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white">
+                <MessageCircle className="mr-1.5 h-3.5 w-3.5" />
+                WhatsApp
+              </Button>
+            </motion.div>
+          </a>
+        )}
       </div>
-    </Link>
+    </div>
   );
 }

@@ -43,16 +43,22 @@ export async function getVehicles(rawFilters: Partial<VehicleFilterInput> = {}) 
     if (filters.maxYear) (where.productionYear as Prisma.IntFilter).lte = filters.maxYear;
   }
 
-  const dateSort: Prisma.SortOrder =
-    filters.sortBy === "oldest" ? "asc" : "desc";
+  // createdAt_desc: Vehicle has no createdAt; use publicationDate desc (listing chronology).
+  const sortBy = filters.sortBy ?? "createdAt_desc";
+  const secondarySort: Prisma.VehicleOrderByWithRelationInput =
+    sortBy === "price_asc"
+      ? { price: "asc" }
+      : sortBy === "price_desc"
+        ? { price: "desc" }
+        : sortBy === "year_desc"
+          ? { productionYear: "desc" }
+          : sortBy === "oldest"
+            ? { publicationDate: "asc" }
+            : { publicationDate: "desc" };
 
   const orderBy: Prisma.VehicleOrderByWithRelationInput[] = [
     { isPromoted: "desc" },
-    ...(filters.sortBy === "price_asc"
-      ? [{ price: "asc" as const }]
-      : filters.sortBy === "price_desc"
-        ? [{ price: "desc" as const }]
-        : [{ publicationDate: dateSort }]),
+    secondarySort,
   ];
 
   const limit = filters.limit ?? 12;

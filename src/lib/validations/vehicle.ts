@@ -54,9 +54,16 @@ export const vehicleFilterSchema = z.object({
   maxYear: z.coerce.number().int().optional(),
   year: z.coerce.number().int().min(1970).optional(),
   sortBy: z
-    .enum(["price_asc", "price_desc", "newest", "oldest"])
+    .enum([
+      "price_asc",
+      "price_desc",
+      "newest",
+      "oldest",
+      "createdAt_desc",
+      "year_desc",
+    ])
     .optional()
-    .default("newest"),
+    .default("createdAt_desc"),
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(50).optional().default(12),
 });
