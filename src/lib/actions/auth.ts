@@ -3,7 +3,7 @@
 import { signIn } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { registerSchema, loginSchema } from "@/lib/validations/auth";
-import { authRateLimit, getIp } from "@/lib/rate-limit";
+import { authRateLimit, getIp, safeLimit } from "@/lib/rate-limit";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
 
@@ -14,9 +14,12 @@ export type AuthResult = {
 
 export async function loginAction(formData: FormData): Promise<AuthResult> {
   const ip = await getIp();
-  const { success } = await authRateLimit.limit(ip);
+  const { success } = await safeLimit(authRateLimit, ip);
   if (!success) {
-    return { success: false, error: "Too many requests. Please try again in 15 minutes." };
+    return {
+      success: false,
+      error: "Too many requests. Please try again in 15 minutes.",
+    };
   }
 
   const raw = {
@@ -48,9 +51,12 @@ export async function loginAction(formData: FormData): Promise<AuthResult> {
 
 export async function registerAction(formData: FormData): Promise<AuthResult> {
   const ip = await getIp();
-  const { success } = await authRateLimit.limit(ip);
+  const { success } = await safeLimit(authRateLimit, ip);
   if (!success) {
-    return { success: false, error: "Too many requests. Please try again in 15 minutes." };
+    return {
+      success: false,
+      error: "Too many requests. Please try again in 15 minutes.",
+    };
   }
 
   const raw = {

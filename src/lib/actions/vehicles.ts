@@ -13,7 +13,47 @@ import {
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@/generated/prisma/client";
 import { formatJordanPhone } from "@/lib/format-jordan-phone";
-import { actionRateLimit } from "@/lib/rate-limit";
+import { actionRateLimit, safeLimit } from "@/lib/rate-limit";
+
+/** Minimal vehicle shape for marketplace grid cards (reduces RSC payload). */
+const marketplaceListSelect = {
+  id: true,
+  status: true,
+  videoUrl: true,
+  imageUrls: true,
+  brand: true,
+  model: true,
+  price: true,
+  shortDescription: true,
+  condition: true,
+  bodyType: true,
+  transmission: true,
+  engineCapacityCC: true,
+  fuelType: true,
+  mileageKm: true,
+  productionYear: true,
+  isPromoted: true,
+  waredWakaleh: true,
+  specificWhatsapp: true,
+  dealership: {
+    select: {
+      name: true,
+      slug: true,
+      whatsappNumber: true,
+      phone: true,
+    },
+  },
+  user: {
+    select: {
+      name: true,
+      phone: true,
+    },
+  },
+} satisfies Prisma.VehicleSelect;
+
+export type MarketplaceListVehicle = Prisma.VehicleGetPayload<{
+  select: typeof marketplaceListSelect;
+}>;
 
 export async function getVehicles(rawFilters: Partial<VehicleFilterInput> = {}) {
   const parsed = vehicleFilterSchema.safeParse(rawFilters);
@@ -71,10 +111,7 @@ export async function getVehicles(rawFilters: Partial<VehicleFilterInput> = {}) 
       orderBy,
       skip,
       take: limit,
-      include: {
-        dealership: { select: { name: true, slug: true, whatsappNumber: true, phone: true } },
-        user: { select: { name: true, phone: true } },
-      },
+      select: marketplaceListSelect,
     }),
     db.vehicle.count({ where }),
   ]);
@@ -115,7 +152,7 @@ export async function createVehicle(input: CreateVehicleInput) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
 
-  const { success } = await actionRateLimit.limit(session.user.id);
+  const { success } = await safeLimit(actionRateLimit, session.user.id);
   if (!success) throw new Error("Rate limit exceeded. Please slow down.");
 
   const parsed = createVehicleSchema.safeParse(input);
@@ -139,6 +176,7 @@ export async function createVehicle(input: CreateVehicleInput) {
   });
 
   revalidatePath("/cars");
+  revalidatePath(`/cars/${vehicle.id}`);
   return { success: true as const, vehicle };
 }
 
@@ -146,7 +184,7 @@ export async function updateVehicle(id: string, input: UpdateVehicleInput) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
 
-  const { success } = await actionRateLimit.limit(session.user.id);
+  const { success } = await safeLimit(actionRateLimit, session.user.id);
   if (!success) throw new Error("Rate limit exceeded. Please slow down.");
 
   const existing = await db.vehicle.findUnique({ where: { id } });
@@ -176,6 +214,7 @@ export async function updateVehicle(id: string, input: UpdateVehicleInput) {
   });
 
   revalidatePath("/cars");
+  revalidatePath(`/cars/${id}`);
   return { success: true as const, vehicle };
 }
 
@@ -183,7 +222,7 @@ export async function deleteVehicle(id: string) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
 
-  const { success } = await actionRateLimit.limit(session.user.id);
+  const { success } = await safeLimit(actionRateLimit, session.user.id);
   if (!success) throw new Error("Rate limit exceeded. Please slow down.");
 
   const existing = await db.vehicle.findUnique({ where: { id } });
@@ -195,6 +234,7 @@ export async function deleteVehicle(id: string) {
 
   await db.vehicle.delete({ where: { id } });
   revalidatePath("/cars");
+  revalidatePath(`/cars/${id}`);
   return { success: true as const };
 }
 

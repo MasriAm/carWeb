@@ -49,24 +49,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const { email, password } = parsed.data;
 
-        const user = await db.user.findUnique({
-          where: { email },
-        });
+        try {
+          const user = await db.user.findUnique({ where: { email } });
 
-        if (!user || !user.password) return null;
-        if (user.isSuspended) return null;
+          if (!user || !user.password) return null;
+          if (user.isSuspended) return null;
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) return null;
+          const passwordMatch = await bcrypt.compare(password, user.password);
+          if (!passwordMatch) return null;
 
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image,
-          role: user.role,
-          isSuspended: user.isSuspended,
-        };
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            role: user.role,
+            isSuspended: user.isSuspended,
+          };
+        } catch {
+          // Any infrastructure error (DB timeout, "fetch failed", etc.)
+          // is translated into a clean "invalid credentials" response
+          // instead of crashing the auth endpoint.
+          return null;
+        }
       },
     }),
   ],

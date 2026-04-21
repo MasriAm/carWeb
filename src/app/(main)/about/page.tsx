@@ -1,4 +1,13 @@
-import { Shield, Users, Globe, Car, MapPin, Phone, Mail, FileCheck } from "lucide-react";
+import {
+  Shield,
+  Users,
+  Globe,
+  Car,
+  MapPin,
+  Phone,
+  Mail,
+  FileCheck,
+} from "lucide-react";
 
 export const metadata = {
   title: "About Us",
@@ -56,35 +65,76 @@ const trustReasons = [
 
 export default function AboutPage() {
   return (
-    <div className="pt-24 pb-16 bg-zinc-950">
-      {/* Hero */}
-      <section className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center mb-20">
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-6">
-          About <span className="text-amber-500">Royal Cars</span>
-        </h1>
-        <p className="text-lg text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-          Royal Cars is Jordan&apos;s premier online marketplace for luxury and
-          performance vehicles. Founded in Amman, we connect discerning buyers
-          with the finest cars from trusted dealers and private sellers across
-          the Kingdom.
-        </p>
+    <div className="bg-zinc-950 pt-24 pb-20">
+      {/* Hero — matches the home hero aesthetic (gradient + grid, no image) */}
+      <section
+        className="relative overflow-hidden border-b border-zinc-900"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, #1C1C1E 0%, #050505 65%)",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(245,158,11,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.03) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
+          <span className="mb-7 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-amber-500">
+              About Us
+            </span>
+          </span>
+          <h1 className="mb-5 text-balance text-4xl font-extrabold tracking-tight text-zinc-50 sm:text-5xl md:text-6xl">
+            About <span className="text-amber-500">Royal Cars</span>
+          </h1>
+          <p className="mx-auto max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+            Royal Cars is Jordan&apos;s premier online marketplace for luxury
+            and performance vehicles. Founded in Amman, we connect discerning
+            buyers with the finest cars from trusted dealers and private
+            sellers across the Kingdom.
+          </p>
+        </div>
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="mb-12 text-center">
+          <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.1em] text-amber-500">
+            What We Offer
+          </p>
+          <h2 className="text-3xl font-extrabold tracking-tight text-zinc-50 sm:text-4xl">
+            Everything you need, in one place
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="text-center p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-colors"
+              className="rounded-2xl border border-zinc-800 bg-zinc-900 p-7 transition-colors hover:border-zinc-700"
             >
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500 mb-4">
-                <feature.icon className="h-6 w-6" />
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-500">
+                <feature.icon className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="mb-2 text-[15px] font-bold text-zinc-50">
                 {feature.title}
               </h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">
+              <p className="text-[13px] leading-relaxed text-zinc-500">
                 {feature.description}
               </p>
             </div>
@@ -93,40 +143,46 @@ export default function AboutPage() {
       </section>
 
       {/* Mission */}
-      <section className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 mb-20 text-center">
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-10">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-amber-500 mb-4">
+      <section className="mx-auto max-w-4xl px-4 pb-20 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-10 text-center">
+          <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.1em] text-amber-500">
             Our Mission
-          </h2>
-          <p className="text-xl text-zinc-300 leading-relaxed max-w-2xl mx-auto font-light">
+          </p>
+          <p className="mx-auto max-w-2xl text-xl font-light leading-relaxed text-zinc-200 sm:text-2xl">
             &ldquo;Bringing transparency to the Jordanian auto market.&rdquo;
           </p>
-          <p className="text-zinc-500 mt-4 max-w-xl mx-auto">
-            We believe every car tells a story — and every buyer deserves to know
-            the full truth before making a decision. No hidden damage, no
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-zinc-500">
+            We believe every car tells a story — and every buyer deserves to
+            know the full truth before making a decision. No hidden damage, no
             inflated prices, no surprises.
           </p>
         </div>
       </section>
 
       {/* Why Trust Us */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-20">
-        <h2 className="text-2xl font-bold text-white mb-8 text-center">
-          Why Trust Us
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+        <div className="mb-12 text-center">
+          <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.1em] text-amber-500">
+            Why Trust Us
+          </p>
+          <h2 className="text-3xl font-extrabold tracking-tight text-zinc-50 sm:text-4xl">
+            Built on verification and trust
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {trustReasons.map((reason) => (
             <div
               key={reason.title}
-              className="p-6 rounded-2xl bg-zinc-900 border border-zinc-800"
+              className="rounded-2xl border border-zinc-800 bg-zinc-900 p-7"
             >
-              <div className="h-10 w-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center mb-4">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-500">
                 <reason.icon className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="mb-2 text-[15px] font-bold text-zinc-50">
                 {reason.title}
               </h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">
+              <p className="text-[13px] leading-relaxed text-zinc-500">
                 {reason.description}
               </p>
             </div>
@@ -136,41 +192,52 @@ export default function AboutPage() {
 
       {/* Contact / Location */}
       <section className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 sm:p-10">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">
-            Visit Us
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-            <div className="flex flex-col items-center gap-2">
-              <div className="h-10 w-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
-                <MapPin className="h-5 w-5" />
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8 sm:p-10">
+          <div className="mb-8 text-center">
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.1em] text-amber-500">
+              Get in Touch
+            </p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-zinc-50 sm:text-3xl">
+              Visit Us
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 text-center sm:grid-cols-3">
+            {[
+              {
+                icon: MapPin,
+                title: "Main Office",
+                lines: ["Mecca Street, Building 47", "Amman, Jordan 11183"],
+              },
+              {
+                icon: Phone,
+                title: "Phone",
+                lines: ["+962 6 593 1000", "+962 79 123 4567"],
+              },
+              {
+                icon: Mail,
+                title: "Email",
+                lines: ["info@royalcars.jo", "support@royalcars.jo"],
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="flex flex-col items-center gap-3"
+              >
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-500">
+                  <item.icon className="h-5 w-5" />
+                </div>
+                <h3 className="text-sm font-bold text-zinc-50">{item.title}</h3>
+                <p className="text-sm leading-relaxed text-zinc-400">
+                  {item.lines.map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      {i < item.lines.length - 1 && <br />}
+                    </span>
+                  ))}
+                </p>
               </div>
-              <h3 className="text-sm font-semibold text-white">Main Office</h3>
-              <p className="text-sm text-zinc-400">
-                Mecca Street, Building 47<br />
-                Amman, Jordan 11183
-              </p>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="h-10 w-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
-                <Phone className="h-5 w-5" />
-              </div>
-              <h3 className="text-sm font-semibold text-white">Phone</h3>
-              <p className="text-sm text-zinc-400">
-                +962 6 593 1000<br />
-                +962 79 123 4567
-              </p>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="h-10 w-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
-                <Mail className="h-5 w-5" />
-              </div>
-              <h3 className="text-sm font-semibold text-white">Email</h3>
-              <p className="text-sm text-zinc-400">
-                info@royalcars.jo<br />
-                support@royalcars.jo
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>

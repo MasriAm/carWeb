@@ -70,6 +70,27 @@ export default function DashboardShell({
 
   const canAddVehicle = role === "DEALER" || role === "ADMIN";
 
+  const roleLabel =
+    role === "ADMIN"
+      ? "Admin Panel"
+      : role === "DEALER"
+      ? "Dealer Panel"
+      : "My Dashboard";
+
+  const roleBadge = (
+    <div className="flex items-center gap-3 px-5 py-4 border-b border-zinc-800">
+      <div className="h-9 w-9 shrink-0 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-xs font-extrabold text-zinc-950 shadow-lg shadow-amber-500/20">
+        {initials}
+      </div>
+      <div className="min-w-0">
+        <p className="text-[13px] font-bold text-white truncate">{roleLabel}</p>
+        <p className="text-[10px] text-zinc-500 capitalize">
+          {role.toLowerCase()} Account
+        </p>
+      </div>
+    </div>
+  );
+
   const sidebarNav = (
     <nav className="flex flex-col gap-0.5 flex-1">
       {filteredNav.map((item) => {
@@ -143,6 +164,7 @@ export default function DashboardShell({
 
       {/* ─── Desktop Sidebar ─── */}
       <aside className="fixed top-16 left-0 bottom-0 w-[260px] bg-zinc-950 border-r border-zinc-800 hidden lg:flex flex-col z-30">
+        {roleBadge}
         <div className="px-4 pt-5 pb-3">
           <Link
             href="/"
@@ -177,6 +199,7 @@ export default function DashboardShell({
         <>
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
           <aside className="fixed top-16 left-0 bottom-0 w-[260px] bg-zinc-950 z-50 lg:hidden flex flex-col shadow-2xl border-r border-zinc-800">
+            {roleBadge}
             <div className="px-4 pt-4 pb-2">
               <Link
                 href="/"

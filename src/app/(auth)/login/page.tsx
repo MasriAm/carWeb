@@ -7,7 +7,7 @@ import { loginAction } from "@/lib/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Crown, Eye, EyeOff, Loader2, Timer } from "lucide-react";
+import { Crown, Eye, EyeOff, Loader2, LogIn, Timer } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -35,56 +35,56 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4 py-20">
+      {/* Decorative background — soft amber glow + subtle grid */}
       <div
-        className="hidden lg:flex lg:w-1/2 relative bg-cover bg-center"
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(245,158,11,0.05) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "url(https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=80)",
+            "linear-gradient(rgba(245,158,11,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.03) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
         }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80" />
-        <div className="relative z-10 flex flex-col justify-between p-12 text-white">
-          <Link href="/" className="flex items-center gap-2.5">
+      />
+
+      <div className="relative w-full max-w-md">
+        <div className="mb-8 text-center">
+          <Link
+            href="/"
+            className="mb-5 inline-flex items-center gap-2 hover:opacity-90"
+          >
             <Crown className="h-7 w-7 text-amber-500" />
-            <span className="text-xl font-bold tracking-tight">Royal Cars</span>
+            <span className="text-xl font-extrabold tracking-tight text-white">
+              Royal<span className="text-amber-500">Cars</span>
+            </span>
           </Link>
-          <div>
-            <h2 className="text-4xl font-bold leading-tight mb-3">
-              Jordan&apos;s Premier<br />Car Marketplace
-            </h2>
-            <p className="text-zinc-400 max-w-sm">
-              Browse luxury and performance vehicles from trusted dealers across Amman.
-            </p>
-          </div>
-          <p className="text-xs text-zinc-600">
-            &copy; {new Date().getFullYear()} Royal Cars. All rights reserved.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-zinc-950">
-        <div className="w-full max-w-sm">
-          <div className="lg:hidden flex items-center gap-2.5 mb-10">
-            <Crown className="h-6 w-6 text-amber-500" />
-            <span className="text-lg font-bold text-white">Royal Cars</span>
-          </div>
-
-          <h1 className="text-2xl font-bold text-white mb-1">Welcome back</h1>
-          <p className="text-zinc-500 text-sm mb-8">
+          <h1 className="mb-1.5 text-2xl font-extrabold text-white">
+            Welcome back
+          </h1>
+          <p className="text-sm text-zinc-500">
             Sign in to your account to continue.
           </p>
+        </div>
 
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-7 shadow-lg shadow-black/40 sm:p-8">
           {error && (
             <div
-              className={`mb-6 rounded-xl px-4 py-4 text-sm flex items-start gap-3 ${
+              className={`mb-5 flex items-start gap-3 rounded-xl border px-4 py-3.5 text-sm ${
                 error.includes("Too many requests")
-                  ? "bg-amber-500/10 border border-amber-500/30 text-amber-400"
-                  : "bg-red-500/10 border border-red-500/20 text-red-400"
+                  ? "border-amber-500/30 bg-amber-500/10 text-amber-400"
+                  : "border-red-500/20 bg-red-500/10 text-red-400"
               }`}
             >
               {error.includes("Too many requests") && (
-                <Timer className="h-5 w-5 shrink-0 mt-0.5" />
+                <Timer className="mt-0.5 h-4 w-4 shrink-0" />
               )}
               <span>{error}</span>
             </div>
@@ -92,7 +92,9 @@ export default function LoginPage() {
 
           <form action={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-zinc-300">Email</Label>
+              <Label htmlFor="email" className="text-zinc-300">
+                Email
+              </Label>
               <Input
                 id="email"
                 name="email"
@@ -101,12 +103,14 @@ export default function LoginPage() {
                 required
                 disabled={isPending}
                 autoComplete="email"
-                className="h-11 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-600"
+                className="h-11 border-zinc-700 bg-zinc-800 text-zinc-100 placeholder:text-zinc-500"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-zinc-300">Password</Label>
+              <Label htmlFor="password" className="text-zinc-300">
+                Password
+              </Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -116,38 +120,55 @@ export default function LoginPage() {
                   required
                   disabled={isPending}
                   autoComplete="current-password"
-                  className="h-11 pr-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-600"
+                  className="h-11 border-zinc-700 bg-zinc-800 pr-10 text-zinc-100 placeholder:text-zinc-500"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors"
+                  onClick={() => setShowPassword((s) => !s)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors hover:text-zinc-300"
                   tabIndex={-1}
+                  aria-label={
+                    showPassword ? "Hide password" : "Show password"
+                  }
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
             </div>
 
-            <Button type="submit" className="w-full h-11 bg-amber-500 text-zinc-950 hover:bg-amber-400 font-semibold" disabled={isPending}>
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="h-11 w-full bg-amber-500 font-semibold text-zinc-950 hover:bg-amber-400"
+            >
               {isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Signing in...
                 </>
               ) : (
-                "Sign In"
+                <>
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Sign In
+                </>
               )}
             </Button>
           </form>
-
-          <p className="mt-8 text-center text-sm text-zinc-500">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-medium text-amber-500 hover:text-amber-400">
-              Create one
-            </Link>
-          </p>
         </div>
+
+        <p className="mt-7 text-center text-sm text-zinc-500">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="font-semibold text-amber-500 hover:text-amber-400"
+          >
+            Create one
+          </Link>
+        </p>
       </div>
     </div>
   );

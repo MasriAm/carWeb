@@ -1,9 +1,10 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import type { MarketplaceListVehicle } from "@/lib/actions/vehicles";
 import CarCard from "./car-card";
 
-type VehicleCard = Parameters<typeof CarCard>[0]["vehicle"];
+type VehicleCard = MarketplaceListVehicle;
 
 const cardVariants = {
   initial: { opacity: 0, y: 20 },
@@ -21,7 +22,7 @@ export default function CarGrid({
   isLoggedIn: boolean;
 }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
       <AnimatePresence mode="popLayout">
         {vehicles.map((v, i) => (
           <motion.div

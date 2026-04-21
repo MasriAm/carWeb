@@ -3,7 +3,14 @@ import { getDealerStats } from "@/lib/actions/dealership";
 import { getAdminStats } from "@/lib/actions/admin";
 import { db } from "@/lib/db";
 import StatCard from "@/components/dashboard/stat-card";
-import { Car, Heart, TrendingUp, Users, Building2, ShieldCheck } from "lucide-react";
+import {
+  Car,
+  Heart,
+  TrendingUp,
+  Users,
+  Building2,
+  ShieldCheck,
+} from "lucide-react";
 
 export default async function DashboardPage() {
   const user = await requireAuth();
@@ -14,14 +21,43 @@ export default async function DashboardPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100">Admin Overview</h1>
-          <p className="text-zinc-500 mt-0.5 text-sm">Platform-wide statistics at a glance.</p>
+          <p className="text-zinc-500 mt-0.5 text-sm">
+            Platform-wide statistics at a glance.
+          </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <StatCard title="Total Users" value={stats.users} icon={<Users className="h-5 w-5" />} />
-          <StatCard title="Total Vehicles" value={stats.vehicles} icon={<Car className="h-5 w-5" />} />
-          <StatCard title="Dealerships" value={stats.dealerships} icon={<Building2 className="h-5 w-5" />} />
-          <StatCard title="On Sale" value={stats.onSale} icon={<TrendingUp className="h-5 w-5" />} subtitle="Active listings" />
-          <StatCard title="Sold" value={stats.sold} icon={<ShieldCheck className="h-5 w-5" />} subtitle="Completed sales" />
+          <StatCard
+            title="Total Users"
+            value={stats.users}
+            icon={<Users className="h-5 w-5" />}
+            color="violet"
+          />
+          <StatCard
+            title="Total Vehicles"
+            value={stats.vehicles}
+            icon={<Car className="h-5 w-5" />}
+            color="amber"
+          />
+          <StatCard
+            title="Dealerships"
+            value={stats.dealerships}
+            icon={<Building2 className="h-5 w-5" />}
+            color="blue"
+          />
+          <StatCard
+            title="On Sale"
+            value={stats.onSale}
+            icon={<TrendingUp className="h-5 w-5" />}
+            subtitle="Active listings"
+            color="emerald"
+          />
+          <StatCard
+            title="Sold"
+            value={stats.sold}
+            icon={<ShieldCheck className="h-5 w-5" />}
+            subtitle="Completed sales"
+            color="red"
+          />
         </div>
       </div>
     );
@@ -33,13 +69,39 @@ export default async function DashboardPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100">Dealer Dashboard</h1>
-          <p className="text-zinc-500 mt-0.5 text-sm">Your dealership performance at a glance.</p>
+          <p className="text-zinc-500 mt-0.5 text-sm">
+            Your dealership performance at a glance.
+          </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <StatCard title="Total Listings" value={stats?.totalListings ?? 0} icon={<Car className="h-5 w-5" />} />
-          <StatCard title="On Sale" value={stats?.onSale ?? 0} icon={<TrendingUp className="h-5 w-5" />} />
-          <StatCard title="Sold" value={stats?.sold ?? 0} icon={<ShieldCheck className="h-5 w-5" />} />
-          <StatCard title="Total Saves" value={stats?.totalSaves ?? 0} icon={<Heart className="h-5 w-5" />} subtitle="Users saved your cars" />
+          <StatCard
+            title="Total Listings"
+            value={stats?.totalListings ?? 0}
+            icon={<Car className="h-5 w-5" />}
+            subtitle="Active inventory"
+            color="amber"
+          />
+          <StatCard
+            title="On Sale"
+            value={stats?.onSale ?? 0}
+            icon={<TrendingUp className="h-5 w-5" />}
+            subtitle="Currently available"
+            color="emerald"
+          />
+          <StatCard
+            title="Sold"
+            value={stats?.sold ?? 0}
+            icon={<ShieldCheck className="h-5 w-5" />}
+            subtitle="Completed sales"
+            color="red"
+          />
+          <StatCard
+            title="Total Saves"
+            value={stats?.totalSaves ?? 0}
+            icon={<Heart className="h-5 w-5" />}
+            subtitle="Users saved your cars"
+            color="violet"
+          />
         </div>
       </div>
     );
@@ -58,7 +120,13 @@ export default async function DashboardPage() {
         <p className="text-zinc-500 mt-0.5 text-sm">Your personal dashboard.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <StatCard title="Saved Cars" value={savedCount} icon={<Heart className="h-5 w-5" />} subtitle="Vehicles in your wishlist" />
+        <StatCard
+          title="Saved Cars"
+          value={savedCount}
+          icon={<Heart className="h-5 w-5" />}
+          subtitle="Vehicles in your wishlist"
+          color="amber"
+        />
       </div>
     </div>
   );
