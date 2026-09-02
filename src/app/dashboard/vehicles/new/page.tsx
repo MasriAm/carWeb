@@ -8,8 +8,8 @@ export default async function DealerNewVehiclePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-zinc-100 mb-1">List a New Vehicle</h1>
-      <p className="text-zinc-400 mb-8">Fill in the details below to create a new listing.</p>
+      <h1 className="text-2xl font-bold text-ink mb-1">List a New Vehicle</h1>
+      <p className="text-ink-3 mb-8">Fill in the details below to create a new listing.</p>
       <DealerVehicleForm />
     </div>
   );

@@ -39,7 +39,7 @@ export default function CarsMarketplaceSort() {
 
   return (
     <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[220px]">
-      <Label className="text-zinc-400 text-sm font-medium">Sort by</Label>
+      <Label className="text-ink-3 text-sm font-medium">Sort by</Label>
       <Select
         value={value}
         onValueChange={(next) => {
@@ -56,15 +56,15 @@ export default function CarsMarketplaceSort() {
           });
         }}
       >
-        <SelectTrigger className="h-10 w-full rounded-md border border-zinc-800 bg-zinc-900 text-zinc-100 shadow-sm">
+        <SelectTrigger className="h-10 w-full rounded-md border border-line bg-surface text-ink shadow-sm">
           <SelectValue placeholder="Sort" />
         </SelectTrigger>
-        <SelectContent className="border border-zinc-800 bg-zinc-900 text-zinc-100">
+        <SelectContent className="border border-line bg-surface text-ink">
           {SORT_OPTIONS.map((o) => (
             <SelectItem
               key={o.value}
               value={o.value}
-              className="focus:bg-zinc-800 focus:text-zinc-100"
+              className="focus:bg-surface-2 focus:text-ink"
             >
               {o.label}
             </SelectItem>

@@ -10,8 +10,6 @@ type Slide = {
   tag: string;
   title: string;
   subtitle: string;
-  /** Radial gradient background — keeps the dark theme intact (no images). */
-  gradient: string;
 };
 
 const heroSlides: Slide[] = [
@@ -19,33 +17,25 @@ const heroSlides: Slide[] = [
     tag: "Zarqa Free Zone",
     title: "Jordan's Premium Car Marketplace.",
     subtitle:
-      "From verified agency imports to US and Korean spec vehicles — curated with absolute transparency.",
-    gradient:
-      "radial-gradient(ellipse at 20% 60%, #1A2744 0%, #050505 60%)",
+      "From verified agency imports to US and Korean spec vehicles — curated with absolute transparency."
   },
   {
     tag: "100% Verified",
     title: "Performance You Can Trust.",
     subtitle:
-      "Every listing is verified. Accurate JOD pricing, full spec disclosure, and strict dealer vetting.",
-    gradient:
-      "radial-gradient(ellipse at 80% 40%, #1C1C1E 0%, #050505 60%)",
+      "Every listing is verified. Accurate JOD pricing, full spec disclosure, and strict dealer vetting."
   },
   {
     tag: "All Specs",
     title: "European, Gulf & American Specs.",
     subtitle:
-      "Browse imports from every origin — all available in one curated marketplace built for Jordan.",
-    gradient:
-      "radial-gradient(ellipse at 30% 70%, #2D1810 0%, #050505 60%)",
+      "Browse imports from every origin — all available in one curated marketplace built for Jordan."
   },
   {
     tag: "Premium Selection",
     title: "Drive Your Dream.",
     subtitle:
-      "Trusted dealers across Amman, Irbid, and Zarqa. Premium selection, transparent deals.",
-    gradient:
-      "radial-gradient(ellipse at 70% 30%, #1F1A00 0%, #050505 60%)",
+      "Trusted dealers across Amman, Irbid, and Zarqa. Premium selection, transparent deals."
   },
 ];
 
@@ -74,26 +64,8 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative flex min-h-[92vh] items-center justify-center overflow-hidden"
-      style={{ background: slide.gradient, transition: "background 1.2s ease" }}
+      className="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-inverse"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(245,158,11,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[20%] h-[600px] w-[600px] -translate-x-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)",
-        }}
-      />
 
       <div className="relative z-10 mx-auto w-full max-w-4xl px-6 pb-24 text-center">
         <AnimatePresence mode="wait">
@@ -104,16 +76,16 @@ export default function HeroSection() {
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <span className="mb-7 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-              <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-amber-500">
+            <span className="mb-7 inline-flex items-center gap-1.5 rounded-full border border-brand/30 bg-brand-soft px-3.5 py-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+              <span className="text-caption font-semibold uppercase tracking-[0.08em] text-brand-strong">
                 {slide.tag}
               </span>
             </span>
-            <h1 className="mb-5 text-balance text-4xl font-extrabold leading-[1.1] tracking-tight text-zinc-50 sm:text-5xl md:text-6xl">
+            <h1 className="mb-5 text-balance font-display text-hero leading-none text-inverse-ink sm:text-6xl">
               {slide.title}
             </h1>
-            <p className="mx-auto mb-9 max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+            <p className="mx-auto mb-9 max-w-2xl text-lead leading-relaxed text-inverse-ink-2">
               {slide.subtitle}
             </p>
           </motion.div>
@@ -123,7 +95,7 @@ export default function HeroSection() {
           <Link href="/cars">
             <Button
               size="lg"
-              className="h-12 rounded-full bg-amber-500 px-8 text-base font-bold text-zinc-950 hover:bg-amber-400"
+              className="h-12 rounded-full bg-brand px-8 text-base font-bold text-brand-ink hover:bg-brand-hover"
             >
               <Search className="mr-2 h-4 w-4" />
               Browse Cars
@@ -133,7 +105,7 @@ export default function HeroSection() {
             <Button
               size="lg"
               variant="outline"
-              className="h-12 rounded-full border-zinc-700 bg-transparent px-7 text-base font-medium text-zinc-400 hover:border-zinc-600 hover:bg-zinc-900 hover:text-zinc-200"
+              className="h-12 rounded-full border-inverse-ink-2/40 bg-transparent px-7 text-base font-medium text-inverse-ink hover:bg-inverse-ink/10 hover:text-inverse-ink"
             >
               Create Account
               <ChevronRight className="ml-1.5 h-4 w-4" />
@@ -147,7 +119,7 @@ export default function HeroSection() {
               key={i}
               onClick={() => setCurrent(i)}
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === current ? "w-7 bg-amber-500" : "w-1.5 bg-white/25"
+                i === current ? "w-7 bg-brand" : "w-1.5 bg-inverse-ink/30"
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />
@@ -155,7 +127,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/5 bg-black/40 backdrop-blur">
+      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-inverse-ink/10 bg-inverse">
         <div className="mx-auto grid max-w-6xl grid-cols-2 sm:grid-cols-4">
           {HERO_STATS.map((s, i) => (
             <div
@@ -164,10 +136,10 @@ export default function HeroSection() {
                 i > 0 ? "border-l border-white/5" : ""
               }`}
             >
-              <div className="text-xl font-extrabold tracking-tight text-amber-500 sm:text-[22px]">
+              <div className="text-xl font-extrabold tracking-tight text-brand-strong sm:text-title">
                 {s.n}
               </div>
-              <div className="mt-0.5 text-[11px] tracking-wide text-zinc-500">
+              <div className="mt-0.5 text-caption tracking-wide text-inverse-ink-2">
                 {s.l}
               </div>
             </div>

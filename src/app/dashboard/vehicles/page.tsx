@@ -15,13 +15,13 @@ export default async function MyVehiclesPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100 mb-1">My Vehicles</h1>
-          <p className="text-zinc-400">
+          <h1 className="text-2xl font-bold text-ink mb-1">My Vehicles</h1>
+          <p className="text-ink-3">
             {vehicles.length} listing{vehicles.length !== 1 ? "s" : ""} total.
           </p>
         </div>
         <Link href="/dashboard/vehicles/new">
-          <Button className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
+          <Button className="bg-brand text-brand-ink hover:bg-brand-hover">
             <Plus className="mr-2 h-4 w-4" />
             Add Vehicle
           </Button>
@@ -30,15 +30,15 @@ export default async function MyVehiclesPage() {
 
       {vehicles.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Car className="h-16 w-16 text-zinc-700 mb-4" />
-          <h2 className="text-xl font-semibold text-zinc-300 mb-2">
+          <Car className="h-16 w-16 text-ink-3 mb-4" />
+          <h2 className="text-xl font-semibold text-ink-2 mb-2">
             No vehicles listed yet
           </h2>
-          <p className="text-zinc-500 mb-6">
+          <p className="text-ink-3 mb-6">
             Your vehicle listings will appear here.
           </p>
           <Link href="/dashboard/vehicles/new">
-            <Button className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
+            <Button className="bg-brand text-brand-ink hover:bg-brand-hover">
               <Plus className="mr-2 h-4 w-4" />
               Add Your First Vehicle
             </Button>

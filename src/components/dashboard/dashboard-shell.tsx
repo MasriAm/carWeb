@@ -78,13 +78,13 @@ export default function DashboardShell({
       : "My Dashboard";
 
   const roleBadge = (
-    <div className="flex items-center gap-3 px-5 py-4 border-b border-zinc-800">
-      <div className="h-9 w-9 shrink-0 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-xs font-extrabold text-zinc-950 shadow-lg shadow-amber-500/20">
+    <div className="flex items-center gap-3 px-5 py-4 border-b border-line">
+      <div className="h-9 w-9 shrink-0 rounded-full bg-gradient-to-br from-brand to-brand-hover flex items-center justify-center text-xs font-extrabold text-brand-ink shadow-lg shadow-lift">
         {initials}
       </div>
       <div className="min-w-0">
-        <p className="text-[13px] font-bold text-white truncate">{roleLabel}</p>
-        <p className="text-[10px] text-zinc-500 capitalize">
+        <p className="text-meta font-bold text-ink truncate">{roleLabel}</p>
+        <p className="text-caption text-ink-3 capitalize">
           {role.toLowerCase()} Account
         </p>
       </div>
@@ -102,14 +102,14 @@ export default function DashboardShell({
             onClick={() => setMobileOpen(false)}
             className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
               active
-                ? "bg-zinc-800/60 text-white"
-                : "text-zinc-500 hover:bg-zinc-800/40 hover:text-zinc-200"
+                ? "bg-surface-2/60 text-ink"
+                : "text-ink-3 hover:bg-surface-2/40 hover:text-ink-2"
             }`}
           >
             {active && (
-              <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-amber-500" />
+              <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full bg-brand" />
             )}
-            <span className={active ? "text-amber-500" : "text-zinc-600 group-hover:text-zinc-400"}>
+            <span className={active ? "text-brand-strong" : "text-ink-3 group-hover:text-ink-3"}>
               {item.icon}
             </span>
             {item.label}
@@ -120,21 +120,21 @@ export default function DashboardShell({
   );
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="min-h-screen bg-canvas">
       {/* ─── Top Navigation Bar ─── */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-zinc-950 border-b border-zinc-800 z-50 flex items-center justify-between px-4 lg:px-6">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-canvas border-b border-line z-50 flex items-center justify-between px-4 lg:px-6">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-zinc-800 text-zinc-400"
+            className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-surface-2 text-ink-3"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
           <Link href="/" className="flex items-center gap-2.5">
-            <Crown className="h-6 w-6 text-amber-500" />
-            <span className="font-bold text-lg text-white hidden sm:inline">Royal Cars</span>
+            <Crown className="h-6 w-6 text-brand-strong" />
+            <span className="font-bold text-lg text-ink hidden sm:inline">Royal Cars</span>
           </Link>
-          <span className="hidden lg:inline text-xs text-zinc-600 border-l border-zinc-800 pl-3 ml-1 uppercase tracking-widest font-medium">
+          <span className="hidden lg:inline text-xs text-ink-3 border-l border-line pl-3 ml-1 uppercase tracking-widest font-medium">
             {role} Panel
           </span>
         </div>
@@ -142,19 +142,19 @@ export default function DashboardShell({
         <div className="flex items-center gap-2">
           {canAddVehicle && (
             <Link href="/dashboard/vehicles/new">
-              <Button size="sm" className="bg-amber-500 text-zinc-950 hover:bg-amber-400 h-9 text-xs font-semibold">
+              <Button size="sm" className="bg-brand text-brand-ink hover:bg-brand-hover h-9 text-xs font-semibold">
                 <Plus className="h-3.5 w-3.5 mr-1.5" />
                 <span className="hidden sm:inline">Add Vehicle</span>
                 <span className="sm:hidden">New</span>
               </Button>
             </Link>
           )}
-          <button type="button" className="relative h-9 w-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-zinc-700 transition-colors">
+          <button type="button" className="relative h-9 w-9 rounded-lg bg-surface border border-line flex items-center justify-center text-ink-3 hover:text-ink-2 hover:border-line-control transition-colors">
             <Bell className="h-4 w-4" />
           </button>
           <Link
             href="/dashboard/profile"
-            className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-zinc-950 text-xs font-bold shadow-lg shadow-amber-500/20"
+            className="h-9 w-9 rounded-full bg-gradient-to-br from-brand to-brand-hover flex items-center justify-center text-brand-ink text-xs font-bold shadow-lg shadow-lift"
             title={`Signed in as ${userName || role}`}
           >
             {initials}
@@ -163,12 +163,12 @@ export default function DashboardShell({
       </header>
 
       {/* ─── Desktop Sidebar ─── */}
-      <aside className="fixed top-16 left-0 bottom-0 w-[260px] bg-zinc-950 border-r border-zinc-800 hidden lg:flex flex-col z-30">
+      <aside className="fixed top-16 left-0 bottom-0 w-[260px] bg-canvas border-r border-line hidden lg:flex flex-col z-30">
         {roleBadge}
         <div className="px-4 pt-5 pb-3">
           <Link
             href="/"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-amber-500 hover:bg-amber-500/10 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-brand-strong hover:bg-brand-soft transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Marketplace
@@ -176,16 +176,16 @@ export default function DashboardShell({
         </div>
 
         <div className="flex-1 px-4 overflow-y-auto">
-          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
+          <p className="px-3 mb-2 text-caption font-semibold uppercase tracking-widest text-ink-3">
             Navigation
           </p>
           {sidebarNav}
         </div>
 
-        <div className="px-4 py-4 border-t border-zinc-800">
+        <div className="px-4 py-4 border-t border-line">
           <Button
             variant="ghost"
-            className="w-full justify-start gap-3 text-zinc-500 hover:text-red-400 hover:bg-zinc-800/50 h-10"
+            className="w-full justify-start gap-3 text-ink-3 hover:text-danger hover:bg-surface-2/50 h-10"
             onClick={() => signOut({ callbackUrl: "/" })}
           >
             <LogOut className="h-4 w-4" />
@@ -198,28 +198,28 @@ export default function DashboardShell({
       {mobileOpen && (
         <>
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
-          <aside className="fixed top-16 left-0 bottom-0 w-[260px] bg-zinc-950 z-50 lg:hidden flex flex-col shadow-2xl border-r border-zinc-800">
+          <aside className="fixed top-16 left-0 bottom-0 w-[260px] bg-canvas z-50 lg:hidden flex flex-col shadow-2xl border-r border-line">
             {roleBadge}
             <div className="px-4 pt-4 pb-2">
               <Link
                 href="/"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-amber-500 hover:bg-amber-500/10 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-brand-strong hover:bg-brand-soft transition-colors"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to Marketplace
               </Link>
             </div>
             <div className="flex-1 px-4 overflow-y-auto">
-              <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
+              <p className="px-3 mb-2 text-caption font-semibold uppercase tracking-widest text-ink-3">
                 Navigation
               </p>
               {sidebarNav}
             </div>
-            <div className="px-4 py-4 border-t border-zinc-800">
+            <div className="px-4 py-4 border-t border-line">
               <Button
                 variant="ghost"
-                className="w-full justify-start gap-3 text-zinc-500 hover:text-red-400 hover:bg-zinc-800/50 h-10"
+                className="w-full justify-start gap-3 text-ink-3 hover:text-danger hover:bg-surface-2/50 h-10"
                 onClick={() => signOut({ callbackUrl: "/" })}
               >
                 <LogOut className="h-4 w-4" />
@@ -231,8 +231,8 @@ export default function DashboardShell({
       )}
 
       {/* ─── Main Content ─── */}
-      <main className="lg:pl-[260px] pt-16">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="lg:ps-[260px] pt-header">
+        <div className="max-w-page mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {children}
         </div>
       </main>

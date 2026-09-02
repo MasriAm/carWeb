@@ -17,7 +17,7 @@ const CarsMarketplaceSort = dynamic(
   () => import("@/components/cars/cars-marketplace-sort"),
   {
     loading: () => (
-      <div className="h-10 w-[180px] animate-pulse rounded-lg border border-zinc-800 bg-zinc-900/60" />
+      <div className="h-10 w-44 animate-pulse rounded-lg border border-line bg-surface/60" />
     ),
   }
 );
@@ -28,7 +28,7 @@ const CarGrid = dynamic(() => import("@/components/cars/car-grid"), {
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="h-[min(28rem,72vw)] animate-pulse rounded-xl border border-zinc-800 bg-zinc-900/70"
+          className="h-96 animate-pulse rounded-xl border border-line bg-surface/70"
         />
       ))}
     </div>
@@ -92,19 +92,19 @@ export default async function CarsPage({ searchParams }: CarsPageProps) {
   const isLoggedIn = !!session?.user;
 
   return (
-    <section className="min-h-screen bg-zinc-950 pt-16">
+    <section className="min-h-screen bg-canvas">
       {/* Page header */}
-      <div className="border-b border-zinc-800 bg-gradient-to-b from-zinc-900/60 to-zinc-950 px-4 py-5 sm:px-6">
-        <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+      <div className="border-b border-line bg-surface px-4 py-5 sm:px-6">
+        <div className="mx-auto flex max-w-page flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10">
-              <Car className="h-4 w-4 text-amber-500" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-brand/30 bg-brand-soft">
+              <Car className="h-4 w-4 text-brand-strong" />
             </div>
             <div>
-              <h1 className="text-lg font-extrabold leading-none tracking-tight text-white sm:text-xl">
+              <h1 className="text-lg font-extrabold leading-none tracking-tight text-ink sm:text-xl">
                 {filters.brand ? `${filters.brand} Cars` : "Vehicle Marketplace"}
               </h1>
-              <p className="mt-1 text-[11px] text-zinc-500">
+              <p className="mt-1 text-caption text-ink-3">
                 Jordan&apos;s leading luxury auto platform
               </p>
             </div>
@@ -113,7 +113,7 @@ export default async function CarsPage({ searchParams }: CarsPageProps) {
           <div className="flex w-full items-center gap-2 sm:w-auto">
             <Suspense
               fallback={
-                <div className="h-10 w-full animate-pulse rounded-lg border border-zinc-800 bg-zinc-900/60 sm:w-[180px]" />
+                <div className="h-10 w-full animate-pulse rounded-lg border border-line bg-surface/60 sm:w-44" />
               }
             >
               <CarsMarketplaceSort />
@@ -126,9 +126,9 @@ export default async function CarsPage({ searchParams }: CarsPageProps) {
       <HorizontalFilter brands={brands} resultsCount={total} />
 
       {/* Body */}
-      <div className="mx-auto flex max-w-[1440px] items-start gap-5 px-4 pb-20 pt-5 sm:px-6">
+      <div className="mx-auto flex max-w-page items-start gap-5 px-4 pb-20 pt-5 sm:px-6">
         {/* Desktop sidebar */}
-        <div className="sticky top-[88px] hidden w-[268px] shrink-0 lg:block">
+        <div className="sticky top-[calc(var(--spacing-header)+1rem)] hidden w-sidebar shrink-0 lg:block">
           <SidebarFilter brands={brands} resultsCount={total} />
         </div>
 
@@ -136,18 +136,18 @@ export default async function CarsPage({ searchParams }: CarsPageProps) {
         <div className="min-w-0 flex-1">
           <ActiveFilterChips />
 
-          <p className="mb-4 hidden text-xs text-zinc-500 lg:block">
-            <span className="font-semibold text-zinc-300">{total}</span>{" "}
+          <p className="mb-4 hidden text-xs text-ink-3 lg:block">
+            <span className="font-semibold text-ink-2">{total}</span>{" "}
             vehicle{total !== 1 ? "s" : ""}
           </p>
 
           {vehicles.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <Car className="mb-4 h-11 w-11 text-zinc-700" />
-              <h2 className="mb-1 text-base font-bold text-zinc-300">
+              <Car className="mb-4 h-11 w-11 text-ink-3" />
+              <h2 className="mb-1 text-base font-bold text-ink-2">
                 No vehicles match your filters
               </h2>
-              <p className="max-w-md text-sm text-zinc-500">
+              <p className="max-w-md text-sm text-ink-3">
                 Try adjusting your price range or removing some filters.
               </p>
             </div>

@@ -1,39 +1,20 @@
-type StatColor = "amber" | "emerald" | "red" | "violet" | "blue";
+import { cn } from "@/lib/utils";
 
-const COLOR_STYLES: Record<
-  StatColor,
-  { glow: string; iconBg: string; iconBorder: string; iconText: string }
-> = {
-  amber: {
-    glow: "bg-amber-500/5",
-    iconBg: "bg-amber-500/10",
-    iconBorder: "border-amber-500/20",
-    iconText: "text-amber-500",
-  },
-  emerald: {
-    glow: "bg-emerald-500/5",
-    iconBg: "bg-emerald-500/10",
-    iconBorder: "border-emerald-500/20",
-    iconText: "text-emerald-400",
-  },
-  red: {
-    glow: "bg-red-500/5",
-    iconBg: "bg-red-500/10",
-    iconBorder: "border-red-500/20",
-    iconText: "text-red-400",
-  },
-  violet: {
-    glow: "bg-violet-500/5",
-    iconBg: "bg-violet-500/10",
-    iconBorder: "border-violet-500/20",
-    iconText: "text-violet-300",
-  },
-  blue: {
-    glow: "bg-blue-500/5",
-    iconBg: "bg-blue-500/10",
-    iconBorder: "border-blue-500/20",
-    iconText: "text-blue-400",
-  },
+/**
+ * Dashboard stat tile.
+ *
+ * Tone is semantic, not decorative: `brand` for the headline figure of a
+ * screen, `trust` and `danger` where the number itself carries a state, and
+ * `neutral` for everything else. The previous violet/blue/emerald/red rotation
+ * coloured tiles for variety, which made colour meaningless.
+ */
+type StatTone = "neutral" | "brand" | "trust" | "danger";
+
+const TONE: Record<StatTone, string> = {
+  neutral: "border-line bg-surface-2 text-ink-2",
+  brand: "border-brand/30 bg-brand-soft text-brand-strong",
+  trust: "border-trust/25 bg-trust-soft text-trust",
+  danger: "border-danger/25 bg-danger-soft text-danger",
 };
 
 export default function StatCard({
@@ -41,34 +22,29 @@ export default function StatCard({
   value,
   icon,
   subtitle,
-  color = "amber",
+  tone = "neutral",
 }: {
   title: string;
   value: number | string;
   icon: React.ReactNode;
   subtitle?: string;
-  color?: StatColor;
+  tone?: StatTone;
 }) {
-  const c = COLOR_STYLES[color];
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 p-6 shadow-lg shadow-black/20">
-      <div
-        className={`absolute -top-6 -right-6 h-24 w-24 rounded-full blur-2xl ${c.glow}`}
-      />
-      <div className="relative flex items-start justify-between">
-        <div>
-          <p className="text-sm font-medium text-zinc-500 tracking-wide">
-            {title}
-          </p>
-          <p className="text-3xl font-bold text-white mt-1.5 tabular-nums">
-            {value}
-          </p>
+    <div className="rounded-card border border-line bg-surface p-5 shadow-card">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-meta font-medium text-ink-3">{title}</p>
+          <p className="mt-1.5 font-display text-display text-ink">{value}</p>
           {subtitle && (
-            <p className="text-xs text-zinc-600 mt-1.5">{subtitle}</p>
+            <p className="mt-1.5 text-caption text-ink-3">{subtitle}</p>
           )}
         </div>
         <div
-          className={`h-11 w-11 rounded-xl border flex items-center justify-center shadow-lg shadow-black/20 ${c.iconBg} ${c.iconBorder} ${c.iconText}`}
+          className={cn(
+            "flex h-10 w-10 shrink-0 items-center justify-center rounded-control border",
+            TONE[tone]
+          )}
         >
           {icon}
         </div>

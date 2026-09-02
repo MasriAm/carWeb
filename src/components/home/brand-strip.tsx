@@ -40,7 +40,7 @@ function BrandLogo({ brand }: { brand: Brand }) {
 
     return (
       <div className="h-full w-full flex items-center justify-center">
-        <span className="text-lg font-bold text-amber-500/70 tracking-tight select-none">
+        <span className="text-lg font-bold text-brand-strong tracking-tight select-none">
           {initials}
         </span>
       </div>
@@ -94,9 +94,9 @@ export default function BrandStrip() {
   };
 
   return (
-    <section className="py-16 bg-zinc-950 border-t border-zinc-900">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-sm font-semibold uppercase tracking-widest text-amber-500/60 mb-10">
+    <section className="py-16 bg-canvas border-t border-line">
+      <div className="mx-auto max-w-page px-4 sm:px-6 lg:px-8">
+        <h2 className="text-center text-sm font-semibold uppercase tracking-widest text-brand-strong mb-10">
           Shop by Brand
         </h2>
 
@@ -104,10 +104,10 @@ export default function BrandStrip() {
           {canScrollLeft && (
             <button
               onClick={() => scroll("left")}
-              className="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center shadow-lg transition-colors hover:bg-zinc-700"
+              className="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-surface-2 border border-line-control flex items-center justify-center shadow-lg transition-colors hover:bg-surface-3"
               aria-label="Scroll left"
             >
-              <ChevronLeft className="h-5 w-5 text-zinc-300" />
+              <ChevronLeft className="h-5 w-5 text-ink-2" />
             </button>
           )}
 
@@ -127,12 +127,12 @@ export default function BrandStrip() {
               >
                 <Link
                   href={`/cars?brand=${encodeURIComponent(brand.slug)}`}
-                  className="flex flex-col items-center gap-3 w-[100px] group/brand"
+                  className="flex flex-col items-center gap-3 w-24 group/brand"
                 >
-                  <div className="relative h-20 w-20 rounded-full bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center overflow-hidden transition-all group-hover/brand:border-amber-500/50 group-hover/brand:shadow-lg group-hover/brand:shadow-amber-500/10">
+                  <div className="relative h-20 w-20 rounded-full bg-surface border-2 border-line flex items-center justify-center overflow-hidden transition-all group-hover/brand:border-amber-500/50 group-hover/brand:shadow-lg group-hover/brand:shadow-amber-500/10">
                     <BrandLogo brand={brand} />
                   </div>
-                  <span className="text-xs font-medium text-zinc-500 group-hover/brand:text-amber-500 transition-colors whitespace-nowrap">
+                  <span className="text-xs font-medium text-ink-3 group-hover/brand:text-brand-strong transition-colors whitespace-nowrap">
                     {brand.name}
                   </span>
                 </Link>
@@ -143,10 +143,10 @@ export default function BrandStrip() {
           {canScrollRight && (
             <button
               onClick={() => scroll("right")}
-              className="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center shadow-lg transition-colors hover:bg-zinc-700"
+              className="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-surface-2 border border-line-control flex items-center justify-center shadow-lg transition-colors hover:bg-surface-3"
               aria-label="Scroll right"
             >
-              <ChevronRight className="h-5 w-5 text-zinc-300" />
+              <ChevronRight className="h-5 w-5 text-ink-2" />
             </button>
           )}
         </div>

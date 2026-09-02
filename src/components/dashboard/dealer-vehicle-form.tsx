@@ -25,8 +25,8 @@ const FUEL_OPTIONS = [
   { value: "HYBRID", label: "Hybrid" },
 ];
 
-const inputCls = "bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 h-10";
-const labelCls = "text-zinc-300 text-sm font-medium";
+const inputCls = "bg-surface-2 border-line-control text-ink placeholder:text-ink-3 h-10";
+const labelCls = "text-ink-2 text-sm font-medium";
 
 export default function DealerVehicleForm() {
   const router = useRouter();
@@ -93,10 +93,10 @@ export default function DealerVehicleForm() {
         <div
           className={`mb-6 rounded-xl px-4 py-3 text-sm ${
             /rate limit/i.test(error)
-              ? "bg-amber-500/10 border border-amber-500/30 text-amber-400"
+              ? "bg-brand-soft border border-brand/30 text-brand-strong"
               : /unauthorized/i.test(error)
-                ? "bg-red-500/10 border border-red-500/20 text-red-400"
-                : "bg-red-500/10 border border-red-500/20 text-red-400"
+                ? "bg-danger-soft border border-danger/25 text-danger"
+                : "bg-danger-soft border border-danger/25 text-danger"
           }`}
         >
           {error}
@@ -105,8 +105,8 @@ export default function DealerVehicleForm() {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Media</h2>
+          <div className="bg-surface border border-line rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Media</h2>
             <ImageDropzone images={imageUrls} onChange={setImageUrls} />
             <div className="mt-4 space-y-2">
               <Label htmlFor="videoUrl" className={labelCls}>Video URL (optional)</Label>
@@ -118,26 +118,26 @@ export default function DealerVehicleForm() {
             </div>
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Description</h2>
+          <div className="bg-surface border border-line rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Description</h2>
             <div className="space-y-2">
               <Label htmlFor="shortDescription" className={labelCls}>Short Description *</Label>
-              <Textarea id="shortDescription" name="shortDescription" rows={3} required placeholder="Gulf-spec 2024 G63 AMG, matte black, full carbon package..." className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500" />
+              <Textarea id="shortDescription" name="shortDescription" rows={3} required placeholder="Gulf-spec 2024 G63 AMG, matte black, full carbon package..." className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3" />
             </div>
             <div className="mt-4 space-y-2">
               <Label htmlFor="fa7s" className={labelCls}>Inspection Report — فحص (optional)</Label>
-              <Textarea id="fa7s" name="fa7s" rows={3} placeholder="Vehicle inspection details..." className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500" />
+              <Textarea id="fa7s" name="fa7s" rows={3} placeholder="Vehicle inspection details..." className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3" />
             </div>
             <div className="mt-4 space-y-2">
               <Label htmlFor="detailedSpecs" className={labelCls}>Features & Specs (one per line)</Label>
-              <Textarea id="detailedSpecs" name="detailedSpecs" rows={5} placeholder={"360° Camera\nAdaptive Cruise Control\nBurmester Sound"} className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500" />
+              <Textarea id="detailedSpecs" name="detailedSpecs" rows={5} placeholder={"360° Camera\nAdaptive Cruise Control\nBurmester Sound"} className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3" />
             </div>
           </div>
         </div>
 
         <div className="lg:col-span-3 space-y-6">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Vehicle Info</h2>
+          <div className="bg-surface border border-line rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Vehicle Info</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="brand" className={labelCls}>Brand *</Label>
@@ -158,14 +158,14 @@ export default function DealerVehicleForm() {
             </div>
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Specifications</h2>
+          <div className="bg-surface border border-line rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Specifications</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label className={labelCls}>Condition *</Label>
                 <Select name="condition" defaultValue="USED">
                   <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                  <SelectContent className="bg-surface border-line-control">
                     <SelectItem value="NEW">New</SelectItem>
                     <SelectItem value="USED">Used</SelectItem>
                   </SelectContent>
@@ -175,7 +175,7 @@ export default function DealerVehicleForm() {
                 <Label className={labelCls}>Transmission *</Label>
                 <Select name="transmission" defaultValue="AUTO">
                   <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                  <SelectContent className="bg-surface border-line-control">
                     <SelectItem value="AUTO">Automatic</SelectItem>
                     <SelectItem value="MANUAL">Manual</SelectItem>
                   </SelectContent>
@@ -185,7 +185,7 @@ export default function DealerVehicleForm() {
                 <Label className={labelCls}>Body Type *</Label>
                 <Select name="bodyType" defaultValue="SUV">
                   <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                  <SelectContent className="bg-surface border-line-control">
                     {BODY_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -194,7 +194,7 @@ export default function DealerVehicleForm() {
                 <Label className={labelCls}>Fuel Type *</Label>
                 <Select name="fuelType" defaultValue="GAS">
                   <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                  <SelectContent className="bg-surface border-line-control">
                     {FUEL_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -203,15 +203,15 @@ export default function DealerVehicleForm() {
                 <input
                   type="checkbox"
                   name="waredWakaleh"
-                  className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-amber-500 focus:ring-amber-500"
+                  className="h-4 w-4 rounded border-line-control bg-surface-2 text-brand-strong focus:ring-brand-strong"
                 />
-                <span className="text-sm text-zinc-200">Agency Import</span>
+                <span className="text-sm text-ink-2">Agency Import</span>
               </label>
             </div>
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Performance</h2>
+          <div className="bg-surface border border-line rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Performance</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="engineCapacityCC" className={labelCls}>Engine CC *</Label>
@@ -224,16 +224,16 @@ export default function DealerVehicleForm() {
             </div>
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Contact</h2>
+          <div className="bg-surface border border-line rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Contact</h2>
             <div className="space-y-2">
               <Label htmlFor="specificWhatsapp" className={labelCls}>Direct WhatsApp for this car (optional)</Label>
               <Input id="specificWhatsapp" name="specificWhatsapp" placeholder="079XXXXXXX or 962791234567" className={inputCls} />
-              <p className="text-xs text-zinc-600">Leave blank to use your dealership&apos;s default WhatsApp number.</p>
+              <p className="text-xs text-ink-3">Leave blank to use your dealership&apos;s default WhatsApp number.</p>
             </div>
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full h-12 bg-amber-500 text-zinc-950 hover:bg-amber-400 font-semibold text-base">
+          <Button type="submit" disabled={loading} className="w-full h-12 bg-brand text-brand-ink hover:bg-brand-hover font-semibold text-base">
             {loading ? (
               <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Publishing...</>
             ) : (

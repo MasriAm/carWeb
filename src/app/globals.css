@@ -4,93 +4,275 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ─────────────────────────────────────────────────────────────────
+   DESIGN TOKENS — "Daylight"
+
+   Roles, not palette values. Components must never reference a literal
+   colour (`bg-zinc-900`, `text-amber-500`); they reference a role
+   (`bg-surface`, `text-brand-strong`). Swapping the palette is then a
+   change to this file alone.
+
+   Brand accent is amber. It is used as a FILL with dark text
+   (`bg-brand text-brand-ink`) and, when it must be text, only as
+   `text-brand-strong`, the darkened cut that passes WCAG AA on light
+   grounds. Green carries exactly two meanings: trust (agency import,
+   inspected) and WhatsApp. Nothing else is green.
+
+   Every foreground/background pair below is verified at AA (4.5:1 for
+   body text, 3:1 for control borders and non-text UI).
+   ───────────────────────────────────────────────────────────────── */
+
 @theme inline {
+  /* Surfaces */
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-inverse: var(--inverse);
+  --color-inverse-ink: var(--inverse-ink);
+  --color-inverse-ink-2: var(--inverse-ink-2);
+
+  /* Text */
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+
+  /* Lines */
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-line-control: var(--line-control);
+
+  /* Brand */
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+
+  /* Semantic status — separate from the brand accent */
+  --color-trust: var(--trust);
+  --color-trust-soft: var(--trust-soft);
+  --color-wa: var(--wa);
+  --color-wa-hover: var(--wa-hover);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+
+  /* shadcn/ui primitive contract — mapped onto the same roles */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Typefaces. Geist runs the interface; Archivo (semi-expanded 700) is
+     reserved for prices and top-level headings — a wide, heavy figure
+     reads like an instrument and is the one distinctly "Royal Cars"
+     typographic move. */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-archivo), var(--font-geist-sans), ui-sans-serif,
+    system-ui, sans-serif;
+
+  /* Type scale. 12px is the floor — nothing smaller ships. */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.125rem;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.25rem;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.625rem;
+  --text-title: 1.375rem;
+  --text-title--line-height: 1.75rem;
+  --text-h2: 1.625rem;
+  --text-h2--line-height: 2rem;
+  --text-h1: 2rem;
+  --text-h1--line-height: 2.25rem;
+  --text-display: 2.5rem;
+  --text-display--line-height: 2.625rem;
+  --text-hero: 3rem;
+  --text-hero--line-height: 3.125rem;
+
+  /* Radius: 8px controls, 12px cards, pill. No 2xl-on-everything. */
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-panel: 1rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Layout constants, so sticky offsets stop being magic numbers.
+     `h-header`, `top-header`, `pt-header`, `w-sidebar`, `max-w-page`. */
+  --spacing-header: 4rem;
+  --spacing-sidebar: 18rem;
+  --container-page: 80rem;
+
+  /* Elevation. Hairline borders are the default; shadows are reserved
+     for things that genuinely float. */
+  --shadow-card: 0 1px 2px rgb(16 17 20 / 0.05), 0 1px 3px rgb(16 17 20 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(16 17 20 / 0.05), 0 12px 24px -8px rgb(16 17 20 / 0.14);
+  --shadow-overlay: 0 8px 32px -8px rgb(16 17 20 / 0.22);
 }
 
 :root {
   --radius: 0.625rem;
-  --background: #0A0A0A;
-  --foreground: #FAFAFA;
-  --card: #18181B;
-  --card-foreground: #FAFAFA;
-  --popover: #18181B;
-  --popover-foreground: #FAFAFA;
-  --primary: #F59E0B;
-  --primary-foreground: #0A0A0A;
-  --secondary: #27272A;
-  --secondary-foreground: #FAFAFA;
-  --muted: #27272A;
-  --muted-foreground: #A1A1AA;
-  --accent: #27272A;
-  --accent-foreground: #FAFAFA;
-  --destructive: #DC2626;
-  --border: #3F3F46;
-  --input: #3F3F46;
-  --ring: #F59E0B;
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: #0A0A0A;
-  --sidebar-foreground: #FAFAFA;
-  --sidebar-primary: #F59E0B;
-  --sidebar-primary-foreground: #0A0A0A;
-  --sidebar-accent: #27272A;
-  --sidebar-accent-foreground: #FAFAFA;
-  --sidebar-border: #3F3F46;
-  --sidebar-ring: #F59E0B;
+
+  --canvas: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #eef0f3;
+  --surface-3: #e7eaee;
+  --inverse: #101114;
+  --inverse-ink: #f4f5f7;
+  --inverse-ink-2: #a8adb5;
+
+  --ink: #101114;
+  --ink-2: #3d4148;
+  --ink-3: #5a5e66;
+
+  --line: #e1e4e9;
+  --line-strong: #c9cdd4;
+  --line-control: #7e838b;
+
+  --brand: #f59e0b;
+  --brand-hover: #e08c05;
+  --brand-ink: #111111;
+  --brand-strong: #b45309;
+  --brand-soft: #fff4dc;
+
+  --trust: #15803d;
+  --trust-soft: #ecfdf3;
+  --wa: #075e54;
+  --wa-hover: #064c44;
+  --danger: #b91c1c;
+  --danger-soft: #fef2f2;
+  --warn: #b45309;
+  --warn-soft: #fff4dc;
+
+  --background: var(--canvas);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-ink);
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--surface-2);
+  --muted-foreground: var(--ink-3);
+  --accent: var(--surface-2);
+  --accent-foreground: var(--ink);
+  --destructive: var(--danger);
+  --border: var(--line);
+  --input: var(--line-control);
+  --ring: var(--brand-strong);
+
+  color-scheme: light;
+}
+
+/* "Luxury Black, refined" — the same roles, dark values, with the two
+   contrast failures of the original theme corrected (tertiary text moves
+   from 3.7:1 to 7.1:1; the WhatsApp button from 4.1:1 to 5.1:1).
+   Defined so the palette is a one-attribute switch. Not yet activated:
+   no toggle ships in this pass and there is no prefers-color-scheme
+   rule, so every surface is deliberately the light one. */
+.dark {
+  --canvas: #0b0b0d;
+  --surface: #141418;
+  --surface-2: #1c1c22;
+  --surface-3: #24242b;
+  --inverse: #f4f5f7;
+  --inverse-ink: #101114;
+  --inverse-ink-2: #3d4148;
+
+  --ink: #f4f5f7;
+  --ink-2: #c9cdd4;
+  --ink-3: #9ca1a9;
+
+  --line: #26262c;
+  --line-strong: #35353d;
+  --line-control: #6e6e7a;
+
+  --brand: #f59e0b;
+  --brand-hover: #fbbf24;
+  --brand-ink: #111111;
+  --brand-strong: #fbbf24;
+  --brand-soft: rgb(245 158 11 / 0.12);
+
+  --trust: #4ade80;
+  --trust-soft: rgb(74 222 128 / 0.12);
+  --wa: #0e7c6f;
+  --wa-hover: #0b6b5f;
+  --danger: #f87171;
+  --danger-soft: rgb(248 113 113 / 0.12);
+  --warn: #fbbf24;
+  --warn-soft: rgb(245 158 11 / 0.1);
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 12px 24px -8px rgb(0 0 0 / 0.6);
+  --shadow-overlay: 0 8px 32px -8px rgb(0 0 0 / 0.7);
+
+  color-scheme: dark;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
+    @apply border-line;
   }
 
-  /* Force hide numeric spin buttons globally */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-canvas text-ink;
+    font-feature-settings: "ss01";
+  }
+
+  /* Numbers in a marketplace are compared, so they line up. */
+  .tabular,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* A single, visible focus ring everywhere. Custom chips, slider thumbs
+     and slide dots previously fell back to the browser default recoloured
+     to a translucent amber, which was effectively invisible. */
+  :focus-visible {
+    outline: 2px solid var(--brand-strong);
+    outline-offset: 2px;
+    border-radius: var(--radius-control);
+  }
+
+  /* Never remove focus from a keyboard user; only from mouse clicks. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ::selection {
+    background: var(--brand-soft);
+    color: var(--ink);
+  }
+
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none !important;
@@ -102,52 +284,77 @@
     -moz-appearance: textfield !important;
     appearance: textfield !important;
   }
+
+  /* Headings balance; long body copy stays near a readable measure. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
 }
 
-/* Themed thin scrollbar — matches the zinc/amber dark palette. */
 @layer utilities {
-  .scrollbar-dark {
-    scrollbar-width: thin;
-    scrollbar-color: #3f3f46 transparent;
+  /* The one display treatment: prices and hero headlines. */
+  .font-display {
+    font-family: var(--font-display);
+    font-stretch: 112.5%;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    font-variant-numeric: tabular-nums;
   }
-  .scrollbar-dark::-webkit-scrollbar {
+
+  .measure {
+    max-width: 68ch;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
-  .scrollbar-dark::-webkit-scrollbar-track {
+  .scrollbar-thin::-webkit-scrollbar-track {
     background: transparent;
   }
-  .scrollbar-dark::-webkit-scrollbar-thumb {
-    background-color: #3f3f46;
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--line-strong);
     border-radius: 9999px;
   }
-  .scrollbar-dark::-webkit-scrollbar-thumb:hover {
-    background-color: #52525b;
+
+  /* Horizontal scrollers (filter bars, galleries) with no visible bar. */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
-  .scrollbar-dark::-webkit-scrollbar-corner {
-    background: transparent;
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Makes an entire card one link target without nesting the link around
+     interactive children. Put `.link-cover` on the anchor and
+     `position: relative` on the card; controls that must stay clickable
+     sit outside the anchor with a higher stacking context. */
+  .link-cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
   }
 }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%) rotate(-15deg); }
-  100% { transform: translateX(100%) rotate(-15deg); }
-}
-
-.animate-shimmer {
-  position: relative;
-  overflow: hidden;
-}
-.animate-shimmer::after {
-  content: "";
-  position: absolute;
-  inset: -50%;
-  width: 50%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.12) 50%,
-    transparent 100%
-  );
-  animation: shimmer 5s ease-in-out infinite;
+/* Motion. The rule is that nothing readable animates in from invisible —
+   server-rendered content is at rest on arrival. What remains is hover,
+   press and overlay transitions, and those stop entirely when the viewer
+   has asked for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

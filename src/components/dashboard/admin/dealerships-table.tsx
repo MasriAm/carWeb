@@ -43,8 +43,8 @@ type DealershipRow = {
   _count: { vehicles: number };
 };
 
-const inputCls = "bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500";
-const labelCls = "text-zinc-300 text-sm";
+const inputCls = "bg-surface-2 border-line-control text-ink placeholder:text-ink-3";
+const labelCls = "text-ink-2 text-sm";
 
 export default function DealershipsAdminTable({
   dealerships,
@@ -108,60 +108,60 @@ export default function DealershipsAdminTable({
 
   return (
     <>
-      <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
+      <div className="bg-surface rounded-xl border border-line overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="border-zinc-800 hover:bg-zinc-900">
-              <TableHead className="text-zinc-400">Name</TableHead>
-              <TableHead className="text-zinc-400">Slug</TableHead>
-              <TableHead className="text-zinc-400">Owner</TableHead>
-              <TableHead className="text-zinc-400">Vehicles</TableHead>
-              <TableHead className="text-zinc-400">Phone</TableHead>
-              <TableHead className="text-zinc-400">Created</TableHead>
-              <TableHead className="text-right text-zinc-400">Actions</TableHead>
+            <TableRow className="border-line hover:bg-surface">
+              <TableHead className="text-ink-3">Name</TableHead>
+              <TableHead className="text-ink-3">Slug</TableHead>
+              <TableHead className="text-ink-3">Owner</TableHead>
+              <TableHead className="text-ink-3">Vehicles</TableHead>
+              <TableHead className="text-ink-3">Phone</TableHead>
+              <TableHead className="text-ink-3">Created</TableHead>
+              <TableHead className="text-right text-ink-3">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {dealerships.map((d) => (
-              <TableRow key={d.id} className="border-zinc-800 hover:bg-zinc-800/50">
-                <TableCell className="font-medium text-zinc-200">{d.name}</TableCell>
+              <TableRow key={d.id} className="border-line hover:bg-surface-2/50">
+                <TableCell className="font-medium text-ink-2">{d.name}</TableCell>
                 <TableCell>
-                  <Badge variant="secondary" className="text-xs font-mono bg-zinc-800 text-zinc-300 border-zinc-700">
+                  <Badge variant="secondary" className="text-xs font-mono bg-surface-2 text-ink-2 border-line-control">
                     {d.slug}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-sm">
-                  <span className="block text-zinc-300">{d.user.name || "—"}</span>
-                  <span className="text-xs text-zinc-500">{d.user.email}</span>
+                  <span className="block text-ink-2">{d.user.name || "—"}</span>
+                  <span className="text-xs text-ink-3">{d.user.email}</span>
                 </TableCell>
-                <TableCell className="text-zinc-400">{d._count.vehicles}</TableCell>
-                <TableCell className="text-sm text-zinc-400">{d.phone || "—"}</TableCell>
-                <TableCell className="text-sm text-zinc-500">
+                <TableCell className="text-ink-3">{d._count.vehicles}</TableCell>
+                <TableCell className="text-sm text-ink-3">{d.phone || "—"}</TableCell>
+                <TableCell className="text-sm text-ink-3">
                   {new Date(d.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="text-right space-x-1">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 hover:bg-zinc-700"
+                    className="h-8 w-8 hover:bg-surface-3"
                     onClick={() => { setEditDealership(d); setError(""); }}
                     title="Edit dealership"
                   >
-                    <Pencil className="h-4 w-4 text-amber-500" />
+                    <Pencil className="h-4 w-4 text-brand-strong" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 hover:bg-zinc-700"
+                    className="h-8 w-8 hover:bg-surface-3"
                     onClick={() => { setResetUserId(d.userId); setResetUserName(d.user.name || d.user.email || ""); setError(""); setNewPassword(""); }}
                     title="Reset dealer password"
                   >
-                    <KeyRound className="h-4 w-4 text-blue-400" />
+                    <KeyRound className="h-4 w-4 text-ink-2" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-zinc-700"
+                    className="h-8 w-8 text-danger hover:text-danger hover:bg-surface-3"
                     onClick={() => setDeleteId(d.id)}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -175,15 +175,15 @@ export default function DealershipsAdminTable({
 
       {/* Delete Dialog */}
       <Dialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-        <DialogContent className="bg-zinc-900 border-zinc-800">
+        <DialogContent className="bg-surface border-line">
           <DialogHeader>
-            <DialogTitle className="text-zinc-100">Delete Dealership</DialogTitle>
-            <DialogDescription className="text-zinc-400">
+            <DialogTitle className="text-ink">Delete Dealership</DialogTitle>
+            <DialogDescription className="text-ink-3">
               This will remove the dealership profile. Vehicle listings will remain but lose their dealership association.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteId(null)} className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
+            <Button variant="outline" onClick={() => setDeleteId(null)} className="border-line-control text-ink-2 hover:bg-surface-2">
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleDelete} disabled={loading}>
@@ -195,12 +195,12 @@ export default function DealershipsAdminTable({
 
       {/* Edit Dialog */}
       <Dialog open={!!editDealership} onOpenChange={() => setEditDealership(null)}>
-        <DialogContent className="bg-zinc-900 border-zinc-800 max-w-lg">
+        <DialogContent className="bg-surface border-line max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-zinc-100">Edit Dealership</DialogTitle>
+            <DialogTitle className="text-ink">Edit Dealership</DialogTitle>
           </DialogHeader>
           {error && (
-            <div className="rounded-lg px-3 py-2 text-sm bg-red-500/10 border border-red-500/20 text-red-400">{error}</div>
+            <div className="rounded-lg px-3 py-2 text-sm bg-danger-soft border border-danger/25 text-danger">{error}</div>
           )}
           <form onSubmit={handleEdit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -232,10 +232,10 @@ export default function DealershipsAdminTable({
               <Input name="address" defaultValue={editDealership?.address ?? ""} className={inputCls} />
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setEditDealership(null)} className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
+              <Button type="button" variant="outline" onClick={() => setEditDealership(null)} className="border-line-control text-ink-2 hover:bg-surface-2">
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading} className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
+              <Button type="submit" disabled={loading} className="bg-brand text-brand-ink hover:bg-brand-hover">
                 {loading ? "Saving..." : "Save Changes"}
               </Button>
             </DialogFooter>
@@ -245,15 +245,15 @@ export default function DealershipsAdminTable({
 
       {/* Reset Password Dialog */}
       <Dialog open={!!resetUserId} onOpenChange={() => { setResetUserId(null); setNewPassword(""); setError(""); }}>
-        <DialogContent className="bg-zinc-900 border-zinc-800 max-w-sm">
+        <DialogContent className="bg-surface border-line max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-zinc-100">Reset Password</DialogTitle>
-            <DialogDescription className="text-zinc-400">
-              Set a new password for <span className="font-medium text-zinc-200">{resetUserName}</span>
+            <DialogTitle className="text-ink">Reset Password</DialogTitle>
+            <DialogDescription className="text-ink-3">
+              Set a new password for <span className="font-medium text-ink-2">{resetUserName}</span>
             </DialogDescription>
           </DialogHeader>
           {error && (
-            <div className="rounded-lg px-3 py-2 text-sm bg-red-500/10 border border-red-500/20 text-red-400">{error}</div>
+            <div className="rounded-lg px-3 py-2 text-sm bg-danger-soft border border-danger/25 text-danger">{error}</div>
           )}
           <div className="space-y-2">
             <Label className={labelCls}>New Password</Label>
@@ -267,10 +267,10 @@ export default function DealershipsAdminTable({
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setResetUserId(null); setNewPassword(""); }} className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
+            <Button variant="outline" onClick={() => { setResetUserId(null); setNewPassword(""); }} className="border-line-control text-ink-2 hover:bg-surface-2">
               Cancel
             </Button>
-            <Button onClick={handleResetPassword} disabled={loading || newPassword.length < 6} className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
+            <Button onClick={handleResetPassword} disabled={loading || newPassword.length < 6} className="bg-brand text-brand-ink hover:bg-brand-hover">
               {loading ? "Resetting..." : "Reset Password"}
             </Button>
           </DialogFooter>

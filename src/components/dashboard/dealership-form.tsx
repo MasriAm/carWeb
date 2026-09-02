@@ -62,112 +62,112 @@ export default function DealershipForm({
   };
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
+    <Card className="bg-surface border-line">
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg">
+            <div className="bg-danger-soft border border-danger/25 text-danger text-sm p-3 rounded-lg">
               {error}
             </div>
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-zinc-200">Dealership Name *</Label>
+              <Label htmlFor="name" className="text-ink-2">Dealership Name *</Label>
               <Input
                 id="name"
                 name="name"
                 required
                 defaultValue={dealership?.name ?? ""}
                 placeholder="Amman Luxury Motors"
-                className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+                className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="slug" className="text-zinc-200">URL Slug *</Label>
+              <Label htmlFor="slug" className="text-ink-2">URL Slug *</Label>
               <Input
                 id="slug"
                 name="slug"
                 required
                 defaultValue={dealership?.slug ?? ""}
                 placeholder="amman-luxury-motors"
-                className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+                className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-zinc-200">Description</Label>
+            <Label htmlFor="description" className="text-ink-2">Description</Label>
             <Textarea
               id="description"
               name="description"
               rows={3}
               defaultValue={dealership?.description ?? ""}
               placeholder="Tell buyers about your dealership..."
-              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+              className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="logoUrl" className="text-zinc-200">Logo URL</Label>
+            <Label htmlFor="logoUrl" className="text-ink-2">Logo URL</Label>
             <Input
               id="logoUrl"
               name="logoUrl"
               type="url"
               defaultValue={dealership?.logoUrl ?? ""}
               placeholder="https://..."
-              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+              className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="phone" className="text-zinc-200">Phone</Label>
+              <Label htmlFor="phone" className="text-ink-2">Phone</Label>
               <Input
                 id="phone"
                 name="phone"
                 defaultValue={dealership?.phone ?? ""}
                 placeholder="+962791234567"
-                className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+                className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="whatsappNumber" className="text-zinc-200">WhatsApp Number</Label>
+              <Label htmlFor="whatsappNumber" className="text-ink-2">WhatsApp Number</Label>
               <Input
                 id="whatsappNumber"
                 name="whatsappNumber"
                 defaultValue={dealership?.whatsappNumber ?? ""}
                 placeholder="962791234567"
-                className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+                className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
               />
-              <p className="text-xs text-zinc-600">Country code without + (e.g. 962791234567)</p>
+              <p className="text-xs text-ink-3">Country code without + (e.g. 962791234567)</p>
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="website" className="text-zinc-200">Website</Label>
+            <Label htmlFor="website" className="text-ink-2">Website</Label>
             <Input
               id="website"
               name="website"
               type="url"
               defaultValue={dealership?.website ?? ""}
               placeholder="https://example.com"
-              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+              className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="address" className="text-zinc-200">Address</Label>
+            <Label htmlFor="address" className="text-ink-2">Address</Label>
             <Input
               id="address"
               name="address"
               defaultValue={dealership?.address ?? ""}
               placeholder="Abdali Boulevard, Amman, Jordan"
-              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+              className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
             />
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full sm:w-auto bg-amber-500 text-zinc-950 hover:bg-amber-400">
+          <Button type="submit" disabled={loading} className="w-full sm:w-auto bg-brand text-brand-ink hover:bg-brand-hover">
             {loading
               ? "Saving..."
               : dealership

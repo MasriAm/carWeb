@@ -65,44 +65,23 @@ const trustReasons = [
 
 export default function AboutPage() {
   return (
-    <div className="bg-zinc-950 pt-24 pb-20">
+    <div className="bg-canvas pb-20">
       {/* Hero — matches the home hero aesthetic (gradient + grid, no image) */}
       <section
-        className="relative overflow-hidden border-b border-zinc-900"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, #1C1C1E 0%, #050505 65%)",
-        }}
+        className="relative overflow-hidden bg-inverse"
       >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(245,158,11,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.03) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)",
-          }}
-        />
 
         <div className="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
-          <span className="mb-7 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-amber-500">
+          <span className="mb-7 inline-flex items-center gap-1.5 rounded-full border border-brand/30 bg-brand-soft px-3.5 py-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+            <span className="text-caption font-semibold uppercase tracking-[0.08em] text-brand-strong">
               About Us
             </span>
           </span>
-          <h1 className="mb-5 text-balance text-4xl font-extrabold tracking-tight text-zinc-50 sm:text-5xl md:text-6xl">
-            About <span className="text-amber-500">Royal Cars</span>
+          <h1 className="mb-5 text-balance font-display text-display text-inverse-ink sm:text-hero">
+            About <span className="text-brand-strong">Royal Cars</span>
           </h1>
-          <p className="mx-auto max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+          <p className="mx-auto max-w-2xl text-lead leading-relaxed text-inverse-ink-2">
             Royal Cars is Jordan&apos;s premier online marketplace for luxury
             and performance vehicles. Founded in Amman, we connect discerning
             buyers with the finest cars from trusted dealers and private
@@ -112,12 +91,12 @@ export default function AboutPage() {
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-page px-4 py-20 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
-          <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.1em] text-amber-500">
+          <p className="mb-2 text-caption font-bold uppercase tracking-[0.1em] text-brand-strong">
             What We Offer
           </p>
-          <h2 className="text-3xl font-extrabold tracking-tight text-zinc-50 sm:text-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
             Everything you need, in one place
           </h2>
         </div>
@@ -126,15 +105,15 @@ export default function AboutPage() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="rounded-2xl border border-zinc-800 bg-zinc-900 p-7 transition-colors hover:border-zinc-700"
+              className="rounded-2xl border border-line bg-surface p-7 transition-colors hover:border-line-control"
             >
-              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-500">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-brand/30 bg-brand-soft text-brand-strong">
                 <feature.icon className="h-5 w-5" />
               </div>
-              <h3 className="mb-2 text-[15px] font-bold text-zinc-50">
+              <h3 className="mb-2 text-body font-bold text-ink">
                 {feature.title}
               </h3>
-              <p className="text-[13px] leading-relaxed text-zinc-500">
+              <p className="text-meta leading-relaxed text-ink-3">
                 {feature.description}
               </p>
             </div>
@@ -144,14 +123,14 @@ export default function AboutPage() {
 
       {/* Mission */}
       <section className="mx-auto max-w-4xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-10 text-center">
-          <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.1em] text-amber-500">
+        <div className="rounded-2xl border border-line bg-surface p-10 text-center">
+          <p className="mb-4 text-caption font-bold uppercase tracking-[0.1em] text-brand-strong">
             Our Mission
           </p>
-          <p className="mx-auto max-w-2xl text-xl font-light leading-relaxed text-zinc-200 sm:text-2xl">
+          <p className="mx-auto max-w-2xl text-xl font-light leading-relaxed text-ink-2 sm:text-2xl">
             &ldquo;Bringing transparency to the Jordanian auto market.&rdquo;
           </p>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-zinc-500">
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-ink-3">
             We believe every car tells a story — and every buyer deserves to
             know the full truth before making a decision. No hidden damage, no
             inflated prices, no surprises.
@@ -160,12 +139,12 @@ export default function AboutPage() {
       </section>
 
       {/* Why Trust Us */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-page px-4 pb-20 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
-          <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.1em] text-amber-500">
+          <p className="mb-2 text-caption font-bold uppercase tracking-[0.1em] text-brand-strong">
             Why Trust Us
           </p>
-          <h2 className="text-3xl font-extrabold tracking-tight text-zinc-50 sm:text-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
             Built on verification and trust
           </h2>
         </div>
@@ -174,15 +153,15 @@ export default function AboutPage() {
           {trustReasons.map((reason) => (
             <div
               key={reason.title}
-              className="rounded-2xl border border-zinc-800 bg-zinc-900 p-7"
+              className="rounded-2xl border border-line bg-surface p-7"
             >
-              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-500">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-brand/30 bg-brand-soft text-brand-strong">
                 <reason.icon className="h-5 w-5" />
               </div>
-              <h3 className="mb-2 text-[15px] font-bold text-zinc-50">
+              <h3 className="mb-2 text-body font-bold text-ink">
                 {reason.title}
               </h3>
-              <p className="text-[13px] leading-relaxed text-zinc-500">
+              <p className="text-meta leading-relaxed text-ink-3">
                 {reason.description}
               </p>
             </div>
@@ -192,12 +171,12 @@ export default function AboutPage() {
 
       {/* Contact / Location */}
       <section className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8 sm:p-10">
+        <div className="rounded-2xl border border-line bg-surface p-8 sm:p-10">
           <div className="mb-8 text-center">
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.1em] text-amber-500">
+            <p className="mb-2 text-caption font-bold uppercase tracking-[0.1em] text-brand-strong">
               Get in Touch
             </p>
-            <h2 className="text-2xl font-extrabold tracking-tight text-zinc-50 sm:text-3xl">
+            <h2 className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
               Visit Us
             </h2>
           </div>
@@ -224,11 +203,11 @@ export default function AboutPage() {
                 key={item.title}
                 className="flex flex-col items-center gap-3"
               >
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-500">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-brand/30 bg-brand-soft text-brand-strong">
                   <item.icon className="h-5 w-5" />
                 </div>
-                <h3 className="text-sm font-bold text-zinc-50">{item.title}</h3>
-                <p className="text-sm leading-relaxed text-zinc-400">
+                <h3 className="text-sm font-bold text-ink">{item.title}</h3>
+                <p className="text-sm leading-relaxed text-ink-3">
                   {item.lines.map((line, i) => (
                     <span key={i}>
                       {line}

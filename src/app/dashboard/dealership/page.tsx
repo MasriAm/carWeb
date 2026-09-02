@@ -30,8 +30,8 @@ export default async function DealershipPage() {
   if (!dealership) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-zinc-100 mb-1">Create Your Dealership</h1>
-        <p className="text-zinc-400 mb-8">Set up your dealership to start listing vehicles.</p>
+        <h1 className="text-2xl font-bold text-ink mb-1">Create Your Dealership</h1>
+        <p className="text-ink-3 mb-8">Set up your dealership to start listing vehicles.</p>
         <div className="max-w-2xl">
           <DealershipForm dealership={null} />
         </div>
@@ -43,8 +43,8 @@ export default async function DealershipPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Dealership</h1>
-          <p className="text-zinc-500 mt-0.5 text-sm">Manage your dealership profile and view performance.</p>
+          <h1 className="text-2xl font-bold text-ink">Dealership</h1>
+          <p className="text-ink-3 mt-0.5 text-sm">Manage your dealership profile and view performance.</p>
         </div>
       </div>
 
@@ -52,91 +52,91 @@ export default async function DealershipPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
         {/* Profile Card — spans 2 cols */}
-        <div className="md:col-span-2 rounded-2xl bg-zinc-900 border border-zinc-800 p-6 shadow-lg shadow-black/20">
+        <div className="md:col-span-2 rounded-2xl bg-surface border border-line p-6 shadow-lg shadow-card">
           <div className="flex items-start gap-4">
-            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-zinc-950 text-xl font-bold shadow-lg shadow-amber-500/20 shrink-0">
+            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-brand to-brand-hover flex items-center justify-center text-brand-ink text-xl font-bold shadow-lg shadow-lift shrink-0">
               {dealership.name[0]}
             </div>
             <div className="min-w-0 flex-1">
-              <h2 className="text-xl font-bold text-white truncate">{dealership.name}</h2>
-              <p className="text-sm text-zinc-500 mt-0.5 truncate">/{dealership.slug}</p>
+              <h2 className="text-xl font-bold text-ink truncate">{dealership.name}</h2>
+              <p className="text-sm text-ink-3 mt-0.5 truncate">/{dealership.slug}</p>
             </div>
-            <div className="flex items-center gap-1.5 shrink-0 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-              <span className="text-xs font-semibold text-emerald-400">Verified</span>
+            <div className="flex items-center gap-1.5 shrink-0 bg-trust-soft border border-trust/25 px-2.5 py-1 rounded-full">
+              <ShieldCheck className="h-3.5 w-3.5 text-trust" />
+              <span className="text-xs font-semibold text-trust">Verified</span>
             </div>
           </div>
 
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
             {dealership.phone && (
-              <div className="flex items-center gap-2.5 text-sm text-zinc-400">
-                <Phone className="h-4 w-4 text-zinc-600 shrink-0" />
+              <div className="flex items-center gap-2.5 text-sm text-ink-3">
+                <Phone className="h-4 w-4 text-ink-3 shrink-0" />
                 <span className="truncate">{dealership.phone}</span>
               </div>
             )}
             {dealership.whatsappNumber && (
-              <div className="flex items-center gap-2.5 text-sm text-zinc-400">
-                <MessageCircle className="h-4 w-4 text-emerald-500 shrink-0" />
+              <div className="flex items-center gap-2.5 text-sm text-ink-3">
+                <MessageCircle className="h-4 w-4 text-trust shrink-0" />
                 <span className="truncate">{dealership.whatsappNumber}</span>
               </div>
             )}
             {dealership.website && (
-              <div className="flex items-center gap-2.5 text-sm text-zinc-400">
-                <Globe className="h-4 w-4 text-zinc-600 shrink-0" />
-                <a href={dealership.website} target="_blank" rel="noopener noreferrer" className="truncate hover:text-amber-500 transition-colors">
+              <div className="flex items-center gap-2.5 text-sm text-ink-3">
+                <Globe className="h-4 w-4 text-ink-3 shrink-0" />
+                <a href={dealership.website} target="_blank" rel="noopener noreferrer" className="truncate hover:text-brand-strong transition-colors">
                   {dealership.website.replace(/^https?:\/\//, "")}
                 </a>
               </div>
             )}
             {dealership.address && (
-              <div className="flex items-center gap-2.5 text-sm text-zinc-400">
-                <MapPin className="h-4 w-4 text-zinc-600 shrink-0" />
+              <div className="flex items-center gap-2.5 text-sm text-ink-3">
+                <MapPin className="h-4 w-4 text-ink-3 shrink-0" />
                 <span className="truncate">{dealership.address}</span>
               </div>
             )}
           </div>
 
           {dealership.description && (
-            <p className="mt-4 text-sm text-zinc-500 leading-relaxed line-clamp-3 border-t border-zinc-800 pt-4">
+            <p className="mt-4 text-sm text-ink-3 leading-relaxed line-clamp-3 border-t border-line pt-4">
               {dealership.description}
             </p>
           )}
         </div>
 
         {/* Quick Actions — spans 1 col on lg, 1 on md */}
-        <div className="rounded-2xl bg-zinc-900 border border-zinc-800 p-6 shadow-lg shadow-black/20 flex flex-col">
-          <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-4">Quick Actions</h3>
+        <div className="rounded-2xl bg-surface border border-line p-6 shadow-lg shadow-card flex flex-col">
+          <h3 className="text-sm font-semibold text-ink-3 uppercase tracking-wider mb-4">Quick Actions</h3>
           <div className="flex flex-col gap-2.5 flex-1">
             <Link href="/dashboard/vehicles/new" className="flex-1">
-              <Button variant="outline" className="w-full h-full min-h-[48px] justify-start gap-3 border-zinc-800 bg-zinc-800/30 text-zinc-200 hover:bg-zinc-800 hover:text-white hover:border-zinc-700 rounded-xl transition-all">
-                <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
-                  <Plus className="h-4 w-4 text-amber-500" />
+              <Button variant="outline" className="w-full h-full min-h-12 justify-start gap-3 border-line bg-surface-2/30 text-ink-2 hover:bg-surface-2 hover:text-ink hover:border-line-control rounded-xl transition-all">
+                <div className="h-8 w-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
+                  <Plus className="h-4 w-4 text-brand-strong" />
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-medium">Add New Listing</p>
-                  <p className="text-xs text-zinc-500">Create a vehicle listing</p>
+                  <p className="text-xs text-ink-3">Create a vehicle listing</p>
                 </div>
               </Button>
             </Link>
             <Link href="/dashboard/profile" className="flex-1">
-              <Button variant="outline" className="w-full h-full min-h-[48px] justify-start gap-3 border-zinc-800 bg-zinc-800/30 text-zinc-200 hover:bg-zinc-800 hover:text-white hover:border-zinc-700 rounded-xl transition-all">
-                <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
-                  <UserCog className="h-4 w-4 text-amber-500" />
+              <Button variant="outline" className="w-full h-full min-h-12 justify-start gap-3 border-line bg-surface-2/30 text-ink-2 hover:bg-surface-2 hover:text-ink hover:border-line-control rounded-xl transition-all">
+                <div className="h-8 w-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
+                  <UserCog className="h-4 w-4 text-brand-strong" />
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-medium">Update Profile</p>
-                  <p className="text-xs text-zinc-500">Edit personal info</p>
+                  <p className="text-xs text-ink-3">Edit personal info</p>
                 </div>
               </Button>
             </Link>
             <Link href="/dashboard/vehicles" className="flex-1">
-              <Button variant="outline" className="w-full h-full min-h-[48px] justify-start gap-3 border-zinc-800 bg-zinc-800/30 text-zinc-200 hover:bg-zinc-800 hover:text-white hover:border-zinc-700 rounded-xl transition-all">
-                <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
-                  <Building2 className="h-4 w-4 text-amber-500" />
+              <Button variant="outline" className="w-full h-full min-h-12 justify-start gap-3 border-line bg-surface-2/30 text-ink-2 hover:bg-surface-2 hover:text-ink hover:border-line-control rounded-xl transition-all">
+                <div className="h-8 w-8 rounded-lg bg-brand-soft flex items-center justify-center shrink-0">
+                  <Building2 className="h-4 w-4 text-brand-strong" />
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-medium">My Inventory</p>
-                  <p className="text-xs text-zinc-500">Manage all listings</p>
+                  <p className="text-xs text-ink-3">Manage all listings</p>
                 </div>
               </Button>
             </Link>
@@ -145,7 +145,7 @@ export default async function DealershipPage() {
 
         {/* Performance Stats — spans full row on lg (4 cols) */}
         <div className="md:col-span-3 lg:col-span-4">
-          <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">Performance</h3>
+          <h3 className="text-sm font-semibold text-ink-3 uppercase tracking-wider mb-3">Performance</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard title="Total Listings" value={stats?.totalListings ?? 0} icon={<Car className="h-5 w-5" />} />
             <StatCard title="On Sale" value={stats?.onSale ?? 0} icon={<TrendingUp className="h-5 w-5" />} />
@@ -156,7 +156,7 @@ export default async function DealershipPage() {
 
         {/* Dealership Form — full width */}
         <div className="md:col-span-3 lg:col-span-4">
-          <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">Edit Dealership</h3>
+          <h3 className="text-sm font-semibold text-ink-3 uppercase tracking-wider mb-3">Edit Dealership</h3>
           <DealershipForm dealership={dealership} />
         </div>
 

@@ -20,8 +20,8 @@ export default async function DashboardPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Admin Overview</h1>
-          <p className="text-zinc-500 mt-0.5 text-sm">
+          <h1 className="text-2xl font-bold text-ink">Admin Overview</h1>
+          <p className="text-ink-3 mt-0.5 text-sm">
             Platform-wide statistics at a glance.
           </p>
         </div>
@@ -30,33 +30,33 @@ export default async function DashboardPage() {
             title="Total Users"
             value={stats.users}
             icon={<Users className="h-5 w-5" />}
-            color="violet"
+            tone="neutral"
           />
           <StatCard
             title="Total Vehicles"
             value={stats.vehicles}
             icon={<Car className="h-5 w-5" />}
-            color="amber"
+            tone="brand"
           />
           <StatCard
             title="Dealerships"
             value={stats.dealerships}
             icon={<Building2 className="h-5 w-5" />}
-            color="blue"
+            tone="neutral"
           />
           <StatCard
             title="On Sale"
             value={stats.onSale}
             icon={<TrendingUp className="h-5 w-5" />}
             subtitle="Active listings"
-            color="emerald"
+            tone="trust"
           />
           <StatCard
             title="Sold"
             value={stats.sold}
             icon={<ShieldCheck className="h-5 w-5" />}
             subtitle="Completed sales"
-            color="red"
+            tone="neutral"
           />
         </div>
       </div>
@@ -68,8 +68,8 @@ export default async function DashboardPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Dealer Dashboard</h1>
-          <p className="text-zinc-500 mt-0.5 text-sm">
+          <h1 className="text-2xl font-bold text-ink">Dealer Dashboard</h1>
+          <p className="text-ink-3 mt-0.5 text-sm">
             Your dealership performance at a glance.
           </p>
         </div>
@@ -79,28 +79,28 @@ export default async function DashboardPage() {
             value={stats?.totalListings ?? 0}
             icon={<Car className="h-5 w-5" />}
             subtitle="Active inventory"
-            color="amber"
+            tone="brand"
           />
           <StatCard
             title="On Sale"
             value={stats?.onSale ?? 0}
             icon={<TrendingUp className="h-5 w-5" />}
             subtitle="Currently available"
-            color="emerald"
+            tone="trust"
           />
           <StatCard
             title="Sold"
             value={stats?.sold ?? 0}
             icon={<ShieldCheck className="h-5 w-5" />}
             subtitle="Completed sales"
-            color="red"
+            tone="neutral"
           />
           <StatCard
             title="Total Saves"
             value={stats?.totalSaves ?? 0}
             icon={<Heart className="h-5 w-5" />}
             subtitle="Users saved your cars"
-            color="violet"
+            tone="neutral"
           />
         </div>
       </div>
@@ -114,10 +114,10 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-100">
+        <h1 className="text-2xl font-bold text-ink">
           Welcome back, {user.name || "User"}
         </h1>
-        <p className="text-zinc-500 mt-0.5 text-sm">Your personal dashboard.</p>
+        <p className="text-ink-3 mt-0.5 text-sm">Your personal dashboard.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <StatCard
@@ -125,7 +125,7 @@ export default async function DashboardPage() {
           value={savedCount}
           icon={<Heart className="h-5 w-5" />}
           subtitle="Vehicles in your wishlist"
-          color="amber"
+          tone="brand"
         />
       </div>
     </div>

@@ -86,8 +86,8 @@ export default function ImageDropzone({
         onClick={() => inputRef.current?.click()}
         className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 cursor-pointer transition-colors ${
           dragOver
-            ? "border-amber-500 bg-amber-500/5"
-            : "border-zinc-700 bg-zinc-800/50 hover:border-zinc-600 hover:bg-zinc-800"
+            ? "border-brand bg-brand-soft"
+            : "border-line-control bg-surface-2/50 hover:border-line-control hover:bg-surface-2"
         }`}
       >
         <input
@@ -100,21 +100,21 @@ export default function ImageDropzone({
         />
 
         {uploading ? (
-          <Loader2 className="h-8 w-8 text-amber-500 animate-spin mb-2" />
+          <Loader2 className="h-8 w-8 text-brand-strong animate-spin mb-2" />
         ) : (
-          <Upload className="h-8 w-8 text-zinc-500 mb-2" />
+          <Upload className="h-8 w-8 text-ink-3 mb-2" />
         )}
 
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-ink-3">
           {uploading ? "Uploading..." : "Drop images here or click to browse"}
         </p>
-        <p className="text-xs text-zinc-600 mt-1">
+        <p className="text-xs text-ink-3 mt-1">
           JPEG, PNG, WebP &middot; Max 5MB each
         </p>
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+        <div className="flex items-center gap-2 text-sm text-danger bg-danger-soft border border-danger/25 rounded-lg px-3 py-2">
           <AlertCircle className="h-4 w-4 shrink-0" />
           {error}
         </div>
@@ -123,7 +123,7 @@ export default function ImageDropzone({
       {images.length > 0 && (
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
           {images.map((url, i) => (
-            <div key={url} className="relative aspect-[4/3] rounded-lg overflow-hidden border border-zinc-700 group">
+            <div key={url} className="relative aspect-[4/3] rounded-lg overflow-hidden border border-line-control group">
               <Image
                 src={url}
                 alt={`Upload ${i + 1}`}
@@ -134,12 +134,12 @@ export default function ImageDropzone({
               <button
                 type="button"
                 onClick={() => removeImage(i)}
-                className="absolute top-1 right-1 h-6 w-6 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                className="absolute top-1 right-1 h-6 w-6 rounded-full bg-black/70 text-ink flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-danger"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
               {i === 0 && (
-                <span className="absolute bottom-1 left-1 text-[9px] uppercase font-bold bg-amber-500 text-zinc-950 px-1.5 py-0.5 rounded">
+                <span className="absolute bottom-1 left-1 text-caption uppercase font-bold bg-brand text-brand-ink px-1.5 py-0.5 rounded">
                   Cover
                 </span>
               )}

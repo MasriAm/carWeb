@@ -120,8 +120,8 @@ function MediaSlider({
 
   if (slides.length === 0) {
     return (
-      <div className="flex aspect-[16/10] items-center justify-center bg-zinc-800">
-        <Car className="h-12 w-12 text-zinc-600" />
+      <div className="flex aspect-[16/10] items-center justify-center bg-surface-2">
+        <Car className="h-12 w-12 text-ink-3" />
       </div>
     );
   }
@@ -129,7 +129,7 @@ function MediaSlider({
   const activeSlide = slides[safeCurrent];
 
   return (
-    <div className="group relative aspect-[16/10] overflow-hidden bg-zinc-900">
+    <div className="group relative aspect-[16/10] overflow-hidden bg-surface">
       {activeSlide.type === "video" ? (
         <video
           key={activeSlide.url}
@@ -176,7 +176,7 @@ function MediaSlider({
               e.stopPropagation();
               prev();
             }}
-            className="absolute left-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity hover:bg-black/70 group-hover:opacity-100"
+            className="absolute left-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-ink opacity-0 transition-opacity hover:bg-black/70 group-hover:opacity-100"
             aria-label="Previous slide"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -188,7 +188,7 @@ function MediaSlider({
               e.stopPropagation();
               next();
             }}
-            className="absolute right-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity hover:bg-black/70 group-hover:opacity-100"
+            className="absolute right-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-ink opacity-0 transition-opacity hover:bg-black/70 group-hover:opacity-100"
             aria-label="Next slide"
           >
             <ChevronRight className="h-4 w-4" />
@@ -206,7 +206,7 @@ function MediaSlider({
                 }}
                 className={cn(
                   "h-1.5 rounded-full transition-all",
-                  i === safeCurrent ? "w-4 bg-amber-500" : "w-1.5 bg-white/50"
+                  i === safeCurrent ? "w-4 bg-brand" : "w-1.5 bg-white/50"
                 )}
                 aria-label={`Go to slide ${i + 1}`}
               />
@@ -216,7 +216,7 @@ function MediaSlider({
       )}
 
       {activeSlide.type === "video" && (
-        <span className="absolute left-2.5 top-10 z-10 rounded bg-amber-500 px-1.5 py-0.5 text-[9px] font-bold text-zinc-950">
+        <span className="absolute left-2.5 top-10 z-10 rounded bg-brand px-1.5 py-0.5 text-caption font-bold text-brand-ink">
           VIDEO
         </span>
       )}
@@ -274,8 +274,8 @@ export default function CarCard({
       className={cn(
         "flex flex-col overflow-hidden rounded-xl border transition-shadow",
         vehicle.isPromoted
-          ? "border-amber-500/40 bg-gradient-to-br from-zinc-900 to-[#1C1710] shadow-lg shadow-amber-500/5 hover:shadow-amber-500/10"
-          : "border-zinc-800 bg-zinc-900 hover:border-zinc-700 hover:shadow-lg hover:shadow-black/40",
+          ? "border-brand/40 bg-surface shadow-card hover:shadow-lift"
+          : "border-line bg-surface hover:border-line-control hover:shadow-lg hover:shadow-lift",
         isSold && "opacity-65"
       )}
     >
@@ -294,12 +294,12 @@ export default function CarCard({
         {/* Top-left badge (Sponsored / Verified) */}
         <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 flex gap-1.5">
           {vehicle.isPromoted ? (
-            <span className="inline-flex items-center gap-1 rounded bg-amber-500 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-zinc-950">
+            <span className="inline-flex items-center gap-1 rounded bg-brand px-1.5 py-0.5 text-caption font-bold tracking-wider text-brand-ink">
               <Star className="h-2.5 w-2.5 fill-current" />
               SPONSORED
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 rounded border border-emerald-500/30 bg-zinc-950/75 px-1.5 py-0.5 text-[9px] font-bold text-emerald-400">
+            <span className="inline-flex items-center gap-1 rounded border border-trust/25 bg-canvas/75 px-1.5 py-0.5 text-caption font-bold text-trust">
               <ShieldCheck className="h-2.5 w-2.5" />
               VERIFIED
             </span>
@@ -310,12 +310,12 @@ export default function CarCard({
         <div className="pointer-events-none absolute right-2.5 top-2.5 z-10">
           <span
             className={cn(
-              "inline-flex items-center gap-1 rounded px-2 py-0.5 text-[9px] font-bold text-white",
+              "inline-flex items-center gap-1 rounded px-2 py-0.5 text-caption font-bold text-ink",
               isSold
-                ? "bg-red-500/90"
+                ? "bg-danger/90"
                 : isElectric
-                ? "bg-blue-500/90"
-                : "bg-emerald-500/90"
+                ? "bg-ink/80"
+                : "bg-trust/90"
             )}
           >
             {isSold ? (
@@ -343,12 +343,12 @@ export default function CarCard({
             disabled={saving}
             aria-label={saved ? "Unsave" : "Save"}
             aria-pressed={saved}
-            className="absolute bottom-2.5 right-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur hover:bg-black/80"
+            className="absolute bottom-2.5 right-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-ink backdrop-blur hover:bg-black/80"
           >
             <Heart
               className={cn(
                 "h-3.5 w-3.5 transition-colors",
-                saved ? "fill-red-500 text-red-500" : "text-white"
+                saved ? "fill-danger text-danger" : "text-ink"
               )}
             />
           </button>
@@ -359,37 +359,37 @@ export default function CarCard({
         {/* Title + Price */}
         <div className="mb-1 flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <div className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-zinc-500">
+            <div className="mb-0.5 text-caption font-medium uppercase tracking-wide text-ink-3">
               {vehicle.brand}
             </div>
             <Link
               href={detailsHref}
-              className="block text-[15px] font-bold leading-tight text-white hover:text-amber-400"
+              className="block text-body font-bold leading-tight text-ink hover:text-brand-strong"
             >
               {vehicle.model}
             </Link>
           </div>
           <div className="shrink-0 text-right">
-            <div className="text-[17px] font-extrabold leading-none text-amber-500">
+            <div className="text-lead font-extrabold leading-none text-brand-strong">
               {formatPriceShort(vehicle.price)}
             </div>
-            <div className="mt-0.5 text-[10px] text-zinc-500">JOD</div>
+            <div className="mt-0.5 text-caption text-ink-3">JOD</div>
           </div>
         </div>
 
         {/* Dealership + Agency badge */}
         {(vehicle.dealership || vehicle.waredWakaleh) && (
-          <div className="mb-2 flex items-center gap-2 text-[11px] text-zinc-500">
+          <div className="mb-2 flex items-center gap-2 text-caption text-ink-3">
             {vehicle.dealership && (
               <span>
                 by{" "}
-                <span className="font-medium text-zinc-300">
+                <span className="font-medium text-ink-2">
                   {vehicle.dealership.name}
                 </span>
               </span>
             )}
             {vehicle.waredWakaleh && (
-              <span className="inline-flex items-center gap-0.5 rounded border border-emerald-500/20 bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-400">
+              <span className="inline-flex items-center gap-0.5 rounded border border-trust/25 bg-trust-soft px-1.5 py-0.5 text-caption font-semibold text-trust">
                 <BadgeCheck className="h-2.5 w-2.5" />
                 Agency
               </span>
@@ -398,7 +398,7 @@ export default function CarCard({
         )}
 
         {/* Description */}
-        <p className="mb-2.5 line-clamp-2 text-[11px] leading-relaxed text-zinc-500">
+        <p className="mb-2.5 line-clamp-2 text-caption leading-relaxed text-ink-3">
           {vehicle.shortDescription}
         </p>
 
@@ -443,7 +443,7 @@ export default function CarCard({
               onClick={(e) => e.stopPropagation()}
               whileTap={{ scale: 0.97 }}
               transition={tactileSpring}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-2 py-2 text-xs font-semibold text-white hover:bg-emerald-500"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-wa px-2 py-2 text-xs font-semibold text-ink hover:bg-wa-hover"
             >
               <MessageCircle className="h-3.5 w-3.5" />
               WhatsApp
@@ -452,7 +452,7 @@ export default function CarCard({
           <Link
             href={detailsHref}
             className={cn(
-              "flex items-center justify-center rounded-lg border border-zinc-800 bg-zinc-800 px-3 py-2 text-xs font-medium text-zinc-300 hover:border-zinc-700 hover:bg-zinc-700",
+              "flex items-center justify-center rounded-lg border border-line bg-surface-2 px-3 py-2 text-xs font-medium text-ink-2 hover:border-line-control hover:bg-surface-3",
               !whatsappUrl && "flex-1"
             )}
           >
@@ -472,8 +472,8 @@ function SpecItem({
   value: string;
 }) {
   return (
-    <div className="flex items-center gap-1 text-[11px] text-zinc-400">
-      <span className="text-zinc-600">{icon}</span>
+    <div className="flex items-center gap-1 text-caption text-ink-3">
+      <span className="text-ink-3">{icon}</span>
       <span className="truncate">{value}</span>
     </div>
   );

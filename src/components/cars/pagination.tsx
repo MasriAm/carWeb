@@ -43,7 +43,7 @@ export default function Pagination({
       <Button
         variant="outline"
         size="icon"
-        className="h-9 w-9 border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+        className="h-9 w-9 border-line-control text-ink-3 hover:bg-surface-2 hover:text-ink"
         disabled={currentPage <= 1}
         onClick={() => goToPage(currentPage - 1)}
         aria-label="Previous page"
@@ -53,7 +53,7 @@ export default function Pagination({
 
       {pageNumbers.map((p, i) =>
         p === "..." ? (
-          <span key={`ellipsis-${i}`} className="px-2 text-zinc-600 text-sm">...</span>
+          <span key={`ellipsis-${i}`} className="px-2 text-ink-3 text-sm">...</span>
         ) : (
           <Button
             key={p}
@@ -61,8 +61,8 @@ export default function Pagination({
             size="icon"
             className={`h-9 w-9 text-sm ${
               p === currentPage
-                ? "bg-amber-500 text-zinc-950 hover:bg-amber-400"
-                : "border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                ? "bg-brand text-brand-ink hover:bg-brand-hover"
+                : "border-line-control text-ink-3 hover:bg-surface-2 hover:text-ink"
             }`}
             onClick={() => goToPage(p)}
             aria-label={`Page ${p}`}
@@ -75,7 +75,7 @@ export default function Pagination({
       <Button
         variant="outline"
         size="icon"
-        className="h-9 w-9 border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+        className="h-9 w-9 border-line-control text-ink-3 hover:bg-surface-2 hover:text-ink"
         disabled={currentPage >= totalPages}
         onClick={() => goToPage(currentPage + 1)}
         aria-label="Next page"

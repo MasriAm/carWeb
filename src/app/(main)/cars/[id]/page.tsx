@@ -53,11 +53,11 @@ export default async function CarDetailPage({ params }: Props) {
     : [];
 
   return (
-    <section className="min-h-screen bg-zinc-950">
-      <div className="max-w-[1200px] mx-auto px-4 py-8">
+    <section className="min-h-screen bg-canvas">
+      <div className="max-w-page mx-auto px-4 py-8">
         <Link
           href="/cars"
-          className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-amber-500 transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-sm text-ink-3 hover:text-brand-strong transition-colors mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Browse
@@ -67,7 +67,7 @@ export default async function CarDetailPage({ params }: Props) {
           {/* Gallery */}
           <div className="lg:col-span-3 space-y-4">
             {vehicle.imageUrls.length > 0 && (
-              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800">
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-surface border border-line">
                 <Image
                   src={vehicle.imageUrls[0]}
                   alt={`${vehicle.brand} ${vehicle.model}`}
@@ -77,7 +77,7 @@ export default async function CarDetailPage({ params }: Props) {
                   priority
                 />
                 {vehicle.isPromoted && (
-                  <Badge className="absolute top-3 left-3 bg-amber-500 text-zinc-950 text-xs font-bold z-10">
+                  <Badge className="absolute top-3 left-3 bg-brand text-brand-ink text-xs font-bold z-10">
                     <Star className="h-3.5 w-3.5 mr-1 fill-current" />
                     SPONSORED
                   </Badge>
@@ -88,7 +88,7 @@ export default async function CarDetailPage({ params }: Props) {
             {vehicle.imageUrls.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
                 {vehicle.imageUrls.slice(1, 5).map((url, i) => (
-                  <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800">
+                  <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-surface border border-line">
                     <Image
                       src={url}
                       alt={`${vehicle.brand} ${vehicle.model} — ${i + 2}`}
@@ -103,8 +103,8 @@ export default async function CarDetailPage({ params }: Props) {
 
             {/* Instagram Reel Embed */}
             {vehicle.instagramVideoUrl && (
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-                <h3 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Video Reel</h3>
+              <div className="bg-surface border border-line rounded-2xl p-6">
+                <h3 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Video Reel</h3>
                 <div className="relative w-full overflow-hidden rounded-xl" style={{ maxWidth: 540 }}>
                   <iframe
                     src={vehicle.instagramVideoUrl.replace(/\/$/, "") + "/embed"}
@@ -121,26 +121,26 @@ export default async function CarDetailPage({ params }: Props) {
           {/* Details */}
           <div className="lg:col-span-2 space-y-6">
             {/* Header */}
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+            <div className="bg-surface border border-line rounded-2xl p-6">
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div>
-                  <h1 className="text-2xl font-bold text-white">
+                  <h1 className="text-2xl font-bold text-ink">
                     {vehicle.brand} {vehicle.model}
                   </h1>
-                  <p className="text-zinc-500 text-sm">{vehicle.productionYear} · {vehicle.condition}</p>
+                  <p className="text-ink-3 text-sm">{vehicle.productionYear} · {vehicle.condition}</p>
                 </div>
-                <Badge className={vehicle.status === "SOLD" ? "bg-red-600 text-white" : "bg-emerald-600 text-white"}>
+                <Badge className={vehicle.status === "SOLD" ? "bg-danger text-ink" : "bg-wa text-ink"}>
                   {vehicle.status === "SOLD" ? "SOLD" : "ON SALE"}
                 </Badge>
               </div>
 
-              <div className="text-3xl font-bold text-amber-500 mb-4">
-                {vehicle.price.toLocaleString()} <span className="text-lg font-normal text-zinc-500">JOD</span>
+              <div className="text-3xl font-bold text-brand-strong mb-4">
+                {vehicle.price.toLocaleString()} <span className="text-lg font-normal text-ink-3">JOD</span>
               </div>
 
               <div className="flex items-center gap-2 flex-wrap">
                 {vehicle.waredWakaleh && (
-                  <Badge className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs">
+                  <Badge className="bg-trust-soft text-trust border border-trust/25 text-xs">
                     <BadgeCheck className="h-3.5 w-3.5 mr-1" />
                     Agency Import (وارد وكالة)
                   </Badge>
@@ -149,57 +149,57 @@ export default async function CarDetailPage({ params }: Props) {
             </div>
 
             {/* Quick Specs */}
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-              <h3 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-4">Specifications</h3>
+            <div className="bg-surface border border-line rounded-2xl p-6">
+              <h3 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Specifications</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <Calendar className="h-4 w-4 text-zinc-600" />
-                  <span className="text-zinc-500">Year:</span>
+                <div className="flex items-center gap-2 text-ink-2">
+                  <Calendar className="h-4 w-4 text-ink-3" />
+                  <span className="text-ink-3">Year:</span>
                   {vehicle.productionYear}
                 </div>
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <Gauge className="h-4 w-4 text-zinc-600" />
-                  <span className="text-zinc-500">Mileage:</span>
+                <div className="flex items-center gap-2 text-ink-2">
+                  <Gauge className="h-4 w-4 text-ink-3" />
+                  <span className="text-ink-3">Mileage:</span>
                   {vehicle.mileageKm.toLocaleString()} km
                 </div>
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <Fuel className="h-4 w-4 text-zinc-600" />
-                  <span className="text-zinc-500">Fuel:</span>
+                <div className="flex items-center gap-2 text-ink-2">
+                  <Fuel className="h-4 w-4 text-ink-3" />
+                  <span className="text-ink-3">Fuel:</span>
                   {vehicle.fuelType}
                 </div>
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <Cog className="h-4 w-4 text-zinc-600" />
-                  <span className="text-zinc-500">Trans:</span>
+                <div className="flex items-center gap-2 text-ink-2">
+                  <Cog className="h-4 w-4 text-ink-3" />
+                  <span className="text-ink-3">Trans:</span>
                   {vehicle.transmission}
                 </div>
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <Car className="h-4 w-4 text-zinc-600" />
-                  <span className="text-zinc-500">Body:</span>
+                <div className="flex items-center gap-2 text-ink-2">
+                  <Car className="h-4 w-4 text-ink-3" />
+                  <span className="text-ink-3">Body:</span>
                   {vehicle.bodyType}
                 </div>
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <Gauge className="h-4 w-4 text-zinc-600" />
-                  <span className="text-zinc-500">Engine:</span>
+                <div className="flex items-center gap-2 text-ink-2">
+                  <Gauge className="h-4 w-4 text-ink-3" />
+                  <span className="text-ink-3">Engine:</span>
                   {vehicle.engineCapacityCC} CC
                 </div>
               </div>
             </div>
 
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-              <h3 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-3">Description</h3>
-              <p className="text-zinc-300 text-sm leading-relaxed whitespace-pre-line">
+            <div className="bg-surface border border-line rounded-2xl p-6">
+              <h3 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-3">Description</h3>
+              <p className="text-ink-2 text-sm leading-relaxed whitespace-pre-line">
                 {vehicle.shortDescription}
               </p>
             </div>
 
             {/* Inspection Report */}
             {vehicle.fa7s && (
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-                <h3 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+              <div className="bg-surface border border-line rounded-2xl p-6">
+                <h3 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-3 flex items-center gap-2">
                   <ClipboardCheck className="h-4 w-4" />
                   Inspection Report (فحص)
                 </h3>
-                <p className="text-zinc-300 text-sm leading-relaxed whitespace-pre-line">
+                <p className="text-ink-2 text-sm leading-relaxed whitespace-pre-line">
                   {vehicle.fa7s}
                 </p>
               </div>
@@ -207,12 +207,12 @@ export default async function CarDetailPage({ params }: Props) {
 
             {/* Features */}
             {specs.length > 0 && (
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-                <h3 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-3">Features & Specs</h3>
+              <div className="bg-surface border border-line rounded-2xl p-6">
+                <h3 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-3">Features & Specs</h3>
                 <ul className="grid gap-2">
                   {specs.map((spec, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-zinc-300">
-                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
+                    <li key={i} className="flex items-center gap-2 text-sm text-ink-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
                       {spec}
                     </li>
                   ))}
@@ -222,10 +222,10 @@ export default async function CarDetailPage({ params }: Props) {
 
             {/* Dealership Info */}
             {vehicle.dealership && (
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-                <h3 className="text-sm font-semibold text-amber-500 uppercase tracking-wider mb-3">Dealership</h3>
-                <p className="text-lg font-semibold text-white mb-2">{vehicle.dealership.name}</p>
-                <div className="space-y-1.5 text-sm text-zinc-400">
+              <div className="bg-surface border border-line rounded-2xl p-6">
+                <h3 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-3">Dealership</h3>
+                <p className="text-lg font-semibold text-ink mb-2">{vehicle.dealership.name}</p>
+                <div className="space-y-1.5 text-sm text-ink-3">
                   {vehicle.dealership.phone && (
                     <div className="flex items-center gap-2">
                       <Phone className="h-3.5 w-3.5" />
@@ -235,7 +235,7 @@ export default async function CarDetailPage({ params }: Props) {
                   {vehicle.dealership.website && (
                     <div className="flex items-center gap-2">
                       <Globe className="h-3.5 w-3.5" />
-                      <a href={vehicle.dealership.website} target="_blank" rel="noopener noreferrer" className="text-amber-500 hover:underline">
+                      <a href={vehicle.dealership.website} target="_blank" rel="noopener noreferrer" className="text-brand-strong hover:underline">
                         {vehicle.dealership.website}
                       </a>
                     </div>
@@ -253,7 +253,7 @@ export default async function CarDetailPage({ params }: Props) {
             {/* Contact CTA */}
             {whatsappUrl && (
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="block">
-                <Button size="lg" className="w-full h-14 bg-emerald-600 hover:bg-emerald-500 text-white text-lg font-semibold rounded-2xl">
+                <Button size="lg" className="w-full h-14 bg-wa hover:bg-wa-hover text-ink text-lg font-semibold rounded-2xl">
                   <MessageCircle className="mr-2 h-5 w-5" />
                   Chat on WhatsApp
                 </Button>

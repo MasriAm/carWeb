@@ -263,10 +263,10 @@ export function RangeSlider({
     <div>
       <div
         ref={trackRef}
-        className="relative mx-2.5 mt-5 mb-2 h-1 rounded-full bg-zinc-800 select-none"
+        className="relative mx-2.5 mt-5 mb-2 h-1 rounded-full bg-surface-2 select-none"
       >
         <div
-          className="absolute h-full rounded-full bg-amber-500"
+          className="absolute h-full rounded-full bg-brand"
           style={{
             left: `${pct(value[0])}%`,
             right: `${100 - pct(value[1])}%`,
@@ -278,14 +278,14 @@ export function RangeSlider({
             type="button"
             aria-label={t === "lo" ? "Minimum" : "Maximum"}
             onPointerDown={startDrag(t)}
-            className="absolute top-1/2 h-[18px] w-[18px] -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none rounded-full border-2 border-zinc-950 bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.2)] active:cursor-grabbing"
+            className="absolute top-1/2 h-4.5 w-4.5 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none rounded-full border-2 border-line bg-brand shadow-[0_0_0_3px_rgba(245,158,11,0.2)] active:cursor-grabbing"
             style={{
               left: `${pct(t === "lo" ? value[0] : value[1])}%`,
             }}
           />
         ))}
       </div>
-      <div className="mt-4 flex justify-between text-xs font-semibold text-amber-500">
+      <div className="mt-4 flex justify-between text-xs font-semibold text-brand-strong">
         <span>{format(value[0])}</span>
         <span>{format(value[1])}</span>
       </div>
@@ -317,16 +317,16 @@ function Section({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-zinc-800 last:border-b-0">
+    <div className="border-b border-line last:border-b-0">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between py-3 text-[10px] font-bold uppercase tracking-[0.09em] text-zinc-300 hover:text-zinc-100"
+        className="flex w-full items-center justify-between py-3 text-caption font-bold uppercase tracking-[0.09em] text-ink-2 hover:text-ink"
       >
         {title}
         <ChevronDown
           className={cn(
-            "h-3.5 w-3.5 text-zinc-600 transition-transform duration-200",
+            "h-3.5 w-3.5 text-ink-3 transition-transform duration-200",
             open ? "rotate-180" : "rotate-0"
           )}
         />
@@ -361,10 +361,10 @@ function Chip({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center rounded-md border px-[11px] py-1 text-xs font-medium transition-colors",
+        "inline-flex items-center rounded-md border px-3 py-1 text-xs font-medium transition-colors",
         active
-          ? "border-amber-500 bg-amber-500/10 text-amber-500"
-          : "border-zinc-800 bg-transparent text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
+          ? "border-brand bg-brand-soft text-brand-strong"
+          : "border-line bg-transparent text-ink-3 hover:border-line-control hover:text-ink-2"
       )}
     >
       {label}
@@ -393,8 +393,8 @@ function ToggleRow<T extends string>({
           className={cn(
             "rounded-lg border px-2 py-2 text-xs font-semibold transition-colors",
             value === opt.value
-              ? "border-amber-500 bg-amber-500/10 text-amber-500"
-              : "border-zinc-800 bg-transparent text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
+              ? "border-brand bg-brand-soft text-brand-strong"
+              : "border-line bg-transparent text-ink-3 hover:border-line-control hover:text-ink-2"
           )}
         >
           {opt.label}
@@ -545,14 +545,14 @@ export default function SidebarFilter({
   } = useCarFilters();
 
   return (
-    <div className="hidden overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 lg:block">
+    <div className="hidden overflow-hidden rounded-2xl border border-line bg-surface/40 lg:block">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-zinc-800 px-[18px] py-4">
-        <span className="flex items-center gap-2 text-sm font-bold text-zinc-100">
-          <Sliders className="h-3.5 w-3.5 text-amber-500" />
+      <div className="flex items-center justify-between border-b border-line px-5 py-4">
+        <span className="flex items-center gap-2 text-sm font-bold text-ink">
+          <Sliders className="h-3.5 w-3.5 text-brand-strong" />
           Filters
           {activeCount > 0 && (
-            <span className="rounded-full bg-amber-500 px-1.5 py-px text-[9px] font-extrabold leading-4 text-zinc-950">
+            <span className="rounded-full bg-brand px-1.5 py-px text-caption font-extrabold leading-4 text-brand-ink">
               {activeCount}
             </span>
           )}
@@ -561,7 +561,7 @@ export default function SidebarFilter({
           <button
             type="button"
             onClick={clearAll}
-            className="text-[11px] font-semibold text-amber-500 hover:text-amber-400"
+            className="text-caption font-semibold text-brand-strong hover:text-brand-strong"
           >
             Clear all
           </button>
@@ -570,8 +570,8 @@ export default function SidebarFilter({
 
       <div className="scrollbar-dark max-h-[calc(100vh-200px)] overflow-y-auto">
         {/* Results count */}
-        <div className="mx-[18px] border-b border-zinc-800 py-2.5 text-xs text-zinc-500">
-          <span className="font-bold text-amber-500">{resultsCount}</span>{" "}
+        <div className="mx-5 border-b border-line py-2.5 text-xs text-ink-3">
+          <span className="font-bold text-brand-strong">{resultsCount}</span>{" "}
           vehicle{resultsCount !== 1 ? "s" : ""} found
         </div>
 
@@ -657,7 +657,7 @@ export function ActiveFilterChips() {
 
   return (
     <div className="mb-4 flex flex-wrap items-center gap-1.5">
-      <span className="mr-0.5 text-[11px] font-medium text-zinc-500">
+      <span className="mr-0.5 text-caption font-medium text-ink-3">
         Active:
       </span>
       {tags.map((t) => (
@@ -665,7 +665,7 @@ export function ActiveFilterChips() {
           key={t.key}
           type="button"
           onClick={t.clear}
-          className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/[0.07] px-2.5 py-1 text-[11px] font-medium leading-tight text-amber-500 hover:bg-amber-500/10"
+          className="inline-flex items-center gap-1.5 rounded-full border border-brand/30 bg-brand-soft px-2.5 py-1 text-caption font-medium leading-tight text-brand-strong hover:bg-brand-soft"
         >
           {t.label}
           <X className="h-2.5 w-2.5 opacity-70" />
@@ -674,7 +674,7 @@ export function ActiveFilterChips() {
       <button
         type="button"
         onClick={clearAll}
-        className="ml-1 px-1 py-1 text-[11px] text-zinc-500 hover:text-zinc-300"
+        className="ml-1 px-1 py-1 text-caption text-ink-3 hover:text-ink-2"
       >
         Clear all
       </button>

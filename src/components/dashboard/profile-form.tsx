@@ -25,44 +25,44 @@ export default function ProfileForm({
   };
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
+    <Card className="bg-surface border-line">
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-zinc-200">Email</Label>
+            <Label htmlFor="email" className="text-ink-2">Email</Label>
             <Input
               id="email"
               type="email"
               value={initialEmail}
               disabled
-              className="bg-zinc-800 border-zinc-700 text-zinc-500 cursor-not-allowed"
+              className="bg-surface-2 border-line-control text-ink-3 cursor-not-allowed"
             />
-            <p className="text-xs text-zinc-600">Email cannot be changed.</p>
+            <p className="text-xs text-ink-3">Email cannot be changed.</p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-zinc-200">Full Name</Label>
+            <Label htmlFor="name" className="text-ink-2">Full Name</Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your full name"
-              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+              className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone" className="text-zinc-200">Phone Number</Label>
+            <Label htmlFor="phone" className="text-ink-2">Phone Number</Label>
             <Input
               id="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+962791234567"
-              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+              className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3"
             />
           </div>
 
-          <Button type="submit" className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
+          <Button type="submit" className="bg-brand text-brand-ink hover:bg-brand-hover">
             <Save className="mr-2 h-4 w-4" />
             {saved ? "Saved!" : "Save Changes"}
           </Button>

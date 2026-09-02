@@ -54,8 +54,8 @@ const FUEL_OPTIONS = [
   { value: "HYBRID", label: "Hybrid" },
 ];
 
-const inputCls = "bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500";
-const labelCls = "text-zinc-200";
+const inputCls = "bg-surface-2 border-line-control text-ink placeholder:text-ink-3";
+const labelCls = "text-ink-2";
 
 export default function VehicleForm({
   vehicle,
@@ -127,15 +127,15 @@ export default function VehicleForm({
   const existingImages = vehicle?.imageUrls?.join("\n") || "";
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
+    <Card className="bg-surface border-line">
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
             <div
               className={`rounded-xl px-4 py-3 text-sm ${
                 /rate limit/i.test(error)
-                  ? "bg-amber-500/10 border border-amber-500/30 text-amber-400"
-                  : "bg-red-500/10 border border-red-500/20 text-red-400"
+                  ? "bg-brand-soft border border-brand/30 text-brand-strong"
+                  : "bg-danger-soft border border-danger/25 text-danger"
               }`}
             >
               {error}
@@ -178,7 +178,7 @@ export default function VehicleForm({
               <Label className={labelCls}>Condition *</Label>
               <Select name="condition" defaultValue={vehicle?.condition ?? "USED"}>
                 <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectContent className="bg-surface border-line-control">
                   <SelectItem value="NEW">New</SelectItem>
                   <SelectItem value="USED">Used</SelectItem>
                 </SelectContent>
@@ -188,7 +188,7 @@ export default function VehicleForm({
               <Label className={labelCls}>Transmission *</Label>
               <Select name="transmission" defaultValue={vehicle?.transmission ?? "AUTO"}>
                 <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectContent className="bg-surface border-line-control">
                   <SelectItem value="AUTO">Automatic</SelectItem>
                   <SelectItem value="MANUAL">Manual</SelectItem>
                 </SelectContent>
@@ -198,7 +198,7 @@ export default function VehicleForm({
               <Label className={labelCls}>Body Type *</Label>
               <Select name="bodyType" defaultValue={vehicle?.bodyType ?? "SUV"}>
                 <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectContent className="bg-surface border-line-control">
                   {BODY_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                 </SelectContent>
               </Select>
@@ -207,7 +207,7 @@ export default function VehicleForm({
               <Label className={labelCls}>Fuel Type *</Label>
               <Select name="fuelType" defaultValue={vehicle?.fuelType ?? "GAS"}>
                 <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectContent className="bg-surface border-line-control">
                   {FUEL_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
                 </SelectContent>
               </Select>
@@ -224,7 +224,7 @@ export default function VehicleForm({
                 <Label className={labelCls}>Status</Label>
                 <Select name="status" defaultValue={vehicle.status}>
                   <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                  <SelectContent className="bg-surface border-line-control">
                     <SelectItem value="ON_SALE">On Sale</SelectItem>
                     <SelectItem value="SOLD">Sold</SelectItem>
                   </SelectContent>
@@ -244,9 +244,9 @@ export default function VehicleForm({
                 type="checkbox"
                 name="waredWakaleh"
                 defaultChecked={vehicle?.waredWakaleh ?? false}
-                className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-amber-500 focus:ring-amber-500"
+                className="h-4 w-4 rounded border-line-control bg-surface-2 text-brand-strong focus:ring-brand-strong"
               />
-              <span className="text-sm text-zinc-200">Agency Import (وارد وكالة)</span>
+              <span className="text-sm text-ink-2">Agency Import (وارد وكالة)</span>
             </label>
           </div>
 
@@ -273,10 +273,10 @@ export default function VehicleForm({
           <div className="space-y-2">
             <Label htmlFor="specificWhatsapp" className={labelCls}>Direct WhatsApp (optional)</Label>
             <Input id="specificWhatsapp" name="specificWhatsapp" defaultValue={vehicle?.specificWhatsapp ?? ""} placeholder="079XXXXXXX or 962791234567" className={inputCls} />
-            <p className="text-xs text-zinc-600">Leave blank to use the dealership default.</p>
+            <p className="text-xs text-ink-3">Leave blank to use the dealership default.</p>
           </div>
 
-          <Button type="submit" disabled={loading} className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
+          <Button type="submit" disabled={loading} className="bg-brand text-brand-ink hover:bg-brand-hover">
             {loading ? (
               <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{vehicle ? "Updating..." : "Creating..."}</>
             ) : (
