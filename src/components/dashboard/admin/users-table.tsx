@@ -65,17 +65,6 @@ export default function UsersAdminTable({ users }: { users: UserRow[] }) {
     setDeleteId(null);
   };
 
-  const roleBadgeColor = (role: Role) => {
-    switch (role) {
-      case "ADMIN":
-        return "bg-purple-500/10 text-purple-400 border-purple-500/20";
-      case "DEALER":
-        return "bg-blue-500/10 text-blue-400 border-blue-500/20";
-      default:
-        return "bg-zinc-700 text-zinc-300";
-    }
-  };
-
   return (
     <>
       <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">

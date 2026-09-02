@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createVehicle, updateVehicle } from "@/lib/actions/vehicles";
+import type {
+  CreateVehicleInput,
+  UpdateVehicleInput,
+} from "@/lib/validations/vehicle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -81,11 +85,11 @@ export default function VehicleForm({
       model: form.get("model") as string,
       price: Number(form.get("price")),
       shortDescription: form.get("shortDescription") as string,
-      condition: form.get("condition") as "NEW" | "USED",
-      bodyType: form.get("bodyType") as string,
-      transmission: form.get("transmission") as "AUTO" | "MANUAL",
+      condition: form.get("condition") as CreateVehicleInput["condition"],
+      bodyType: form.get("bodyType") as CreateVehicleInput["bodyType"],
+      transmission: form.get("transmission") as CreateVehicleInput["transmission"],
       engineCapacityCC: Number(form.get("engineCapacityCC")),
-      fuelType: form.get("fuelType") as string,
+      fuelType: form.get("fuelType") as CreateVehicleInput["fuelType"],
       mileageKm: Number(form.get("mileageKm")),
       productionYear: Number(form.get("productionYear")),
       videoUrl: (form.get("videoUrl") as string) || "",
@@ -95,15 +99,14 @@ export default function VehicleForm({
       specificWhatsapp: (form.get("specificWhatsapp") as string) || "",
       fa7s: (form.get("fa7s") as string) || "",
       waredWakaleh: form.get("waredWakaleh") === "on",
-      status: (form.get("status") as "ON_SALE" | "SOLD") || undefined,
+      status: (form.get("status") as UpdateVehicleInput["status"]) || undefined,
       dealershipId: (form.get("dealershipId") as string) || undefined,
-    };
+    } satisfies CreateVehicleInput & UpdateVehicleInput;
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = vehicle
-        ? await updateVehicle(vehicle.id, data as any)
-        : await createVehicle(data as any);
+        ? await updateVehicle(vehicle.id, data)
+        : await createVehicle(data);
       setLoading(false);
       if (!result.success) {
         setError(result.error || "Something went wrong");
