@@ -61,9 +61,13 @@ export default async function DealershipPage() {
               <h2 className="text-xl font-bold text-ink truncate">{dealership.name}</h2>
               <p className="text-sm text-ink-3 mt-0.5 truncate">/{dealership.slug}</p>
             </div>
-            <div className="flex items-center gap-1.5 shrink-0 bg-trust-soft border border-trust/25 px-2.5 py-1 rounded-full">
-              <ShieldCheck className="h-3.5 w-3.5 text-trust" />
-              <span className="text-xs font-semibold text-trust">Verified</span>
+            {/* There is no verification process behind this, so it states
+                what is actually true: the profile is live and listing. */}
+            <div className="flex items-center gap-1.5 shrink-0 bg-surface-2 px-2.5 py-1 rounded-full">
+              <ShieldCheck className="h-3.5 w-3.5 text-ink-3" />
+              <span className="text-caption font-semibold text-ink-2">
+                {stats?.onSale ?? 0} live {(stats?.onSale ?? 0) === 1 ? "listing" : "listings"}
+              </span>
             </div>
           </div>
 

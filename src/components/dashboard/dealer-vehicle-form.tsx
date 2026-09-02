@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createVehicle } from "@/lib/actions/vehicles";
+import type { CreateVehicleInput } from "@/lib/validations/vehicle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,8 +26,19 @@ const FUEL_OPTIONS = [
   { value: "HYBRID", label: "Hybrid" },
 ];
 
+const SPEC_OPTIONS = [
+  { value: "GCC", label: "Gulf spec" },
+  { value: "US", label: "US spec" },
+  { value: "EU", label: "European spec" },
+  { value: "KOREAN", label: "Korean spec" },
+  { value: "JAPANESE", label: "Japanese spec" },
+  { value: "OTHER", label: "Other" },
+];
+
 const inputCls = "bg-surface-2 border-line-control text-ink placeholder:text-ink-3 h-10";
 const labelCls = "text-ink-2 text-sm font-medium";
+
+const DEFAULT_SPEC = "UNSPECIFIED";
 
 export default function DealerVehicleForm() {
   const router = useRouter();
@@ -68,11 +80,14 @@ export default function DealerVehicleForm() {
       specificWhatsapp: (form.get("specificWhatsapp") as string) || "",
       fa7s: (form.get("fa7s") as string) || "",
       waredWakaleh: form.get("waredWakaleh") === "on",
+      specOrigin:
+        form.get("specOrigin") === DEFAULT_SPEC
+          ? null
+          : (form.get("specOrigin") as CreateVehicleInput["specOrigin"]),
     };
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const result = await createVehicle(data as any);
+      const result = await createVehicle(data as CreateVehicleInput);
       setLoading(false);
       if (!result.success) {
         setError(result.error || "Something went wrong");
@@ -110,7 +125,12 @@ export default function DealerVehicleForm() {
             <ImageDropzone images={imageUrls} onChange={setImageUrls} />
             <div className="mt-4 space-y-2">
               <Label htmlFor="videoUrl" className={labelCls}>Video URL (optional)</Label>
-              <Input id="videoUrl" name="videoUrl" type="url" placeholder="https://youtube.com/..." className={inputCls} />
+              <p className="text-caption text-ink-3">
+                A direct MP4 or WebM file — a Cloudinary upload works. A
+                YouTube or Instagram page link will not play; use the
+                Instagram field below for reels.
+              </p>
+              <Input id="videoUrl" name="videoUrl" type="url" placeholder="https://res.cloudinary.com/.../video.mp4" className={inputCls} />
             </div>
             <div className="mt-4 space-y-2">
               <Label htmlFor="instagramVideoUrl" className={labelCls}>Instagram Reel URL (optional)</Label>
@@ -196,6 +216,18 @@ export default function DealerVehicleForm() {
                   <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-surface border-line-control">
                     {FUEL_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className={labelCls}>Spec origin</Label>
+                <Select name="specOrigin" defaultValue={DEFAULT_SPEC}>
+                  <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="UNSPECIFIED">Not specified</SelectItem>
+                    {SPEC_OPTIONS.map((o) => (
+                      <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

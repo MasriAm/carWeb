@@ -112,6 +112,7 @@ model User {
   dealership    Dealership?
   vehicles      Vehicle[]
   savedVehicles SavedVehicle[]
+  savedSearches SavedSearch[]
 }
 
 model Dealership {
@@ -192,6 +193,22 @@ model Vehicle {
   @@index([dealershipId])
   @@index([userId])
   @@index([searchVector], type: Gin)
+}
+
+/// A filter set a buyer wants to come back to, stored as the URL query
+/// string so re-running it is just a navigation and the encoding stays the
+/// single source of truth.
+model SavedSearch {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  query     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, query])
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 model SavedVehicle {

@@ -59,3 +59,15 @@ export const getSavedVehicles = cache(async () => {
 
   return rows;
 });
+
+/** Filter sets this user asked to keep. */
+export const getSavedSearches = cache(async () => {
+  const user = await getSessionUser();
+  if (!user) return [];
+
+  return db.savedSearch.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, name: true, query: true, createdAt: true },
+  });
+});

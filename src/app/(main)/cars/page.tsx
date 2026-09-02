@@ -25,6 +25,7 @@ import FilterPanel from "@/components/cars/filters/filter-panel";
 import MobileFilters from "@/components/cars/filters/mobile-filters";
 import SearchInput from "@/components/cars/filters/search-input";
 import SortSelect from "@/components/cars/filters/sort-select";
+import SaveSearchButton from "@/components/cars/filters/save-search-button";
 import ClearFiltersLink from "@/components/cars/filters/clear-filters-link";
 
 export const metadata: Metadata = {
@@ -74,6 +75,12 @@ export default function CarsPage({
       </div>
 
       <div className="mx-auto flex max-w-page items-start gap-6 px-4 py-6 sm:px-6 lg:px-8">
+        <a
+          href="#results"
+          className="sr-only rounded-control bg-brand px-4 py-2 text-body-sm font-semibold text-brand-ink focus:not-sr-only focus:absolute focus:z-[60]"
+        >
+          Skip filters, go to results
+        </a>
         <aside className="sticky top-[calc(var(--spacing-header)+1.5rem)] hidden w-sidebar shrink-0 lg:block">
           <div className="overflow-hidden rounded-card border border-line bg-surface">
             <div className="border-b border-line px-4 py-3">
@@ -87,12 +94,12 @@ export default function CarsPage({
           </div>
         </aside>
 
-        <main className="min-w-0 flex-1">
+        <section id="results" aria-label="Search results" className="min-w-0 flex-1">
           <ActiveFilterChips />
           <Suspense fallback={<ResultsFallback />}>
             <Results searchParams={searchParams} />
           </Suspense>
-        </main>
+        </section>
       </div>
     </div>
   );
@@ -180,13 +187,19 @@ async function Results({
 
   return (
     <>
-      <p className="mb-4 text-body-sm text-ink-2" aria-live="polite">
-        <span className="font-semibold text-ink tabular-nums">
-          {formatNumber(total)}
-        </span>{" "}
-        {total === 1 ? "car" : "cars"}
-        {filters.q ? ` matching “${filters.q}”` : ""}
-      </p>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-body-sm text-ink-2" aria-live="polite">
+          <span className="font-semibold text-ink tabular-nums">
+            {formatNumber(total)}
+          </span>{" "}
+          {total === 1 ? "car" : "cars"}
+          {filters.q ? ` matching “${filters.q}”` : ""}
+        </p>
+        <SaveSearchButton
+          isLoggedIn={Boolean(user)}
+          suggestedName={suggestSearchName(filters, raw)}
+        />
+      </div>
 
       <CarGrid
         vehicles={all}
@@ -264,6 +277,26 @@ async function NoResults({
       </div>
     </div>
   );
+}
+
+/**
+ * A sensible default name for a saved search, built from what the buyer
+ * actually filtered on, so they are not staring at an empty text box.
+ */
+function suggestSearchName(
+  filters: ReturnType<typeof vehicleFilterSchema.parse>,
+  raw: SearchParams
+): string {
+  const parts: string[] = [];
+  if (filters.q) parts.push(filters.q);
+  if (filters.brand?.length) parts.push(filters.brand.join(", "));
+  if (filters.bodyType?.length) parts.push(filters.bodyType.join(", ").toLowerCase());
+  if (filters.maxPrice) parts.push(`under ${formatNumber(filters.maxPrice)} JOD`);
+  if (filters.agency) parts.push("agency import");
+
+  const name = parts.join(" · ");
+  if (name) return name.slice(0, 60);
+  return typeof raw.dealer === "string" ? `Cars from ${raw.dealer}` : "All cars";
 }
 
 /* ─── Fallbacks ─────────────────────────────────────────────────────── */

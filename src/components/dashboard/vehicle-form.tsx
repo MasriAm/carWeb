@@ -43,6 +43,7 @@ type VehicleData = {
   specificWhatsapp: string | null;
   fa7s: string | null;
   waredWakaleh: boolean;
+  specOrigin: string | null;
   isPromoted: boolean;
 } | null;
 
@@ -54,8 +55,19 @@ const FUEL_OPTIONS = [
   { value: "HYBRID", label: "Hybrid" },
 ];
 
+const SPEC_OPTIONS = [
+  { value: "GCC", label: "Gulf spec" },
+  { value: "US", label: "US spec" },
+  { value: "EU", label: "European spec" },
+  { value: "KOREAN", label: "Korean spec" },
+  { value: "JAPANESE", label: "Japanese spec" },
+  { value: "OTHER", label: "Other" },
+];
+
 const inputCls = "bg-surface-2 border-line-control text-ink placeholder:text-ink-3";
 const labelCls = "text-ink-2";
+
+const DEFAULT_SPEC = "UNSPECIFIED";
 
 export default function VehicleForm({
   vehicle,
@@ -99,6 +111,10 @@ export default function VehicleForm({
       specificWhatsapp: (form.get("specificWhatsapp") as string) || "",
       fa7s: (form.get("fa7s") as string) || "",
       waredWakaleh: form.get("waredWakaleh") === "on",
+      specOrigin:
+        form.get("specOrigin") === DEFAULT_SPEC
+          ? null
+          : (form.get("specOrigin") as CreateVehicleInput["specOrigin"]),
       status: (form.get("status") as UpdateVehicleInput["status"]) || undefined,
       dealershipId: (form.get("dealershipId") as string) || undefined,
     } satisfies CreateVehicleInput & UpdateVehicleInput;
@@ -238,6 +254,21 @@ export default function VehicleForm({
             <Textarea id="fa7s" name="fa7s" rows={3} defaultValue={vehicle?.fa7s ?? ""} placeholder="Vehicle inspection details..." className={inputCls} />
           </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className={labelCls}>Spec origin</Label>
+                <Select name="specOrigin" defaultValue={DEFAULT_SPEC}>
+                  <SelectTrigger className={`${inputCls} w-full`}><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="UNSPECIFIED">Not specified</SelectItem>
+                    {SPEC_OPTIONS.map((o) => (
+                      <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+          </div>
+
           <div className="flex items-center gap-6">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -252,7 +283,8 @@ export default function VehicleForm({
 
           <div className="space-y-2">
             <Label htmlFor="videoUrl" className={labelCls}>Video URL</Label>
-            <Input id="videoUrl" name="videoUrl" type="url" defaultValue={vehicle?.videoUrl ?? ""} placeholder="https://..." className={inputCls} />
+            <Input id="videoUrl" name="videoUrl" type="url" defaultValue={vehicle?.videoUrl ?? ""} placeholder="https://res.cloudinary.com/.../video.mp4" className={inputCls} />
+            <p className="text-caption text-ink-3">Direct MP4 or WebM only; a YouTube link will not play.</p>
           </div>
 
           <div className="space-y-2">

@@ -18,7 +18,7 @@ import {
   ArrowLeft,
   UserCog,
   Plus,
-  Bell,
+  Bookmark,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -33,6 +33,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: <LayoutDashboard className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
   { label: "Saved Cars", href: "/dashboard/saved", icon: <Heart className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
+  { label: "Saved Searches", href: "/dashboard/searches", icon: <Bookmark className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
   { label: "Profile Settings", href: "/dashboard/profile", icon: <UserCog className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
   { label: "My Vehicles", href: "/dashboard/vehicles", icon: <Car className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
   { label: "Dealership", href: "/dashboard/dealership", icon: <Building2 className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
@@ -53,13 +54,9 @@ export default function DashboardShell({
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const filteredNav = NAV_ITEMS.filter((item) => {
-    if (!item.roles.includes(role)) return false;
-    if (role === "DEALER" && (item.href === "/dashboard" || item.href === "/dashboard/saved")) {
-      return false;
-    }
-    return true;
-  });
+  // Dealers previously had Overview and Saved Cars hidden from them for no
+  // stated reason, so a dealer could not reach their own saved listings.
+  const filteredNav = NAV_ITEMS.filter((item) => item.roles.includes(role));
 
   const isActive = (href: string) =>
     href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
@@ -149,9 +146,6 @@ export default function DashboardShell({
               </Button>
             </Link>
           )}
-          <button type="button" className="relative h-9 w-9 rounded-lg bg-surface border border-line flex items-center justify-center text-ink-3 hover:text-ink-2 hover:border-line-control transition-colors">
-            <Bell className="h-4 w-4" />
-          </button>
           <Link
             href="/dashboard/profile"
             className="h-9 w-9 rounded-full bg-gradient-to-br from-brand to-brand-hover flex items-center justify-center text-brand-ink text-xs font-bold shadow-lg shadow-lift"
