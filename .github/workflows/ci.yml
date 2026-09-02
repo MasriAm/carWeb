@@ -90,12 +90,26 @@ jobs:
 
           status=0
           for path in "/" "/cars" "/about" "/dealers"; do
-            hidden=$(curl -sf "http://localhost:3000${path}" | grep -o 'opacity:0' | wc -l)
+            body=$(mktemp)
+            # Assert the status separately. Piping `curl -sf` straight into
+            # grep swallows a 500: the pipeline yields zero matches, which is
+            # indistinguishable from a clean page, so the check would pass on
+            # a broken one.
+            code=$(curl -s -o "$body" -w '%{http_code}' "http://localhost:3000${path}")
+            if [ "$code" != "200" ]; then
+              echo "::error::${path} returned HTTP ${code}"
+              status=1
+              rm -f "$body"
+              continue
+            fi
+
+            hidden=$(grep -o 'opacity:0' "$body" | wc -l)
             if [ "$hidden" -gt 4 ]; then
               echo "::error::${path} server-renders ${hidden} elements at opacity:0"
               status=1
             else
-              echo "ok  ${path} (${hidden} hidden elements)"
+              echo "ok  ${path} (HTTP 200, ${hidden} hidden elements)"
             fi
+            rm -f "$body"
           done
           exit $status
