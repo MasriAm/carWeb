@@ -11,6 +11,7 @@ import {
   type UpdateVehicleInput,
 } from "@/lib/validations/vehicle";
 import { revalidatePath } from "next/cache";
+import { revalidateVehicleData } from "@/lib/cache-tags";
 import type { Prisma } from "@/generated/prisma/client";
 import { formatJordanPhone } from "@/lib/format-jordan-phone";
 import { actionRateLimit, safeLimit } from "@/lib/rate-limit";
@@ -177,6 +178,7 @@ export async function createVehicle(input: CreateVehicleInput) {
 
   revalidatePath("/cars");
   revalidatePath(`/cars/${vehicle.id}`);
+  await revalidateVehicleData(vehicle.id);
   return { success: true as const, vehicle };
 }
 
@@ -215,6 +217,7 @@ export async function updateVehicle(id: string, input: UpdateVehicleInput) {
 
   revalidatePath("/cars");
   revalidatePath(`/cars/${id}`);
+  await revalidateVehicleData(id);
   return { success: true as const, vehicle };
 }
 
@@ -235,12 +238,24 @@ export async function deleteVehicle(id: string) {
   await db.vehicle.delete({ where: { id } });
   revalidatePath("/cars");
   revalidatePath(`/cars/${id}`);
+  await revalidateVehicleData(id);
   return { success: true as const };
 }
 
 export async function toggleSaveVehicle(vehicleId: string) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
+
+  const { success } = await safeLimit(actionRateLimit, session.user.id);
+  if (!success) throw new Error("Rate limit exceeded. Please slow down.");
+
+  // A stale id from a cached page would otherwise surface as a raw
+  // foreign-key error from Postgres.
+  const vehicle = await db.vehicle.findUnique({
+    where: { id: vehicleId },
+    select: { id: true },
+  });
+  if (!vehicle) throw new Error("Vehicle not found");
 
   const existing = await db.savedVehicle.findUnique({
     where: { userId_vehicleId: { userId: session.user.id, vehicleId } },

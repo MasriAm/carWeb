@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import crypto from "crypto";
+import { actionRateLimit, safeLimit } from "@/lib/rate-limit";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
@@ -9,6 +10,16 @@ const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 export async function uploadImage(formData: FormData): Promise<{ success: true; url: string } | { success: false; error: string }> {
   const session = await auth();
   if (!session?.user) return { success: false, error: "Unauthorized" };
+
+  // Uploads cost money at the Cloudinary end, so they are limited like any
+  // other mutation.
+  const { success: withinLimit } = await safeLimit(
+    actionRateLimit,
+    session.user.id
+  );
+  if (!withinLimit) {
+    return { success: false, error: "Too many uploads. Please slow down." };
+  }
 
   const file = formData.get("file") as File | null;
   if (!file) return { success: false, error: "No file provided" };

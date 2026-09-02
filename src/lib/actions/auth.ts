@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { registerSchema, loginSchema } from "@/lib/validations/auth";
 import { authRateLimit, getIp, safeLimit } from "@/lib/rate-limit";
 import bcrypt from "bcryptjs";
+import { PASSWORD_HASH_ROUNDS } from "@/lib/password";
 import { AuthError } from "next-auth";
 
 export type AuthResult = {
@@ -79,7 +80,7 @@ export async function registerAction(formData: FormData): Promise<AuthResult> {
     return { success: false, error: "An account with this email already exists" };
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, PASSWORD_HASH_ROUNDS);
 
   await db.user.create({
     data: {
