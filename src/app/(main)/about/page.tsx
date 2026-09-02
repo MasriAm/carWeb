@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 export const metadata = {
+  alternates: { canonical: "/about" },
   title: "About Us",
   description:
     "Royal Cars is Jordan's premier online marketplace for luxury and performance vehicles. Founded in Amman, we connect discerning buyers with the finest cars.",

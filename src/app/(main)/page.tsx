@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Hero from "@/components/home/hero";
+import { WebsiteJsonLd } from "@/components/cars/detail/structured-data";
 import {
   BrowseByBodyType,
   BrowseByBrand,
@@ -26,6 +27,7 @@ import { getSavedVehicleIds, getSessionUser } from "@/lib/data/session";
 export default function HomePage() {
   return (
     <>
+      <WebsiteJsonLd />
       <Hero />
 
       <Suspense fallback={<StripFallback title="Featured cars" />}>

@@ -31,6 +31,9 @@ export const metadata: Metadata = {
   title: "Browse cars for sale in Jordan",
   description:
     "Search cars for sale across Jordan by price in JOD, mileage, year, body type and agency-import status. Message the seller directly on WhatsApp.",
+  // Filter combinations are query strings on one page; point them all at the
+  // canonical listing so crawlers do not treat each as a separate document.
+  alternates: { canonical: "/cars" },
 };
 
 type SearchParams = Record<string, string | string[] | undefined>;
