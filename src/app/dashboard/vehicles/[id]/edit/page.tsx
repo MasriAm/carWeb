@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth-utils";
-import { getVehicleById } from "@/lib/actions/vehicles";
+import { getVehicleById } from "@/lib/data/vehicles";
 import { auth } from "@/lib/auth";
 import VehicleForm from "@/components/dashboard/vehicle-form";
 

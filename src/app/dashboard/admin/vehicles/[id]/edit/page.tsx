@@ -1,5 +1,5 @@
 import { requireRole } from "@/lib/auth-utils";
-import { getVehicleById } from "@/lib/actions/vehicles";
+import { getVehicleById } from "@/lib/data/vehicles";
 import VehicleForm from "@/components/dashboard/vehicle-form";
 import { notFound } from "next/navigation";
 

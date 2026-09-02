@@ -1,480 +1,161 @@
-"use client";
-
-import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Fuel,
-  Gauge,
-  Calendar,
-  Cog,
-  Car,
-  Heart,
-  MessageCircle,
-  Star,
-  BadgeCheck,
-  Zap,
-  ShieldCheck,
-} from "lucide-react";
-import { toggleSaveVehicle } from "@/lib/actions/vehicles";
+import { BadgeCheck, Images, Star, Video } from "lucide-react";
+import type { ListVehicle } from "@/lib/data/vehicles";
 import { cn } from "@/lib/utils";
+import {
+  formatKm,
+  formatPriceJOD,
+  vehicleTitle,
+  FUEL_LABEL,
+  SPEC_ORIGIN_LABEL,
+  TRANSMISSION_LABEL,
+} from "@/lib/vehicle-format";
+import { contactNumberFor, whatsappVehicleLink } from "@/lib/vehicle-contact";
+import CarPhoto from "./car-photo";
+import SaveButton from "./save-button";
+import WhatsAppButton from "./whatsapp-button";
 
-/** Matches `MarketplaceListVehicle` from getVehicles (grid payload). */
-type VehicleCard = {
-  id: string;
-  status: string;
-  videoUrl: string | null;
-  imageUrls: string[];
-  brand: string;
-  model: string;
-  price: number;
-  shortDescription: string;
-  condition: string;
-  bodyType: string;
-  transmission: string;
-  engineCapacityCC: number;
-  fuelType: string;
-  mileageKm: number;
-  productionYear: number;
-  isPromoted?: boolean;
-  waredWakaleh?: boolean;
-  specificWhatsapp?: string | null;
-  dealership?: {
-    name: string;
-    slug: string;
-    whatsappNumber?: string | null;
-    phone?: string | null;
-  } | null;
-  user?: { name: string | null; phone?: string | null } | null;
-};
-
-const tactileSpring = { type: "spring" as const, stiffness: 400, damping: 17 };
-
-const formatPriceShort = (price: number) =>
-  price >= 1000 ? `${Math.round(price / 1000)}K` : price.toLocaleString();
-
-const FUEL_LABEL: Record<string, string> = {
-  GAS: "Gasoline",
-  DIESEL: "Diesel",
-  ELECTRIC: "Electric",
-  HYBRID: "Hybrid",
-};
-
-const TRANSMISSION_LABEL: Record<string, string> = {
-  AUTO: "Auto",
-  MANUAL: "Manual",
-};
-
-const BODY_LABEL: Record<string, string> = {
-  SUV: "SUV",
-  SEDAN: "Sedan",
-  COUPE: "Coupe",
-  HATCHBACK: "Hatchback",
-  CONVERTIBLE: "Convertible",
-  PICKUP: "Pickup",
-  VAN: "Van",
-  WAGON: "Wagon",
-};
-
-/** Infer a reasonable MIME type from a video URL extension so the browser
- * doesn't silently reject playable content (e.g. .mov served without a type). */
-function guessVideoMime(url: string): string | undefined {
-  const cleanUrl = url.split("?")[0].split("#")[0].toLowerCase();
-  if (cleanUrl.endsWith(".webm")) return "video/webm";
-  if (cleanUrl.endsWith(".ogg") || cleanUrl.endsWith(".ogv"))
-    return "video/ogg";
-  if (cleanUrl.endsWith(".mov")) return "video/quicktime";
-  if (cleanUrl.endsWith(".mp4") || cleanUrl.endsWith(".m4v"))
-    return "video/mp4";
-  return undefined;
-}
-
-function MediaSlider({
-  videoUrl,
-  imageUrls,
-  brand,
-  model,
-}: {
-  videoUrl: string | null;
-  imageUrls: string[];
-  brand: string;
-  model: string;
-}) {
-  const [videoFailed, setVideoFailed] = useState(false);
-
-  const slides: { type: "video" | "image"; url: string }[] = [];
-  if (videoUrl && !videoFailed) slides.push({ type: "video", url: videoUrl });
-  imageUrls.forEach((url) => slides.push({ type: "image", url }));
-
-  const [current, setCurrent] = useState(0);
-
-  // If the video fails after we advanced past it, clamp the index.
-  const safeCurrent = Math.min(current, Math.max(slides.length - 1, 0));
-
-  const prev = () =>
-    setCurrent((c) => (c - 1 + slides.length) % slides.length);
-  const next = () => setCurrent((c) => (c + 1) % slides.length);
-
-  if (slides.length === 0) {
-    return (
-      <div className="flex aspect-[16/10] items-center justify-center bg-surface-2">
-        <Car className="h-12 w-12 text-ink-3" />
-      </div>
-    );
-  }
-
-  const activeSlide = slides[safeCurrent];
-
-  return (
-    <div className="group relative aspect-[16/10] overflow-hidden bg-surface">
-      {activeSlide.type === "video" ? (
-        <video
-          key={activeSlide.url}
-          className="h-full w-full object-cover"
-          controls
-          muted
-          playsInline
-          preload="metadata"
-          crossOrigin="anonymous"
-          onError={() => {
-            setVideoFailed(true);
-            setCurrent(0);
-          }}
-        >
-          <source
-            src={activeSlide.url}
-            type={guessVideoMime(activeSlide.url)}
-          />
-          {/* Fallback: bare src for browsers that ignore <source> type. */}
-          <source src={activeSlide.url} />
-        </video>
-      ) : (
-        <motion.div
-          className="h-full w-full"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-        >
-          <Image
-            src={activeSlide.url}
-            alt={`${brand} ${model}`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-        </motion.div>
-      )}
-
-      {slides.length > 1 && (
-        <>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              prev();
-            }}
-            className="absolute left-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-ink opacity-0 transition-opacity hover:bg-black/70 group-hover:opacity-100"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              next();
-            }}
-            className="absolute right-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-ink opacity-0 transition-opacity hover:bg-black/70 group-hover:opacity-100"
-            aria-label="Next slide"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-
-          <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 gap-1">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setCurrent(i);
-                }}
-                className={cn(
-                  "h-1.5 rounded-full transition-all",
-                  i === safeCurrent ? "w-4 bg-brand" : "w-1.5 bg-white/50"
-                )}
-                aria-label={`Go to slide ${i + 1}`}
-              />
-            ))}
-          </div>
-        </>
-      )}
-
-      {activeSlide.type === "video" && (
-        <span className="absolute left-2.5 top-10 z-10 rounded bg-brand px-1.5 py-0.5 text-caption font-bold text-brand-ink">
-          VIDEO
-        </span>
-      )}
-    </div>
-  );
-}
-
+/**
+ * Listing card.
+ *
+ * One link target. The previous card nested the slide controls, the dot
+ * indicators, the save button and a second "Details" link inside a wrapping
+ * anchor — invalid HTML, and every one of those controls needed
+ * preventDefault/stopPropagation to work at all. Here the anchor covers the
+ * card through `.link-cover`, and the two real controls sit outside it in a
+ * higher stacking context.
+ *
+ * The photo carousel is gone too: a card shows one photo and says how many
+ * more there are. Browsing images is what the detail page is for, and the old
+ * version mounted a `<video controls preload="metadata">` as slide one, so
+ * twelve cards meant twelve video elements fetching metadata on page load.
+ */
 export default function CarCard({
   vehicle,
-  isSaved: initialSaved = false,
+  isSaved = false,
   isLoggedIn = false,
+  isFeatured = false,
+  priority = false,
 }: {
-  vehicle: VehicleCard;
+  vehicle: ListVehicle;
   isSaved?: boolean;
   isLoggedIn?: boolean;
+  isFeatured?: boolean;
+  priority?: boolean;
 }) {
-  const [saved, setSaved] = useState(initialSaved);
-  const [saving, setSaving] = useState(false);
-
-  const handleSave = async () => {
-    if (!isLoggedIn) return;
-    setSaving(true);
-    try {
-      const result = await toggleSaveVehicle(vehicle.id);
-      setSaved(result.saved);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const contactNumber =
-    vehicle.specificWhatsapp ||
-    vehicle.dealership?.whatsappNumber ||
-    vehicle.dealership?.phone ||
-    vehicle.user?.phone;
-  const whatsappUrl = contactNumber
-    ? `https://wa.me/${contactNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-        `I am interested in your ${vehicle.brand} ${vehicle.model}.`
-      )}`
-    : null;
-
+  const href = `/cars/${vehicle.id}`;
   const isSold = vehicle.status === "SOLD";
-  const isElectric = vehicle.fuelType === "ELECTRIC";
-  const fuelLabel = FUEL_LABEL[vehicle.fuelType] ?? vehicle.fuelType;
-  const transLabel =
-    TRANSMISSION_LABEL[vehicle.transmission] ?? vehicle.transmission;
-  const bodyLabel = BODY_LABEL[vehicle.bodyType] ?? vehicle.bodyType;
+  const title = vehicleTitle(vehicle);
+  const photoCount = vehicle.imageUrls.length;
+  const hasVideo = Boolean(vehicle.videoUrl);
 
-  const detailsHref = `/cars/${vehicle.id}`;
+  const contact = contactNumberFor(vehicle);
+  const whatsappHref = contact ? whatsappVehicleLink(contact, vehicle) : null;
+  const showWhatsApp = Boolean(whatsappHref) && !isSold;
+
+  const meta = [
+    formatKm(vehicle.mileageKm),
+    FUEL_LABEL[vehicle.fuelType] ?? vehicle.fuelType,
+    TRANSMISSION_LABEL[vehicle.transmission] ?? vehicle.transmission,
+    vehicle.specOrigin ? SPEC_ORIGIN_LABEL[vehicle.specOrigin] : null,
+  ].filter(Boolean);
 
   return (
-    <motion.div
-      whileHover={{ y: -2 }}
-      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+    <article
       className={cn(
-        "flex flex-col overflow-hidden rounded-xl border transition-shadow",
-        vehicle.isPromoted
-          ? "border-brand/40 bg-surface shadow-card hover:shadow-lift"
-          : "border-line bg-surface hover:border-line-control hover:shadow-lg hover:shadow-lift",
-        isSold && "opacity-65"
+        "group relative flex h-full flex-col overflow-hidden rounded-card border bg-surface shadow-card transition-shadow hover:shadow-lift",
+        isFeatured ? "border-brand/40" : "border-line"
       )}
     >
-      <Link
-        href={detailsHref}
-        className="relative block"
-        aria-label={`View details for ${vehicle.brand} ${vehicle.model}`}
-      >
-        <MediaSlider
-          videoUrl={vehicle.videoUrl}
-          imageUrls={vehicle.imageUrls}
-          brand={vehicle.brand}
-          model={vehicle.model}
+      <div className="relative">
+        <CarPhoto
+          src={vehicle.imageUrls[0]}
+          alt={title}
+          priority={priority}
+          className={isSold ? "grayscale" : undefined}
         />
 
-        {/* Top-left badge (Sponsored / Verified) */}
-        <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 flex gap-1.5">
-          {vehicle.isPromoted ? (
-            <span className="inline-flex items-center gap-1 rounded bg-brand px-1.5 py-0.5 text-caption font-bold tracking-wider text-brand-ink">
-              <Star className="h-2.5 w-2.5 fill-current" />
-              SPONSORED
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 rounded border border-trust/25 bg-canvas/75 px-1.5 py-0.5 text-caption font-bold text-trust">
-              <ShieldCheck className="h-2.5 w-2.5" />
-              VERIFIED
-            </span>
-          )}
-        </div>
-
-        {/* Top-right status badge */}
-        <div className="pointer-events-none absolute right-2.5 top-2.5 z-10">
-          <span
-            className={cn(
-              "inline-flex items-center gap-1 rounded px-2 py-0.5 text-caption font-bold text-ink",
-              isSold
-                ? "bg-danger/90"
-                : isElectric
-                ? "bg-ink/80"
-                : "bg-trust/90"
-            )}
-          >
+        {(isFeatured || isSold) && (
+          <div className="pointer-events-none absolute start-2.5 top-2.5 z-[2]">
             {isSold ? (
-              "SOLD"
-            ) : isElectric ? (
-              <>
-                <Zap className="h-2.5 w-2.5" />
-                EV
-              </>
+              <span className="rounded-control bg-ink px-2 py-1 text-caption font-bold uppercase tracking-wide text-inverse-ink">
+                Sold
+              </span>
             ) : (
-              "ON SALE"
+              <span className="inline-flex items-center gap-1 rounded-control bg-brand px-2 py-1 text-caption font-bold text-brand-ink">
+                <Star className="h-3 w-3 fill-current" aria-hidden="true" />
+                Featured
+              </span>
             )}
+          </div>
+        )}
+
+        {(photoCount > 1 || hasVideo) && (
+          <div className="pointer-events-none absolute bottom-2.5 end-2.5 z-[2] flex items-center gap-2 rounded-control bg-ink/70 px-2 py-1 text-caption font-semibold text-inverse-ink backdrop-blur-sm">
+            {photoCount > 1 && (
+              <span className="flex items-center gap-1">
+                <Images className="h-3.5 w-3.5" aria-hidden="true" />
+                {photoCount}
+              </span>
+            )}
+            {hasVideo && (
+              <span className="flex items-center gap-1">
+                <Video className="h-3.5 w-3.5" aria-hidden="true" />
+                Video
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <div className="flex items-baseline gap-2">
+          <span className="font-display text-title text-ink">
+            {formatPriceJOD(vehicle.price)}
           </span>
+          <span className="text-body-sm font-semibold text-ink-3">JOD</span>
         </div>
 
-        {/* Save button */}
-        {isLoggedIn && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              void handleSave();
-            }}
-            disabled={saving}
-            aria-label={saved ? "Unsave" : "Save"}
-            aria-pressed={saved}
-            className="absolute bottom-2.5 right-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-ink backdrop-blur hover:bg-black/80"
-          >
-            <Heart
-              className={cn(
-                "h-3.5 w-3.5 transition-colors",
-                saved ? "fill-danger text-danger" : "text-ink"
-              )}
-            />
-          </button>
-        )}
-      </Link>
-
-      <div className="flex flex-1 flex-col p-3.5">
-        {/* Title + Price */}
-        <div className="mb-1 flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <div className="mb-0.5 text-caption font-medium uppercase tracking-wide text-ink-3">
-              {vehicle.brand}
-            </div>
-            <Link
-              href={detailsHref}
-              className="block text-body font-bold leading-tight text-ink hover:text-brand-strong"
-            >
-              {vehicle.model}
-            </Link>
-          </div>
-          <div className="shrink-0 text-right">
-            <div className="text-lead font-extrabold leading-none text-brand-strong">
-              {formatPriceShort(vehicle.price)}
-            </div>
-            <div className="mt-0.5 text-caption text-ink-3">JOD</div>
-          </div>
-        </div>
-
-        {/* Dealership + Agency badge */}
-        {(vehicle.dealership || vehicle.waredWakaleh) && (
-          <div className="mb-2 flex items-center gap-2 text-caption text-ink-3">
-            {vehicle.dealership && (
-              <span>
-                by{" "}
-                <span className="font-medium text-ink-2">
-                  {vehicle.dealership.name}
-                </span>
-              </span>
-            )}
-            {vehicle.waredWakaleh && (
-              <span className="inline-flex items-center gap-0.5 rounded border border-trust/25 bg-trust-soft px-1.5 py-0.5 text-caption font-semibold text-trust">
-                <BadgeCheck className="h-2.5 w-2.5" />
-                Agency
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Description */}
-        <p className="mb-2.5 line-clamp-2 text-caption leading-relaxed text-ink-3">
-          {vehicle.shortDescription}
-        </p>
-
-        {/* Spec grid */}
-        <div className="mb-2.5 grid grid-cols-3 gap-x-1 gap-y-1.5">
-          <SpecItem
-            icon={<Calendar className="h-3 w-3" />}
-            value={String(vehicle.productionYear)}
-          />
-          <SpecItem
-            icon={<Gauge className="h-3 w-3" />}
-            value={`${Math.round(vehicle.mileageKm / 1000)}k km`}
-          />
-          <SpecItem
-            icon={<Fuel className="h-3 w-3" />}
-            value={fuelLabel}
-          />
-          <SpecItem
-            icon={<Cog className="h-3 w-3" />}
-            value={transLabel}
-          />
-          <SpecItem icon={<Car className="h-3 w-3" />} value={bodyLabel} />
-          <SpecItem
-            icon={<Zap className="h-3 w-3" />}
-            value={
-              isElectric
-                ? "EV"
-                : vehicle.engineCapacityCC
-                ? `${vehicle.engineCapacityCC}cc`
-                : "—"
-            }
-          />
-        </div>
-
-        {/* Actions */}
-        <div className="mt-auto flex gap-1.5 pt-1">
-          {whatsappUrl && (
-            <motion.a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              whileTap={{ scale: 0.97 }}
-              transition={tactileSpring}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-wa px-2 py-2 text-xs font-semibold text-ink hover:bg-wa-hover"
-            >
-              <MessageCircle className="h-3.5 w-3.5" />
-              WhatsApp
-            </motion.a>
-          )}
-          <Link
-            href={detailsHref}
-            className={cn(
-              "flex items-center justify-center rounded-lg border border-line bg-surface-2 px-3 py-2 text-xs font-medium text-ink-2 hover:border-line-control hover:bg-surface-3",
-              !whatsappUrl && "flex-1"
-            )}
-          >
-            Details
+        {/* The only link. `.link-cover` stretches it over the whole card, so
+            the card has a single, correctly sized target. */}
+        <h3 className="text-body font-semibold leading-snug text-ink">
+          <Link href={href} className="link-cover rounded-control">
+            {title}
           </Link>
+        </h3>
+
+        <p className="text-body-sm text-ink-3">{meta.join(" · ")}</p>
+
+        {(vehicle.waredWakaleh || vehicle.dealership) && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {vehicle.waredWakaleh && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-trust-soft px-2 py-0.5 text-caption font-semibold text-trust">
+                <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                Agency import
+              </span>
+            )}
+            {vehicle.dealership && (
+              <span className="max-w-full truncate rounded-full bg-surface-2 px-2 py-0.5 text-caption font-medium text-ink-2">
+                {vehicle.dealership.name}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Controls sit outside the anchor, above it in the stacking order. */}
+        <div className="relative z-[2] mt-auto flex items-center gap-2 pt-2">
+          {showWhatsApp && whatsappHref && (
+            <WhatsAppButton href={whatsappHref} label={title} />
+          )}
+          <SaveButton
+            vehicleId={vehicle.id}
+            vehicleLabel={title}
+            initialSaved={isSaved}
+            isLoggedIn={isLoggedIn}
+            className={showWhatsApp ? undefined : "ms-auto"}
+          />
         </div>
       </div>
-    </motion.div>
-  );
-}
-
-function SpecItem({
-  icon,
-  value,
-}: {
-  icon: React.ReactNode;
-  value: string;
-}) {
-  return (
-    <div className="flex items-center gap-1 text-caption text-ink-3">
-      <span className="text-ink-3">{icon}</span>
-      <span className="truncate">{value}</span>
-    </div>
+    </article>
   );
 }

@@ -1,8 +1,24 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Crown } from "lucide-react";
-import HeaderNav from "./header-nav";
-import UserMenu from "./user-menu";
+import HeaderNav, { HeaderNavStatic } from "./header-nav";
 import MobileMenu from "./mobile-menu";
+import {
+  AccountFallback,
+  AccountFallbackMobile,
+  HeaderAccount,
+  HeaderAccountMobile,
+} from "./header-account";
+
+/** Placeholder with the trigger's exact footprint, so nothing shifts. */
+function MenuButtonFallback() {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-9 w-9 rounded-control bg-surface-2 md:hidden"
+    />
+  );
+}
 
 export const NAV_LINKS = [
   { href: "/cars", label: "Browse cars" },
@@ -16,6 +32,9 @@ export const NAV_LINKS = [
  * not, which put its "Back to browse" link underneath the header where it
  * could not be clicked. Sticky keeps the bar pinned without any page needing
  * to know how tall it is.
+ *
+ * Everything except the account control prerenders; the session-dependent
+ * part streams in behind its own Suspense boundary.
  */
 export default function Header() {
   return (
@@ -34,13 +53,26 @@ export default function Header() {
           </span>
         </Link>
 
-        <HeaderNav links={NAV_LINKS} />
+        <Suspense fallback={<HeaderNavStatic links={NAV_LINKS} />}>
+          <HeaderNav links={NAV_LINKS} />
+        </Suspense>
 
         <div className="ms-auto flex items-center gap-2">
           <div className="hidden md:block">
-            <UserMenu />
+            <Suspense fallback={<AccountFallback />}>
+              <HeaderAccount />
+            </Suspense>
           </div>
-          <MobileMenu links={NAV_LINKS} />
+          <Suspense fallback={<MenuButtonFallback />}>
+            <MobileMenu
+              links={NAV_LINKS}
+              account={
+                <Suspense fallback={<AccountFallbackMobile />}>
+                  <HeaderAccountMobile />
+                </Suspense>
+              }
+            />
+          </Suspense>
         </div>
       </div>
     </header>

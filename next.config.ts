@@ -17,6 +17,7 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  cacheComponents: true,
   poweredByHeader: false,
   compiler: {
     removeConsole:

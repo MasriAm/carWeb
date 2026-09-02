@@ -7,6 +7,10 @@ import {
 } from "@/lib/site-config";
 import { InstagramIcon, WhatsAppIcon } from "@/components/ui/brand-icons";
 
+/* Evaluated once when the module loads, not per render. Reading the clock
+   during render would make every page that includes the footer dynamic. */
+const COPYRIGHT_YEAR = new Date().getFullYear();
+
 const quickLinks = [
   { href: "/", label: "Home" },
   { href: "/cars", label: "Browse cars" },
@@ -119,7 +123,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 border-t border-line pt-6 text-center text-xs text-ink-3">
-          &copy; {new Date().getFullYear()} Royal Cars Jordan. All rights
+          &copy; {COPYRIGHT_YEAR} Royal Cars Jordan. All rights
           reserved.
         </div>
       </div>

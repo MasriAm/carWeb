@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Archivo } from "next/font/google";
-import { auth } from "@/lib/auth";
-import { SessionProvider } from "@/lib/session-provider";
 import { MotionProvider } from "@/components/motion-provider";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
@@ -68,23 +66,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+/**
+ * The root layout does no data fetching.
+ *
+ * It previously awaited `auth()`, which made every route in the app dynamic —
+ * marketing pages included — and put a session lookup in front of every
+ * request. The session is now read only by the components that need it, each
+ * inside its own Suspense boundary, so the rest of the page prerenders.
+ */
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="en" dir="ltr">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${archivo.variable} antialiased`}
       >
-        <MotionProvider>
-          <SessionProvider user={session?.user ?? null}>
-            {children}
-          </SessionProvider>
-        </MotionProvider>
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );

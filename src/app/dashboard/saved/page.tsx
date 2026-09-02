@@ -1,55 +1,43 @@
-import { requireAuth } from "@/lib/auth-utils";
-import { db } from "@/lib/db";
-import CarCard from "@/components/cars/car-card";
+import Link from "next/link";
 import { Heart } from "lucide-react";
+import { requireAuth } from "@/lib/auth-utils";
+import { getSavedVehicles } from "@/lib/data/session";
+import { Button } from "@/components/ui/button";
+import CarGrid from "@/components/cars/car-grid";
 
-export const metadata = { title: "Saved Cars" };
+export const metadata = { title: "Saved cars" };
 
 export default async function SavedPage() {
-  const user = await requireAuth();
-
-  const saved = await db.savedVehicle.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
-    include: {
-      vehicle: {
-        include: {
-          dealership: { select: { name: true, slug: true } },
-          user: { select: { name: true } },
-        },
-      },
-    },
-  });
-
+  await requireAuth();
+  const saved = await getSavedVehicles();
+  const vehicles = saved.map((s) => s.vehicle);
   const savedIds = saved.map((s) => s.vehicleId);
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-ink mb-1">Saved Cars</h1>
-      <p className="text-ink-3 mb-8">
-        {saved.length} vehicle{saved.length !== 1 ? "s" : ""} in your wishlist.
+      <h1 className="text-h2 font-bold text-ink">Saved cars</h1>
+      <p className="mt-1 text-body-sm text-ink-3">
+        {vehicles.length} {vehicles.length === 1 ? "car" : "cars"} in your list.
       </p>
 
-      {saved.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Heart className="h-16 w-16 text-ink-3 mb-4" />
-          <h2 className="text-xl font-semibold text-ink-2 mb-2">No saved cars yet</h2>
-          <p className="text-ink-3 max-w-md">
-            Browse our collection and tap the heart icon to save vehicles you like.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {saved.map((s) => (
-            <CarCard
-              key={s.id}
-              vehicle={s.vehicle}
-              isSaved={savedIds.includes(s.vehicleId)}
-              isLoggedIn
-            />
-          ))}
-        </div>
-      )}
+      <div className="mt-8">
+        {vehicles.length === 0 ? (
+          <div className="rounded-card border border-line bg-surface px-6 py-16 text-center">
+            <Heart className="mx-auto mb-4 h-10 w-10 text-ink-3" aria-hidden="true" />
+            <h2 className="text-title font-semibold text-ink">
+              Nothing saved yet
+            </h2>
+            <p className="mx-auto mt-2 max-w-prose text-body-sm text-ink-3">
+              Tap the heart on any listing to keep it here for later.
+            </p>
+            <Button asChild className="mt-6">
+              <Link href="/cars">Browse cars</Link>
+            </Button>
+          </div>
+        ) : (
+          <CarGrid vehicles={vehicles} savedIds={savedIds} isLoggedIn />
+        )}
+      </div>
     </div>
   );
 }

@@ -11,7 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSession } from "@/lib/session-provider";
+
+export type SessionUser = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+} | null;
 
 export function initialsOf(name: string | null | undefined): string {
   if (!name) return "U";
@@ -24,9 +29,7 @@ export function initialsOf(name: string | null | undefined): string {
     .slice(0, 2);
 }
 
-export default function UserMenu() {
-  const { user } = useSession();
-
+export default function UserMenu({ user }: { user: SessionUser }) {
   if (!user) {
     return (
       <div className="flex items-center gap-2">
