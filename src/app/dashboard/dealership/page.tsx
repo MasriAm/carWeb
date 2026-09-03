@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BidiText from "@/components/bidi-text";
 import { requireRole } from "@/lib/auth-utils";
 import { getMyDealership, getDealerStats } from "@/lib/actions/dealership";
 import DealershipForm from "@/components/dashboard/dealership-form";
@@ -102,7 +103,7 @@ export default async function DealershipPage() {
 
           {dealership.description && (
             <p className="mt-4 text-sm text-ink-3 leading-relaxed line-clamp-3 border-t border-line pt-4">
-              {dealership.description}
+              <BidiText text={dealership.description} />
             </p>
           )}
         </div>

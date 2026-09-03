@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, Globe, MapPin, Phone } from "lucide-react";
+import BidiText from "@/components/bidi-text";
 import { getDealershipBySlug, getDealershipSlugs } from "@/lib/data/dealerships";
 import { getVehicles } from "@/lib/data/vehicles";
 import { getSavedVehicleIds, getSessionUser } from "@/lib/data/session";
@@ -113,7 +114,7 @@ export default async function DealerPage({ params, searchParams }: Props) {
               </p>
               {dealer.description && (
                 <p className="mt-3 max-w-prose text-body-sm leading-relaxed text-ink-2">
-                  {dealer.description}
+                  <BidiText text={dealer.description} />
                 </p>
               )}
 

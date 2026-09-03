@@ -125,6 +125,19 @@ purchase decision, not a dashboard metric.
 - **Schema changes** ship as migrations in `prisma/migrations`. Never
   `prisma db push` against an environment that matters.
 
+## Mixed-direction text
+
+Listing copy in this market mixes Arabic into English sentences — "Corolla
+2021 — وارد وكالة, full service history". Rendered as a bare string, the
+Unicode bidirectional algorithm treats the comma and any digits after an
+Arabic run as neutral and absorbs them into it, so "وارد وكالة, 800V" is
+displayed as "800 ,وارد وكالةV". The stored text is fine; only its display
+order is wrong.
+
+Render every free-text field a dealer can write — vehicle description,
+فحص notes, dealership description — through `BidiText`, which wraps each
+Arabic run in `<bdi>`. Never interpolate such a field directly into JSX.
+
 ## Motion
 
 **The rule: nothing readable animates in from invisible.** Server-rendered

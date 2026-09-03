@@ -38,6 +38,7 @@ import {
   vehicleTitle,
 } from "@/lib/vehicle-format";
 import { siteConfig } from "@/lib/site-config";
+import BidiText from "@/components/bidi-text";
 import CarGrid from "@/components/cars/car-grid";
 import SaveButton from "@/components/cars/save-button";
 import WhatsAppButton from "@/components/cars/whatsapp-button";
@@ -191,7 +192,7 @@ export default async function CarDetailPage({ params }: Props) {
                 About this car
               </h2>
               <p className="whitespace-pre-line text-body-sm leading-relaxed text-ink-2">
-                {vehicle.shortDescription}
+                <BidiText text={vehicle.shortDescription} />
               </p>
             </section>
 
@@ -205,7 +206,7 @@ export default async function CarDetailPage({ params }: Props) {
                   </span>
                 </h2>
                 <p className="whitespace-pre-line text-body-sm leading-relaxed text-ink-2">
-                  {vehicle.fa7s}
+                  <BidiText text={vehicle.fa7s} />
                 </p>
                 <p className="mt-3 text-caption text-ink-3">
                   Provided by the seller. Royal Cars does not independently
