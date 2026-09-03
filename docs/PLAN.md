@@ -14,7 +14,7 @@ rationale; this file is the working checklist.
 | 4 | Brand logos: **typographic tiles** with live counts, not third-party logo files. An optional logo slot stays for licensed SVGs. |
 | 5 | Promoted listings: **pin two per page**, labelled "Featured", instead of sorting all promoted rows first. |
 | 6 | **Remove** the floating WhatsApp/Instagram buttons. Contact lives on cards, detail pages and the footer, from environment variables. |
-| 7 | URL parameters: keep existing names, add `q`, `model`, `maxKm`, `agency`, `dealer`, `spec`, `includeSold`. Multi-select uses comma lists. |
+| 7 | URL parameters: keep existing names, add `q`, `model`, `maxKm`, `agency`, `dealer`, `specOrigin`, `includeSold`. Multi-select uses comma lists. |
 | 8 | Add a nullable `specOrigin` enum to `Vehicle`. |
 | 9 | Replace unverifiable trust claims with what the product actually does. |
 | 10 | Baseline migration `0_init`; run `prisma migrate resolve --applied 0_init` once against existing databases. |

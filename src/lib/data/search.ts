@@ -16,8 +16,21 @@ import { CACHE_TAGS } from "@/lib/cache-tags";
  * Two passes, because they catch different mistakes:
  *   1. Full-text against the generated `searchVector`, where brand and model
  *      are weighted above the description. Handles "prado 2019".
- *   2. Trigram similarity on brand + model. Handles "mercedez", "landcru"
- *      and other misspellings that produce no lexeme match at all.
+ *   2. Trigram word similarity on brand + model. Handles "mercedez",
+ *      "landcru" and other misspellings that produce no lexeme match at all.
+ *
+ * The fallback uses `<%` (word similarity), not `%` (whole-string
+ * similarity). `%` compares the search term against the entire
+ * "brand model" string, so one misspelled word is diluted by the correctly
+ * spelled rest of it: similarity('Hyundai Tucson', 'hyundia') is 0.278,
+ * under the 0.3 default threshold, and the row is missed. `<%` scores the
+ * best-matching word instead — the same pair scores 0.625. Both operators
+ * are served by the existing GIN trigram index.
+ *
+ * A transposition inside a short word ("tuscon" for "Tucson", 0.286) still
+ * falls under the threshold. Lowering it globally needs `set_limit`, which
+ * is per-session state and unreliable behind a connection pooler, so those
+ * are handled by BRAND_ALIASES instead.
  */
 
 const MAX_RESULTS = 500;
@@ -67,10 +80,10 @@ export async function searchVehicleIds(rawQuery: string): Promise<string[]> {
     SELECT v.id
     FROM "Vehicle" v, q
     WHERE v."searchVector" @@ q.tsq
-       OR (v."brand" || ' ' || v."model") % q.raw
+       OR q.raw <% (v."brand" || ' ' || v."model")
     ORDER BY
       ts_rank(v."searchVector", q.tsq) DESC,
-      similarity(v."brand" || ' ' || v."model", q.raw) DESC,
+      word_similarity(q.raw, v."brand" || ' ' || v."model") DESC,
       v."publicationDate" DESC
     LIMIT ${MAX_RESULTS}
   `;
