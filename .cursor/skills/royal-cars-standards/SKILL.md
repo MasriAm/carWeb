@@ -98,11 +98,17 @@ purchase decision, not a dashboard metric.
 
 ## Backend
 
-- **Reads** live in `src/lib/data/*`, are marked `server-only`, wrapped in
-  React `cache()` for request deduplication and `unstable_cache` with a
-  tag from `src/lib/cache-tags.ts` for cross-request caching. Reads are
-  **not** server actions — a `"use server"` file exposes every export as
-  a public POST endpoint.
+- **Reads** live in `src/lib/data/*` and are marked `server-only`.
+  Cross-request caching is the `"use cache"` directive plus `cacheTag()`
+  from `src/lib/cache-tags.ts` and `cacheLife()`; session-scoped reads
+  (`src/lib/data/session.ts`) use React `cache()` only, so they dedupe
+  within a render but never persist across requests. Reads are **not**
+  server actions — a `"use server"` file exposes every export as a public
+  POST endpoint.
+- **Never `export const revalidate`.** Cache Components rejects the route
+  segment config outright and the build fails. A route that needs caching
+  declares `"use cache"` in the function body and takes a tag, so a
+  mutation invalidates it instead of a timer expiring it.
 - **Writes** live in `src/lib/actions/*` as `"use server"` actions. Every
   one of them, with no exceptions:
   1. verifies the session with `auth()`,
