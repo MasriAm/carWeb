@@ -7,8 +7,18 @@ import { defineConfig } from "prisma/config";
  * property is required in your Prisma config file", and `prisma db seed`
  * fails further along with "SASL: client password must be a string", neither
  * of which points at the missing file.
+ *
+ * Migrations also need a direct connection.
+ *
+ * A pooled connection string (Neon's `-pooler` host, PgBouncer, the Supabase
+ * pooler) runs in transaction mode, which drops the session state Prisma
+ * Migrate depends on — advisory locks and `SET` in particular. This file is
+ * loaded by the Prisma CLI only; the application builds its own pool from
+ * DATABASE_URL in src/lib/db.ts. So the CLI takes DIRECT_DATABASE_URL when it
+ * is set and the app keeps the pooled one, and neither can pick the wrong
+ * endpoint by accident.
  */
-const url = process.env.DATABASE_URL;
+const url = process.env.DIRECT_DATABASE_URL || process.env.DATABASE_URL;
 if (!url) {
   throw new Error(
     "DATABASE_URL is not set.\n\n" +

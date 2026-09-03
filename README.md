@@ -90,7 +90,8 @@ redeploy, not just a restart.
 
 | Variable | Required | Notes |
 | --- | --- | --- |
-| `DATABASE_URL` | yes | Must be a **pooled** connection string. Every serverless instance opens its own pool; a direct connection exhausts Postgres as soon as a few instances are warm. Use the Neon/Supabase pooler or PgBouncer. |
+| `DATABASE_URL` | yes | The **pooled** connection string. Every serverless instance opens its own pool; a direct connection exhausts Postgres as soon as a few instances are warm. On Neon this is the host containing `-pooler`. |
+| `DIRECT_DATABASE_URL` | when pooling | The **unpooled** string, used only by the Prisma CLI for migrations. Transaction-mode pooling drops the session state Prisma Migrate needs. On Neon it is the same string with `-pooler` removed from the host. |
 | `AUTH_SECRET` | yes | Any random 32-byte value. |
 | `AUTH_URL` | yes | The deployed origin, e.g. `https://royalcars.jo`. |
 | `NEXT_PUBLIC_APP_URL` | yes | Same origin. Wrong values break canonical URLs, the sitemap and share links. |
@@ -104,11 +105,16 @@ build step, not only at runtime. A build against an unreachable database
 fails rather than degrading.
 
 **Migrations do not run on deploy.** Vercel runs `next build`, not
-`migrate deploy`. Apply them yourself before promoting a deploy:
+`migrate deploy`. Apply them yourself before promoting a deploy, using the
+**unpooled** string:
 
 ```bash
-DATABASE_URL="<production url>" npx prisma migrate deploy
+DIRECT_DATABASE_URL="<unpooled url>" npx prisma migrate deploy
 ```
+
+`prisma.config.ts` prefers `DIRECT_DATABASE_URL` when it is set, so once both
+are in your `.env` the CLI uses the direct endpoint and the application keeps
+the pooled one — neither can pick the wrong endpoint by accident.
 
 If the production database predates migrations, run the one-time baseline
 first — see **Database migrations** above.
