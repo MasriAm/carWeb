@@ -136,27 +136,27 @@
 :root {
   --radius: 0.625rem;
 
-  --canvas: #f4f5f7;
+  --canvas: #f5f3ef;
   --surface: #ffffff;
-  --surface-2: #eef0f3;
-  --surface-3: #e7eaee;
-  --inverse: #101114;
-  --inverse-ink: #f4f5f7;
-  --inverse-ink-2: #a8adb5;
+  --surface-2: #edeae3;
+  --surface-3: #e4e0d7;
+  --inverse: #0f1e3d;
+  --inverse-ink: #eef1f6;
+  --inverse-ink-2: #a3b0c7;
 
-  --ink: #101114;
-  --ink-2: #3d4148;
-  --ink-3: #5a5e66;
+  --ink: #1a1b18;
+  --ink-2: #44463f;
+  --ink-3: #5e6157;
 
-  --line: #e1e4e9;
-  --line-strong: #c9cdd4;
-  --line-control: #7e838b;
+  --line: #e2ded4;
+  --line-strong: #c9c4b8;
+  --line-control: #7d7c70;
 
   --brand: #f59e0b;
   --brand-hover: #e08c05;
   --brand-ink: #111111;
-  --brand-strong: #b45309;
-  --brand-soft: #fff4dc;
+  --brand-strong: #a35a06;
+  --brand-soft: #fdf1da;
 
   --trust: #15803d;
   --trust-soft: #ecfdf3;
