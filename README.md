@@ -119,8 +119,15 @@ the pooled one — neither can pick the wrong endpoint by accident.
 If the production database predates migrations, run the one-time baseline
 first — see **Database migrations** above.
 
-`postinstall` runs `prisma generate`, so the client is built on Vercel
-without extra configuration. Node is pinned to 22 via `engines`.
+`prisma generate` runs in **both** `postinstall` and the `build` script. That
+looks redundant and is not: Vercel reuses a cached `node_modules` between
+builds and skips install scripts when it does, which leaves the generated
+client missing and the build fails with `Can't resolve
+'@/generated/prisma/client'`. Generating again from the build command costs
+about 100ms and removes the failure mode. Verified with
+`npm ci --ignore-scripts`, which is the worst case: the build still succeeds.
+
+Node is pinned to 22 via `engines`.
 
 ## Architecture notes
 
