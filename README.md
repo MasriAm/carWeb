@@ -32,14 +32,21 @@ Seeded accounts all use the password `Password123!`:
 
 ### Listing photos
 
-Seeded listings show a body-type silhouette from `public/placeholder/`, not a
-photograph. Stock photos cannot be verified from an environment with no image
-egress, and an unverified photo is worse than none — an earlier revision of the
-seed put a BMW on the Civic and a stock portrait of a person on the Golf GTI.
+Photos for seeded listings live in `prisma/seed-photos.json`, keyed by
+`"Brand Model"`. Eleven of the sixteen budget listings carry real photos;
+the rest fall back to a body-type silhouette from `public/placeholder/`.
 
-To give a listing real photos, put URLs in `prisma/seed-photos.json` keyed by
-`"Brand Model"` and re-seed. Anything left empty keeps its placeholder. The
-host must also appear in `next.config.ts` under `images.remotePatterns`.
+Every URL in that file was opened and looked at before being added. An
+unverified photo is worse than none — an earlier revision of the seed put a
+BMW on the Civic and a stock portrait of a person on the Golf GTI, and search
+results for a model name are mostly other cars (a Sonata comes back for
+"Hyundai Elantra", a Tacoma for "Toyota Hilux"). Five listings are still empty
+because no photo of that car could be found, and a silhouette is the honest
+answer there.
+
+To add or replace photos, put URLs in the file and re-seed. Anything left
+empty keeps its placeholder. The host must also appear in `next.config.ts`
+under `images.remotePatterns`.
 
 In production photos come from sellers through Cloudinary; none of this
 applies there.
