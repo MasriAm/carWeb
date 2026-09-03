@@ -80,8 +80,8 @@ export async function BrowseByBudget() {
   if (withStock.length === 0) return null;
 
   return (
-    <section className="border-y border-line bg-surface">
-      <div className="mx-auto max-w-page px-4 py-10 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-page px-4 py-10 sm:px-6 lg:px-8">
+      <div>
         <SectionHeading title="Browse by budget" />
         <ul className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {withStock.map((band) => {
@@ -92,7 +92,7 @@ export async function BrowseByBudget() {
               <li key={band.label}>
                 <Link
                   href={`/cars?${params.toString()}`}
-                  className="flex h-full flex-col gap-1 rounded-card border border-line bg-canvas p-4 transition-colors hover:border-brand"
+                  className="flex h-full flex-col gap-1 rounded-card border border-line bg-surface p-4 transition-colors hover:border-brand"
                 >
                   <span className="text-caption font-semibold uppercase tracking-[0.06em] text-ink-3">
                     JOD
@@ -154,8 +154,8 @@ export async function DealerStrip() {
   if (dealers.length === 0) return null;
 
   return (
-    <section className="border-y border-line bg-surface">
-      <div className="mx-auto max-w-page px-4 py-10 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-page px-4 py-10 sm:px-6 lg:px-8">
+      <div>
         <SectionHeading
           title="Dealers with cars listed"
           href="/dealers"
@@ -166,7 +166,7 @@ export async function DealerStrip() {
             <li key={d.id}>
               <Link
                 href={`/dealers/${d.slug}`}
-                className="flex h-full items-center gap-3 rounded-card border border-line bg-canvas p-4 transition-colors hover:border-line-control"
+                className="flex h-full items-center gap-3 rounded-card border border-line bg-surface p-4 transition-colors hover:border-line-control"
               >
                 <span
                   aria-hidden="true"
