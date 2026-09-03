@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import {
   getBodyTypeFacets,
   getBrandFacets,
@@ -32,10 +31,9 @@ function SectionHeading({
       {href && (
         <Link
           href={href}
-          className="inline-flex shrink-0 items-center gap-1 text-body-sm font-semibold text-brand-strong hover:underline"
+          className="-my-1.5 shrink-0 py-1.5 text-body-sm font-semibold text-brand-strong hover:underline"
         >
           {linkLabel ?? "See all"}
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       )}
     </div>

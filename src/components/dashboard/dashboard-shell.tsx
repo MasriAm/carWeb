@@ -32,14 +32,14 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: <LayoutDashboard className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
+  { label: "My Vehicles", href: "/dashboard/vehicles", icon: <Car className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
+  { label: "Dealership", href: "/dashboard/dealership", icon: <Building2 className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
+  { label: "All Vehicles", href: "/dashboard/admin/vehicles", icon: <ShieldCheck className="h-4 w-4" />, roles: ["ADMIN"] },
+  { label: "All Dealerships", href: "/dashboard/admin/dealerships", icon: <Building2 className="h-4 w-4" />, roles: ["ADMIN"] },
+  { label: "All Users", href: "/dashboard/admin/users", icon: <Users className="h-4 w-4" />, roles: ["ADMIN"] },
   { label: "Saved Cars", href: "/dashboard/saved", icon: <Heart className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
   { label: "Saved Searches", href: "/dashboard/searches", icon: <Bookmark className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
   { label: "Profile Settings", href: "/dashboard/profile", icon: <UserCog className="h-4 w-4" />, roles: ["USER", "DEALER", "ADMIN"] },
-  { label: "My Vehicles", href: "/dashboard/vehicles", icon: <Car className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
-  { label: "Dealership", href: "/dashboard/dealership", icon: <Building2 className="h-4 w-4" />, roles: ["DEALER", "ADMIN"] },
-  { label: "All Users", href: "/dashboard/admin/users", icon: <Users className="h-4 w-4" />, roles: ["ADMIN"] },
-  { label: "All Vehicles", href: "/dashboard/admin/vehicles", icon: <ShieldCheck className="h-4 w-4" />, roles: ["ADMIN"] },
-  { label: "All Dealerships", href: "/dashboard/admin/dealerships", icon: <Building2 className="h-4 w-4" />, roles: ["ADMIN"] },
 ];
 
 export default function DashboardShell({
@@ -68,22 +68,18 @@ export default function DashboardShell({
   const canAddVehicle = role === "DEALER" || role === "ADMIN";
 
   const roleLabel =
-    role === "ADMIN"
-      ? "Admin Panel"
-      : role === "DEALER"
-      ? "Dealer Panel"
-      : "My Dashboard";
+    role === "ADMIN" ? "Admin" : role === "DEALER" ? "Dealer" : "Buyer";
 
   const roleBadge = (
     <div className="flex items-center gap-3 px-5 py-4 border-b border-line">
-      <div className="h-9 w-9 shrink-0 rounded-full bg-gradient-to-br from-brand to-brand-hover flex items-center justify-center text-xs font-extrabold text-brand-ink shadow-lg shadow-lift">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand text-caption font-bold text-brand-ink">
         {initials}
       </div>
       <div className="min-w-0">
-        <p className="text-meta font-bold text-ink truncate">{roleLabel}</p>
-        <p className="text-caption text-ink-3 capitalize">
-          {role.toLowerCase()} Account
+        <p className="truncate text-meta font-semibold text-ink">
+          {userName || roleLabel}
         </p>
+        <p className="text-caption text-ink-3">{roleLabel}</p>
       </div>
     </div>
   );
@@ -131,9 +127,6 @@ export default function DashboardShell({
             <Crown className="h-6 w-6 text-brand-strong" />
             <span className="font-bold text-lg text-ink hidden sm:inline">Royal Cars</span>
           </Link>
-          <span className="hidden lg:inline text-xs text-ink-3 border-l border-line pl-3 ml-1 uppercase tracking-widest font-medium">
-            {role} Panel
-          </span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -141,7 +134,7 @@ export default function DashboardShell({
             <Link href="/dashboard/vehicles/new">
               <Button size="sm" className="bg-brand text-brand-ink hover:bg-brand-hover h-9 text-xs font-semibold">
                 <Plus className="h-3.5 w-3.5 mr-1.5" />
-                <span className="hidden sm:inline">Add Vehicle</span>
+                <span className="hidden sm:inline">Add a car</span>
                 <span className="sm:hidden">New</span>
               </Button>
             </Link>
@@ -170,9 +163,6 @@ export default function DashboardShell({
         </div>
 
         <div className="flex-1 px-4 overflow-y-auto">
-          <p className="px-3 mb-2 text-caption font-semibold uppercase tracking-widest text-ink-3">
-            Navigation
-          </p>
           {sidebarNav}
         </div>
 
@@ -205,9 +195,6 @@ export default function DashboardShell({
               </Link>
             </div>
             <div className="flex-1 px-4 overflow-y-auto">
-              <p className="px-3 mb-2 text-caption font-semibold uppercase tracking-widest text-ink-3">
-                Navigation
-              </p>
               {sidebarNav}
             </div>
             <div className="px-4 py-4 border-t border-line">

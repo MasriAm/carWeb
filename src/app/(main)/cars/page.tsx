@@ -77,7 +77,7 @@ export default function CarsPage({
       <div className="mx-auto flex max-w-page items-start gap-6 px-4 py-6 sm:px-6 lg:px-8">
         <a
           href="#results"
-          className="sr-only rounded-control bg-brand px-4 py-2 text-body-sm font-semibold text-brand-ink focus:not-sr-only focus:absolute focus:z-[60]"
+          className="sr-only rounded-control bg-brand text-body-sm font-semibold text-brand-ink focus:not-sr-only focus:px-4 focus:py-2 focus:absolute focus:z-[60]"
         >
           Skip filters, go to results
         </a>

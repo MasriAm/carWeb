@@ -82,6 +82,40 @@ Never use `prisma db push` against an environment that matters — it applies
 schema changes without recording them, which is what made the baseline
 necessary in the first place.
 
+## Deploying to Vercel
+
+Set these in **Settings → Environment Variables** before the first deploy.
+`NEXT_PUBLIC_*` values are inlined at build time, so changing one needs a
+redeploy, not just a restart.
+
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `DATABASE_URL` | yes | Must be a **pooled** connection string. Every serverless instance opens its own pool; a direct connection exhausts Postgres as soon as a few instances are warm. Use the Neon/Supabase pooler or PgBouncer. |
+| `AUTH_SECRET` | yes | Any random 32-byte value. |
+| `AUTH_URL` | yes | The deployed origin, e.g. `https://royalcars.jo`. |
+| `NEXT_PUBLIC_APP_URL` | yes | Same origin. Wrong values break canonical URLs, the sitemap and share links. |
+| `UPSTASH_REDIS_REST_URL` / `_TOKEN` | yes in production | Without them the rate limiter is a no-op and **fails open** — silently, with no error. |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | for uploads | Dealers can't add photos without them. |
+| `NEXT_PUBLIC_CONTACT_*` | optional | Drive the footer; anything unset is not rendered. |
+
+**The build queries the database.** The home page, browse facets and dealer
+pages are prerendered, so `DATABASE_URL` must be reachable from Vercel's
+build step, not only at runtime. A build against an unreachable database
+fails rather than degrading.
+
+**Migrations do not run on deploy.** Vercel runs `next build`, not
+`migrate deploy`. Apply them yourself before promoting a deploy:
+
+```bash
+DATABASE_URL="<production url>" npx prisma migrate deploy
+```
+
+If the production database predates migrations, run the one-time baseline
+first — see **Database migrations** above.
+
+`postinstall` runs `prisma generate`, so the client is built on Vercel
+without extra configuration. Node is pinned to 22 via `engines`.
+
 ## Architecture notes
 
 - **Reads** live in `src/lib/data/*` and are marked `server-only`. They are

@@ -15,17 +15,11 @@ export default async function MyVehiclesPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-ink mb-1">My Vehicles</h1>
+          <h1 className="font-display text-h1 text-ink mb-1">My Vehicles</h1>
           <p className="text-ink-3">
             {vehicles.length} listing{vehicles.length !== 1 ? "s" : ""} total.
           </p>
         </div>
-        <Link href="/dashboard/vehicles/new">
-          <Button className="bg-brand text-brand-ink hover:bg-brand-hover">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Vehicle
-          </Button>
-        </Link>
       </div>
 
       {vehicles.length === 0 ? (
