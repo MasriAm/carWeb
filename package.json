@@ -13,7 +13,8 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "db:deploy": "prisma migrate deploy",
-    "db:check": "npx tsx prisma/check.ts"
+    "db:check": "npx tsx prisma/check.ts",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"

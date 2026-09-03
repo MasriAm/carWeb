@@ -7,15 +7,38 @@ Upstash Redis rate limiting, Cloudinary uploads.
 ## Getting started
 
 ```bash
-npm install
+npm install                 # also generates the Prisma client
 cp .env.example .env        # then fill in DATABASE_URL and AUTH_SECRET
-npx prisma migrate dev      # creates the schema
-npm run db:seed             # optional sample data
+npx prisma migrate deploy   # creates the schema
+npm run db:seed             # sample inventory — without it the site is empty
 npm run dev
 ```
 
+`DATABASE_URL` must point at **PostgreSQL**. The search column is a Postgres
+generated `tsvector` and the fuzzy matching needs `pg_trgm`; neither exists in
+MySQL.
+
+Use `migrate deploy`, not `migrate dev`. `migrate dev` re-diffs the whole
+schema and emits an `ALTER COLUMN` for the generated `searchVector` column
+that Postgres rejects — see **Database migrations** below.
+
+The seed is not optional in practice. It clears the database and recreates
+it, so never run it against data you care about, but without it every listing
+section on the home page correctly renders nothing and the site looks broken.
+
 Seeded accounts all use the password `Password123!`:
-`admin@royalcars.jo`, `dealer@ammanluxury.jo`, `sara@gmail.com`.
+`admin@royalcars.jo`, `dealer@ammanluxury.jo`, `rami@wadisaqramotors.jo`,
+`sara@gmail.com`.
+
+If a page shows no cars, check the database rather than the browser:
+
+```bash
+npm run db:check            # row counts, accounts, and whether AUTH_SECRET is set
+```
+
+Reads are cached until a mutation invalidates them, so seeding *while the app
+is running* leaves the old empty result in place. Delete `.next` and restart
+after seeding by hand.
 
 ## Database migrations
 
@@ -78,3 +101,4 @@ See `.env.example`. Notable optional values:
 | `npm run db:deploy` | Apply pending migrations (production) |
 | `npm run db:seed` | Load sample data |
 | `npm run db:studio` | Prisma Studio |
+| `npm run db:check` | Print row counts and accounts for the current `DATABASE_URL` |
