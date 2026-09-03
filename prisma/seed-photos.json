@@ -11,7 +11,6 @@
     "Example:",
     "  \"Honda Civic\": [\"https://images.unsplash.com/photo-XXXXXXXXXXXXX\"]"
   ],
-
   "_provenance": [
     "Every URL below was downloaded and looked at before being pasted here.",
     "Photos that turned out to show a different car were discarded: a Hyundai",
@@ -31,9 +30,12 @@
     "  Volkswagen Golf GTI — listing is 2019 (Mk7.5); photos are Mk6",
     "  Ford Mustang — the orange car is a 2018+ facelift GT and matches;",
     "                 the other two are 2015-17 S550 GTs",
-    "  MG ZS EV — listing is 2023; photos are the 2019-21 pre-facelift"
+    "  MG ZS EV — listing is 2023; photos are the 2019-21 pre-facelift",
+    "",
+    "  Removed after a second look: a 10th-gen Civic hatchback that was",
+    "  correctly identified as a Civic but sits on a listing whose bodyType",
+    "  is SEDAN, so it would show a hatchback to anyone filtering for sedans."
   ],
-
   "Hyundai Elantra": [
     "https://images.unsplash.com/photo-1721002913303-7dac5b3b69c4?w=1600&q=80&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1707325653284-49057765e44c?w=1600&q=80&auto=format&fit=crop",
@@ -89,8 +91,7 @@
   ],
   "Honda Civic": [
     "https://images.unsplash.com/photo-1594070319944-7c0cbebb6f58?w=1600&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1578659258511-4a4e7dee7344?w=1600&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1605816988069-b11383b50717?w=1600&q=80&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1578659258511-4a4e7dee7344?w=1600&q=80&auto=format&fit=crop"
   ],
   "BYD Atto 3": []
 }
