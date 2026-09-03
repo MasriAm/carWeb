@@ -11,6 +11,25 @@ const prisma = new (PrismaClient as any)({
   adapter,
 }) as InstanceType<typeof PrismaClient>;
 
+import photoOverrides from "./seed-photos.json";
+
+/**
+ * Photos for seeded listings.
+ *
+ * Stock photography cannot be verified from a sandbox with no image egress,
+ * and an unverified photo is worse than none — an earlier revision of this
+ * file put a BMW on the Civic and a stock portrait of a person on the Golf.
+ * So a listing shows its own photos only when someone has looked at them and
+ * put them in seed-photos.json; otherwise it gets the silhouette for its body
+ * type, which is always right about what kind of vehicle it is.
+ */
+function photosFor(brand: string, model: string, bodyType: string): string[] {
+  const key = `${brand} ${model}`;
+  const given = (photoOverrides as Record<string, unknown>)[key];
+  if (Array.isArray(given) && given.length > 0) return given as string[];
+  return [`/placeholder/${bodyType.toLowerCase()}.png`];
+}
+
 const PLACEHOLDER_VIDEO =
   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4";
 const PLACEHOLDER_VIDEO_2 =
@@ -415,7 +434,7 @@ async function main() {
       userId: dealer.id,
       dealershipId: dealership.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/sedan.png"],
+      imageUrls: [],
       brand: "Hyundai",
       model: "Elantra",
       price: 11500,
@@ -443,7 +462,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/hatchback.png"],
+      imageUrls: [],
       brand: "Kia",
       model: "Rio",
       price: 9800,
@@ -470,7 +489,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/sedan.png"],
+      imageUrls: [],
       brand: "Toyota",
       model: "Corolla",
       price: 14900,
@@ -498,7 +517,7 @@ async function main() {
       userId: dealer.id,
       dealershipId: dealership.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/sedan.png"],
+      imageUrls: [],
       brand: "Nissan",
       model: "Sunny",
       price: 7600,
@@ -525,7 +544,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/suv.png"],
+      imageUrls: [],
       brand: "Hyundai",
       model: "Tucson",
       price: 21500,
@@ -553,7 +572,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/suv.png"],
+      imageUrls: [],
       brand: "Kia",
       model: "Sportage",
       price: 19750,
@@ -581,7 +600,7 @@ async function main() {
       userId: dealer.id,
       dealershipId: dealership.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/sedan.png"],
+      imageUrls: [],
       brand: "Mitsubishi",
       model: "Lancer",
       price: 8200,
@@ -608,7 +627,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/sedan.png"],
+      imageUrls: [],
       brand: "Chevrolet",
       model: "Malibu",
       price: 10900,
@@ -635,7 +654,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/sedan.png"],
+      imageUrls: [],
       brand: "Tesla",
       model: "Model 3",
       price: 27500,
@@ -664,7 +683,7 @@ async function main() {
       userId: dealer.id,
       dealershipId: dealership.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/suv.png"],
+      imageUrls: [],
       brand: "MG",
       model: "ZS EV",
       price: 18900,
@@ -692,7 +711,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/hatchback.png"],
+      imageUrls: [],
       brand: "Hyundai",
       model: "Ioniq 5",
       price: 29900,
@@ -720,7 +739,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/pickup.png"],
+      imageUrls: [],
       brand: "Toyota",
       model: "Hilux",
       price: 22400,
@@ -748,7 +767,7 @@ async function main() {
       userId: dealer.id,
       dealershipId: dealership.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/hatchback.png"],
+      imageUrls: [],
       brand: "Volkswagen",
       model: "Golf GTI",
       price: 16500,
@@ -776,7 +795,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "SOLD" as const,
-      imageUrls: ["/placeholder/coupe.png"],
+      imageUrls: [],
       brand: "Ford",
       model: "Mustang",
       price: 19900,
@@ -804,7 +823,7 @@ async function main() {
       userId: dealer2.id,
       dealershipId: dealership2.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/sedan.png"],
+      imageUrls: [],
       brand: "Honda",
       model: "Civic",
       price: 13200,
@@ -832,7 +851,7 @@ async function main() {
       userId: dealer.id,
       dealershipId: dealership.id,
       status: "ON_SALE" as const,
-      imageUrls: ["/placeholder/suv.png"],
+      imageUrls: [],
       brand: "BYD",
       model: "Atto 3",
       price: 20500,
@@ -859,7 +878,18 @@ async function main() {
   ];
 
   for (const vehicleData of vehicles) {
-    const created = await prisma.vehicle.create({ data: vehicleData });
+    const data =
+      vehicleData.imageUrls.length > 0
+        ? vehicleData
+        : {
+            ...vehicleData,
+            imageUrls: photosFor(
+              vehicleData.brand,
+              vehicleData.model,
+              vehicleData.bodyType
+            ),
+          };
+    const created = await prisma.vehicle.create({ data });
     console.log(
       `  ✓ Vehicle: ${created.brand} ${created.model} (${created.productionYear}) — ${created.status} — ${created.price.toLocaleString()} JOD`
     );

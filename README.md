@@ -30,6 +30,20 @@ Seeded accounts all use the password `Password123!`:
 `admin@royalcars.jo`, `dealer@ammanluxury.jo`, `rami@wadisaqramotors.jo`,
 `sara@gmail.com`.
 
+### Listing photos
+
+Seeded listings show a body-type silhouette from `public/placeholder/`, not a
+photograph. Stock photos cannot be verified from an environment with no image
+egress, and an unverified photo is worse than none — an earlier revision of the
+seed put a BMW on the Civic and a stock portrait of a person on the Golf GTI.
+
+To give a listing real photos, put URLs in `prisma/seed-photos.json` keyed by
+`"Brand Model"` and re-seed. Anything left empty keeps its placeholder. The
+host must also appear in `next.config.ts` under `images.remotePatterns`.
+
+In production photos come from sellers through Cloudinary; none of this
+applies there.
+
 If a page shows no cars, check the database rather than the browser:
 
 ```bash

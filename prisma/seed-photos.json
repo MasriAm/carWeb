@@ -1,0 +1,31 @@
+{
+  "_readme": [
+    "Photo URLs for seeded listings, keyed by \"Brand Model\" exactly as it",
+    "appears in seed.ts. Any car listed here uses these photos; any car not",
+    "listed falls back to the body-type placeholder in public/placeholder.",
+    "",
+    "Paste URLs you have actually opened and checked. The host must also be",
+    "listed in next.config.ts under images.remotePatterns — images.unsplash.com,",
+    "res.cloudinary.com and lh3.googleusercontent.com already are.",
+    "",
+    "Example:",
+    "  \"Honda Civic\": [\"https://images.unsplash.com/photo-XXXXXXXXXXXXX\"]"
+  ],
+
+  "Hyundai Elantra": [],
+  "Kia Rio": [],
+  "Toyota Corolla": [],
+  "Nissan Sunny": [],
+  "Hyundai Tucson": [],
+  "Kia Sportage": [],
+  "Mitsubishi Lancer": [],
+  "Chevrolet Malibu": [],
+  "Tesla Model 3": [],
+  "MG ZS EV": [],
+  "Hyundai Ioniq 5": [],
+  "Toyota Hilux": [],
+  "Volkswagen Golf GTI": [],
+  "Ford Mustang": [],
+  "Honda Civic": [],
+  "BYD Atto 3": []
+}
