@@ -32,9 +32,21 @@ interface Props {
  * Dealers are few and change rarely, so every dealer page is prerendered at
  * build time. That also makes `params` known ahead of the request, which lets
  * the page shell render statically with only the listings streaming in.
+ *
+ * Cache Components requires at least one param: an empty array fails the build
+ * with `empty-generate-static-params`, because Next.js needs one path to
+ * prerender in order to validate the route's static shell. A database with no
+ * dealerships in it is not a broken state — it is every deployment before the
+ * first dealer signs up — so fall back to one placeholder slug. Nothing links
+ * to it and `notFound()` handles the request; it exists only to give the build
+ * a shell to validate. Slugs that are not listed here are still served: Next
+ * prerenders the shell and streams the dealer in at request time.
  */
+const SHELL_SLUG = "__shell__";
+
 export async function generateStaticParams() {
   const slugs = await getDealershipSlugs();
+  if (slugs.length === 0) return [{ slug: SHELL_SLUG }];
   return slugs.map((slug) => ({ slug }));
 }
 
