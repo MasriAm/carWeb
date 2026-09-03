@@ -62,9 +62,21 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
-      # Seeded so the production build prerenders against real rows: the hero,
-      # the browse facets and the dealer pages all query during the build, and
-      # an empty database would let a broken query through unnoticed.
+      # Build once against the empty database this job just migrated, before
+      # any rows exist. That is the state of every first deployment, and it is
+      # not the same code path as a seeded build: `generateStaticParams` for
+      # /dealers/[slug] returns nothing when no dealership exists, which Cache
+      # Components rejects with `empty-generate-static-params`. Seeding first
+      # and building once hid that for three failed production deploys.
+      - name: Build against an empty database
+        run: npm run build
+
+      - name: Reset the build output
+        run: rm -rf .next
+
+      # Seeded so the second build prerenders against real rows: the hero, the
+      # browse facets and the dealer pages all query during the build, and an
+      # empty database would let a broken query through unnoticed.
       - name: Seed
         run: npm run db:seed
 
