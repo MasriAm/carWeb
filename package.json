@@ -17,7 +17,7 @@
     "postinstall": "prisma generate"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": "22.x"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
