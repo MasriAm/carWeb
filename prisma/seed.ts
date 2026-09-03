@@ -4,6 +4,14 @@ import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
 
+if (!process.env.DATABASE_URL) {
+  console.error(
+    "\nDATABASE_URL is not set. It comes from .env, which is gitignored and so\n" +
+      "is never part of a clone. Copy .env.example to .env and fill it in.\n"
+  );
+  process.exit(1);
+}
+
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
