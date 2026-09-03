@@ -1,73 +1,109 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { Save } from "lucide-react";
+import { updateProfile } from "@/lib/actions/account";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { Save } from "lucide-react";
 
+/**
+ * Profile settings.
+ *
+ * This form previously had no server action behind it: it showed "Saved!" on
+ * a two-second timer and threw the input away.
+ */
 export default function ProfileForm({
   initialName,
   initialEmail,
+  initialPhone,
 }: {
   initialName: string;
   initialEmail: string;
+  initialPhone: string;
 }) {
   const [name, setName] = useState(initialName);
-  const [phone, setPhone] = useState("");
-  const [saved, setSaved] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
+  const [phone, setPhone] = useState(initialPhone);
+  const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
-      <CardContent className="p-6">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-zinc-200">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={initialEmail}
-              disabled
-              className="bg-zinc-800 border-zinc-700 text-zinc-500 cursor-not-allowed"
-            />
-            <p className="text-xs text-zinc-600">Email cannot be changed.</p>
-          </div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        setStatus("idle");
+        setError(null);
+        startTransition(async () => {
+          try {
+            const result = await updateProfile({ name, phone });
+            if (!result.success) {
+              setError(result.error);
+              setStatus("error");
+              return;
+            }
+            setStatus("saved");
+          } catch (err) {
+            setError(
+              err instanceof Error ? err.message : "Could not save your changes"
+            );
+            setStatus("error");
+          }
+        });
+      }}
+      className="space-y-5 rounded-card border border-line bg-surface p-6"
+    >
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          value={initialEmail}
+          disabled
+          className="bg-surface-2"
+        />
+        <p className="text-caption text-ink-3">Email cannot be changed.</p>
+      </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="name" className="text-zinc-200">Full Name</Label>
-            <Input
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your full name"
-              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
-            />
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="name">Full name</Label>
+        <Input
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Your full name"
+        />
+      </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="phone" className="text-zinc-200">Phone Number</Label>
-            <Input
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+962791234567"
-              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
-            />
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="phone">Phone number</Label>
+        <Input
+          id="phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="0791234567"
+        />
+        <p className="text-caption text-ink-3">
+          Buyers reach you on this number when a listing has no dealership
+          WhatsApp set.
+        </p>
+      </div>
 
-          <Button type="submit" className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
-            <Save className="mr-2 h-4 w-4" />
-            {saved ? "Saved!" : "Save Changes"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+      {error && (
+        <p role="alert" className="rounded-control bg-danger-soft px-3 py-2 text-body-sm text-danger">
+          {error}
+        </p>
+      )}
+
+      <div className="flex items-center gap-3">
+        <Button type="submit" disabled={isPending}>
+          <Save className="h-4 w-4" aria-hidden="true" />
+          {isPending ? "Saving…" : "Save changes"}
+        </Button>
+        <span aria-live="polite" className="text-body-sm text-trust">
+          {status === "saved" && !isPending ? "Saved" : ""}
+        </span>
+      </div>
+    </form>
   );
 }

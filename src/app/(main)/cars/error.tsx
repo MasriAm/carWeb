@@ -10,18 +10,18 @@ export default function CarsError({
   reset: () => void;
 }) {
   return (
-    <section className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
+    <section className="min-h-screen bg-canvas flex items-center justify-center px-4">
       <div className="text-center max-w-md">
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10 mb-6">
-          <AlertTriangle className="h-8 w-8 text-red-400" />
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-danger-soft mb-6">
+          <AlertTriangle className="h-8 w-8 text-danger" />
         </div>
-        <h1 className="text-2xl font-bold text-zinc-100 mb-2">
+        <h1 className="text-2xl font-bold text-ink mb-2">
           Something went wrong
         </h1>
-        <p className="text-zinc-400 mb-6">
+        <p className="text-ink-3 mb-6">
           We couldn&apos;t load the vehicle listings. This might be a temporary issue.
         </p>
-        <Button onClick={reset} className="bg-amber-500 text-zinc-950 hover:bg-amber-400">Try Again</Button>
+        <Button onClick={reset} className="bg-brand text-brand-ink hover:bg-brand-hover">Try Again</Button>
       </div>
     </section>
   );

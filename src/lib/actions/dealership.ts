@@ -10,6 +10,8 @@ import {
   type UpdateDealershipInput,
 } from "@/lib/validations/dealership";
 import { formatJordanPhone } from "@/lib/format-jordan-phone";
+import { actionRateLimit, safeLimit } from "@/lib/rate-limit";
+import { revalidateVehicleData } from "@/lib/cache-tags";
 
 export async function getMyDealership() {
   const session = await auth();
@@ -24,6 +26,12 @@ export async function getMyDealership() {
 export async function createDealership(input: CreateDealershipInput) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
+
+  const { success: withinLimit } = await safeLimit(
+    actionRateLimit,
+    session.user.id
+  );
+  if (!withinLimit) throw new Error("Rate limit exceeded. Please slow down.");
 
   const existing = await db.dealership.findUnique({
     where: { userId: session.user.id },
@@ -65,12 +73,19 @@ export async function createDealership(input: CreateDealershipInput) {
   }
 
   revalidatePath("/dashboard");
+  await revalidateVehicleData();
   return { success: true as const, dealership };
 }
 
 export async function updateDealership(input: UpdateDealershipInput) {
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
+
+  const { success: withinLimit } = await safeLimit(
+    actionRateLimit,
+    session.user.id
+  );
+  if (!withinLimit) throw new Error("Rate limit exceeded. Please slow down.");
 
   const existing = await db.dealership.findUnique({
     where: { userId: session.user.id },
@@ -109,6 +124,7 @@ export async function updateDealership(input: UpdateDealershipInput) {
   });
 
   revalidatePath("/dashboard");
+  await revalidateVehicleData();
   return { success: true as const, dealership };
 }
 

@@ -1,0 +1,97 @@
+{
+  "_readme": [
+    "Photo URLs for seeded listings, keyed by \"Brand Model\" exactly as it",
+    "appears in seed.ts. Any car listed here uses these photos; any car not",
+    "listed falls back to the body-type placeholder in public/placeholder.",
+    "",
+    "Paste URLs you have actually opened and checked. The host must also be",
+    "listed in next.config.ts under images.remotePatterns — images.unsplash.com,",
+    "res.cloudinary.com and lh3.googleusercontent.com already are.",
+    "",
+    "Example:",
+    "  \"Honda Civic\": [\"https://images.unsplash.com/photo-XXXXXXXXXXXXX\"]"
+  ],
+  "_provenance": [
+    "Every URL below was downloaded and looked at before being pasted here.",
+    "Photos that turned out to show a different car were discarded: a Hyundai",
+    "Sonata offered for the Elantra, a Toyota Tacoma for the Hilux, a Golf R",
+    "and a plain Mk7.5 Golf for the GTI, a Civic Type R for the Civic, a GR",
+    "Corolla and an AE86 for the Corolla, a BYD Dolphin for the Atto 3.",
+    "",
+    "Five listings are still empty because Unsplash has no photo of that car:",
+    "Kia Rio (only sedans of other generations), Nissan Sunny, Mitsubishi",
+    "Lancer (only Evolution models, which is a different car), Chevrolet",
+    "Malibu, BYD Atto 3 (only Dolphin, Seal and Song). They keep the",
+    "body-type silhouette, which is honest about what it does not know.",
+    "",
+    "Right model, different generation than the listing year — swap these out",
+    "if an exact-year photo turns up:",
+    "  Hyundai Elantra — listing is 2019 (AD); photos are CN7 (2021+)",
+    "  Volkswagen Golf GTI — listing is 2019 (Mk7.5); photos are Mk6",
+    "  Ford Mustang — the orange car is a 2018+ facelift GT and matches;",
+    "                 the other two are 2015-17 S550 GTs",
+    "  MG ZS EV — listing is 2023; photos are the 2019-21 pre-facelift",
+    "",
+    "  Removed after a second look: a 10th-gen Civic hatchback that was",
+    "  correctly identified as a Civic but sits on a listing whose bodyType",
+    "  is SEDAN, so it would show a hatchback to anyone filtering for sedans."
+  ],
+  "Hyundai Elantra": [
+    "https://images.unsplash.com/photo-1721002913303-7dac5b3b69c4?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1707325653284-49057765e44c?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1724217556692-5388bf475634?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Kia Rio": [],
+  "Toyota Corolla": [
+    "https://images.unsplash.com/photo-1623869675781-80aa31012a5a?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1686082344567-6f0dbee591f5?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1691994877641-36e673ad4236?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Nissan Sunny": [],
+  "Hyundai Tucson": [
+    "https://images.unsplash.com/photo-1646029642262-022158ff5794?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1704940225548-1420f7fed72f?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1706082072635-d19df8f0f3fb?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Kia Sportage": [
+    "https://images.unsplash.com/photo-1649921777129-a28a26031a03?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1647588854348-f3b37a0f0ef7?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1647501581530-053b42684b8d?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Mitsubishi Lancer": [],
+  "Chevrolet Malibu": [],
+  "Tesla Model 3": [
+    "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1610470832703-95d40c3fad55?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1571127236794-81c0bbfe1ce3?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "MG ZS EV": [
+    "https://images.unsplash.com/photo-1649468351720-065c308a35ba?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1649468351961-82480be17fb7?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1649468351829-0e69564ee247?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Hyundai Ioniq 5": [
+    "https://images.unsplash.com/photo-1647418552401-f3958302b72a?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1691641334147-ea39e3d3d2be?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1645664148883-2cc9832954bb?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Toyota Hilux": [
+    "https://images.unsplash.com/photo-1759213281196-6c5e463b3021?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1631377875413-b1e3e660bfa2?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1714213624189-9a9fc8a0736a?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Volkswagen Golf GTI": [
+    "https://images.unsplash.com/photo-1679251930798-58f80d64352a?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1679252069474-0a17dbebf1f1?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Ford Mustang": [
+    "https://images.unsplash.com/photo-1649274749460-5851a718dd2a?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1600138336992-d9fcd4280aa5?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1547744152-14d985cb937f?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Honda Civic": [
+    "https://images.unsplash.com/photo-1594070319944-7c0cbebb6f58?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1578659258511-4a4e7dee7344?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "BYD Atto 3": []
+}

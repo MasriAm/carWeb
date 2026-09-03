@@ -35,25 +35,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4 py-20">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas px-4 py-20">
       {/* Decorative background — soft amber glow + subtle grid */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(245,158,11,0.05) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(245,158,11,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
 
       <div className="relative w-full max-w-md">
         <div className="mb-8 text-center">
@@ -61,26 +44,26 @@ export default function LoginPage() {
             href="/"
             className="mb-5 inline-flex items-center gap-2 hover:opacity-90"
           >
-            <Crown className="h-7 w-7 text-amber-500" />
-            <span className="text-xl font-extrabold tracking-tight text-white">
-              Royal<span className="text-amber-500">Cars</span>
+            <Crown className="h-7 w-7 text-brand-strong" />
+            <span className="text-xl font-extrabold tracking-tight text-ink">
+              Royal<span className="text-brand-strong">Cars</span>
             </span>
           </Link>
-          <h1 className="mb-1.5 text-2xl font-extrabold text-white">
+          <h1 className="mb-1.5 text-2xl font-extrabold text-ink">
             Welcome back
           </h1>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-ink-3">
             Sign in to your account to continue.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-7 shadow-lg shadow-black/40 sm:p-8">
+        <div className="rounded-2xl border border-line bg-surface p-7 shadow-lg shadow-lift sm:p-8">
           {error && (
             <div
               className={`mb-5 flex items-start gap-3 rounded-xl border px-4 py-3.5 text-sm ${
                 error.includes("Too many requests")
-                  ? "border-amber-500/30 bg-amber-500/10 text-amber-400"
-                  : "border-red-500/20 bg-red-500/10 text-red-400"
+                  ? "border-brand/30 bg-brand-soft text-brand-strong"
+                  : "border-danger/25 bg-danger-soft text-danger"
               }`}
             >
               {error.includes("Too many requests") && (
@@ -92,7 +75,7 @@ export default function LoginPage() {
 
           <form action={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-zinc-300">
+              <Label htmlFor="email" className="text-ink-2">
                 Email
               </Label>
               <Input
@@ -103,12 +86,12 @@ export default function LoginPage() {
                 required
                 disabled={isPending}
                 autoComplete="email"
-                className="h-11 border-zinc-700 bg-zinc-800 text-zinc-100 placeholder:text-zinc-500"
+                className="h-11 border-line-control bg-surface-2 text-ink placeholder:text-ink-3"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-zinc-300">
+              <Label htmlFor="password" className="text-ink-2">
                 Password
               </Label>
               <div className="relative">
@@ -120,12 +103,12 @@ export default function LoginPage() {
                   required
                   disabled={isPending}
                   autoComplete="current-password"
-                  className="h-11 border-zinc-700 bg-zinc-800 pr-10 text-zinc-100 placeholder:text-zinc-500"
+                  className="h-11 border-line-control bg-surface-2 pr-10 text-ink placeholder:text-ink-3"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors hover:text-zinc-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-3 transition-colors hover:text-ink-2"
                   tabIndex={-1}
                   aria-label={
                     showPassword ? "Hide password" : "Show password"
@@ -143,7 +126,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={isPending}
-              className="h-11 w-full bg-amber-500 font-semibold text-zinc-950 hover:bg-amber-400"
+              className="h-11 w-full bg-brand font-semibold text-brand-ink hover:bg-brand-hover"
             >
               {isPending ? (
                 <>
@@ -160,11 +143,11 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p className="mt-7 text-center text-sm text-zinc-500">
+        <p className="mt-7 text-center text-sm text-ink-3">
           Don&apos;t have an account?{" "}
           <Link
             href="/register"
-            className="font-semibold text-amber-500 hover:text-amber-400"
+            className="font-semibold text-brand-strong hover:text-brand-strong"
           >
             Create one
           </Link>

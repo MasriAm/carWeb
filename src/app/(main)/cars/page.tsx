@@ -1,168 +1,328 @@
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
+import type { Metadata } from "next";
+import { SearchX } from "lucide-react";
 import {
+  getBrandFacets,
+  getBrandsAlphabetical,
+  getMarketBounds,
+  getModelsForBrands,
+} from "@/lib/data/facets";
+import {
+  getRelaxations,
   getVehicles,
-  getDistinctBrands,
-  getSavedVehicleIds,
-} from "@/lib/actions/vehicles";
-import { auth } from "@/lib/auth";
-import SidebarFilter, {
-  ActiveFilterChips,
-} from "@/components/cars/sidebar-filter";
-import HorizontalFilter from "@/components/cars/horizontal-filter";
-import type { VehicleFilterInput } from "@/lib/validations/vehicle";
-import { Car } from "lucide-react";
-
-const CarsMarketplaceSort = dynamic(
-  () => import("@/components/cars/cars-marketplace-sort"),
-  {
-    loading: () => (
-      <div className="h-10 w-[180px] animate-pulse rounded-lg border border-zinc-800 bg-zinc-900/60" />
-    ),
-  }
-);
-
-const CarGrid = dynamic(() => import("@/components/cars/car-grid"), {
-  loading: () => (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <div
-          key={i}
-          className="h-[min(28rem,72vw)] animate-pulse rounded-xl border border-zinc-800 bg-zinc-900/70"
-        />
-      ))}
-    </div>
-  ),
-});
-
+  type ListVehicle,
+} from "@/lib/data/vehicles";
+import { searchVehicleIds } from "@/lib/data/search";
+import { getSavedVehicleIds, getSessionUser } from "@/lib/data/session";
+import { filtersFromSearchParams, readList } from "@/lib/filter-params";
+import { vehicleFilterSchema } from "@/lib/validations/vehicle";
+import { formatNumber } from "@/lib/vehicle-format";
+import CarGrid from "@/components/cars/car-grid";
+import CarGridSkeleton from "@/components/cars/car-grid-skeleton";
 import Pagination from "@/components/cars/pagination";
+import ActiveFilterChips from "@/components/cars/filters/active-filter-chips";
+import FilterPanel from "@/components/cars/filters/filter-panel";
+import MobileFilters from "@/components/cars/filters/mobile-filters";
+import SearchInput from "@/components/cars/filters/search-input";
+import SortSelect from "@/components/cars/filters/sort-select";
+import SaveSearchButton from "@/components/cars/filters/save-search-button";
+import ClearFiltersLink from "@/components/cars/filters/clear-filters-link";
 
-export const metadata = {
-  title: "Browse Cars",
+export const metadata: Metadata = {
+  title: "Browse cars for sale in Jordan",
   description:
-    "Search and filter luxury vehicles available in Jordan. Mercedes, BMW, Porsche, Toyota, and more from trusted dealers.",
+    "Search cars for sale across Jordan by price in JOD, mileage, year, body type and agency-import status. Message the seller directly on WhatsApp.",
+  // Filter combinations are query strings on one page; point them all at the
+  // canonical listing so crawlers do not treat each as a separate document.
+  alternates: { canonical: "/cars" },
 };
 
-interface CarsPageProps {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}
+type SearchParams = Record<string, string | string[] | undefined>;
 
-function filtersFromParams(
-  raw: Record<string, string | string[] | undefined>
-): Partial<VehicleFilterInput> {
-  const str = (k: string) => {
-    const v = raw[k];
-    return typeof v === "string" ? v : undefined;
-  };
-  const num = (k: string) => {
-    const v = str(k);
-    return v ? Number(v) : undefined;
-  };
-
-  return {
-    brand: str("brand"),
-    model: str("model"),
-    minPrice: num("minPrice"),
-    maxPrice: num("maxPrice"),
-    condition: str("condition") as VehicleFilterInput["condition"],
-    bodyType: str("bodyType") as VehicleFilterInput["bodyType"],
-    transmission: str("transmission") as VehicleFilterInput["transmission"],
-    fuelType: str("fuelType") as VehicleFilterInput["fuelType"],
-    year: num("year"),
-    minYear: num("minYear"),
-    maxYear: num("maxYear"),
-    sortBy: str("sortBy") as VehicleFilterInput["sortBy"] | undefined,
-    page: num("page") ?? 1,
-    limit: 12,
-  };
-}
-
-export default async function CarsPage({ searchParams }: CarsPageProps) {
-  const rawParams = await searchParams;
-  const filters = filtersFromParams(rawParams);
-
-  const [{ vehicles, total, page, totalPages }, brands, session, savedIds] =
-    await Promise.all([
-      getVehicles(filters),
-      getDistinctBrands(),
-      auth(),
-      getSavedVehicleIds(),
-    ]);
-
-  const isLoggedIn = !!session?.user;
-
+/**
+ * Listing page.
+ *
+ * The shell — heading, search box, filter sidebar — renders from cached facet
+ * data and does not depend on the request, so it prerenders. Only the results
+ * read searchParams, and they sit behind their own Suspense boundary, so the
+ * page paints immediately and the grid streams in.
+ */
+export default function CarsPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
   return (
-    <section className="min-h-screen bg-zinc-950 pt-16">
-      {/* Page header */}
-      <div className="border-b border-zinc-800 bg-gradient-to-b from-zinc-900/60 to-zinc-950 px-4 py-5 sm:px-6">
-        <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10">
-              <Car className="h-4 w-4 text-amber-500" />
-            </div>
-            <div>
-              <h1 className="text-lg font-extrabold leading-none tracking-tight text-white sm:text-xl">
-                {filters.brand ? `${filters.brand} Cars` : "Vehicle Marketplace"}
-              </h1>
-              <p className="mt-1 text-[11px] text-zinc-500">
-                Jordan&apos;s leading luxury auto platform
-              </p>
-            </div>
-          </div>
-
-          <div className="flex w-full items-center gap-2 sm:w-auto">
-            <Suspense
-              fallback={
-                <div className="h-10 w-full animate-pulse rounded-lg border border-zinc-800 bg-zinc-900/60 sm:w-[180px]" />
-              }
-            >
-              <CarsMarketplaceSort />
-            </Suspense>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile filter bar */}
-      <HorizontalFilter brands={brands} resultsCount={total} />
-
-      {/* Body */}
-      <div className="mx-auto flex max-w-[1440px] items-start gap-5 px-4 pb-20 pt-5 sm:px-6">
-        {/* Desktop sidebar */}
-        <div className="sticky top-[88px] hidden w-[268px] shrink-0 lg:block">
-          <SidebarFilter brands={brands} resultsCount={total} />
-        </div>
-
-        {/* Results */}
-        <div className="min-w-0 flex-1">
-          <ActiveFilterChips />
-
-          <p className="mb-4 hidden text-xs text-zinc-500 lg:block">
-            <span className="font-semibold text-zinc-300">{total}</span>{" "}
-            vehicle{total !== 1 ? "s" : ""}
+    <div className="min-h-screen bg-canvas">
+      <div className="border-b border-line bg-surface">
+        <div className="mx-auto max-w-page px-4 py-5 sm:px-6 lg:px-8">
+          <h1 className="font-display text-h2 text-ink">Cars for sale</h1>
+          <p className="mt-1 text-body-sm text-ink-3">
+            Every listing shows mileage, spec origin and agency-import status.
           </p>
 
-          {vehicles.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <Car className="mb-4 h-11 w-11 text-zinc-700" />
-              <h2 className="mb-1 text-base font-bold text-zinc-300">
-                No vehicles match your filters
-              </h2>
-              <p className="max-w-md text-sm text-zinc-500">
-                Try adjusting your price range or removing some filters.
-              </p>
-            </div>
-          ) : (
-            <>
-              <CarGrid
-                vehicles={vehicles}
-                savedIds={savedIds}
-                isLoggedIn={isLoggedIn}
-              />
-              <Pagination currentPage={page} totalPages={totalPages} />
-            </>
-          )}
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <SearchInput className="flex-1" />
+            <SortSelect />
+          </div>
         </div>
       </div>
-    </section>
+
+      <div className="border-b border-line bg-surface pt-3 lg:hidden">
+        <Suspense fallback={<div className="h-16" />}>
+          <MobileFilterSlot searchParams={searchParams} />
+        </Suspense>
+      </div>
+
+      <div className="mx-auto flex max-w-page items-start gap-6 px-4 py-6 sm:px-6 lg:px-8">
+        <a
+          href="#results"
+          className="sr-only rounded-control bg-brand text-body-sm font-semibold text-brand-ink focus:not-sr-only focus:px-4 focus:py-2 focus:absolute focus:z-[60]"
+        >
+          Skip filters, go to results
+        </a>
+        <aside className="sticky top-[calc(var(--spacing-header)+1.5rem)] hidden w-sidebar shrink-0 lg:block">
+          <div className="overflow-hidden rounded-card border border-line bg-surface">
+            <div className="border-b border-line px-4 py-3">
+              <h2 className="text-body font-semibold text-ink">Filters</h2>
+            </div>
+            <div className="scrollbar-thin max-h-[calc(100vh-12rem)] overflow-y-auto">
+              <Suspense fallback={<FilterSkeleton />}>
+                <SidebarFilterSlot searchParams={searchParams} />
+              </Suspense>
+            </div>
+          </div>
+        </aside>
+
+        <section id="results" aria-label="Search results" className="min-w-0 flex-1">
+          <ActiveFilterChips />
+          <Suspense fallback={<ResultsFallback />}>
+            <Results searchParams={searchParams} />
+          </Suspense>
+        </section>
+      </div>
+    </div>
   );
 }
+
+/* ─── Filter slots ──────────────────────────────────────────────────────
+   Facets are cached; the model list depends on which brands are selected,
+   so these read searchParams and stream in behind their own boundary.
+   ─────────────────────────────────────────────────────────────────────── */
+
+async function loadFacets(searchParams: Promise<SearchParams>) {
+  const raw = await searchParams;
+  const selectedBrands = readList(
+    new URLSearchParams(
+      Object.entries(raw)
+        .filter(([, v]) => typeof v === "string")
+        .map(([k, v]) => [k, v as string])
+    ),
+    "brand"
+  );
+
+  const [bounds, models] = await Promise.all([
+    getMarketBounds(),
+    getModelsForBrands(selectedBrands),
+  ]);
+  return { bounds, models };
+}
+
+async function SidebarFilterSlot({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const [brands, { bounds, models }] = await Promise.all([
+    getBrandsAlphabetical(),
+    loadFacets(searchParams),
+  ]);
+  return <FilterPanel brands={brands} bounds={bounds} models={models} />;
+}
+
+async function MobileFilterSlot({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const [brands, { bounds, models }] = await Promise.all([
+    getBrandFacets(),
+    loadFacets(searchParams),
+  ]);
+  return <MobileFilters brands={brands} bounds={bounds} models={models} />;
+}
+
+/* ─── Results (depends on the request) ──────────────────────────────── */
+
+async function Results({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const raw = await searchParams;
+  const filters = vehicleFilterSchema.parse(filtersFromSearchParams(raw));
+
+  // A keyword search narrows to a ranked id set first, then the normal
+  // filters apply on top of it.
+  if (filters.q) {
+    const ids = await searchVehicleIds(filters.q);
+    if (ids.length === 0) {
+      return <NoResults searchParams={raw} query={filters.q} />;
+    }
+    filters.ids = ids;
+  }
+
+  const [{ vehicles, featured, total, page, totalPages }, savedIds, user] =
+    await Promise.all([
+      getVehicles(filters),
+      getSavedVehicleIds(),
+      getSessionUser(),
+    ]);
+
+  const all: ListVehicle[] = [...featured, ...vehicles];
+
+  if (all.length === 0) {
+    return <NoResults searchParams={raw} query={filters.q} />;
+  }
+
+  return (
+    <>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-body-sm text-ink-2" aria-live="polite">
+          <span className="font-semibold text-ink tabular-nums">
+            {formatNumber(total)}
+          </span>{" "}
+          {total === 1 ? "car" : "cars"}
+          {filters.q ? ` matching “${filters.q}”` : ""}
+        </p>
+        <SaveSearchButton
+          isLoggedIn={Boolean(user)}
+          suggestedName={suggestSearchName(filters, raw)}
+        />
+      </div>
+
+      <CarGrid
+        vehicles={all}
+        savedIds={savedIds}
+        isLoggedIn={Boolean(user)}
+        featuredIds={featured.map((v) => v.id)}
+      />
+
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        searchParams={raw}
+      />
+    </>
+  );
+}
+
+/**
+ * Empty state that does actual work: it says which single filter to drop and
+ * how many cars that brings back, instead of "try adjusting your filters".
+ */
+async function NoResults({
+  searchParams,
+  query,
+}: {
+  searchParams: SearchParams;
+  query?: string;
+}) {
+  const filters = vehicleFilterSchema.parse(
+    filtersFromSearchParams(searchParams)
+  );
+  const relaxations = await getRelaxations(filters);
+
+  return (
+    <div className="rounded-card border border-line bg-surface px-6 py-14 text-center">
+      <SearchX
+        className="mx-auto mb-4 h-10 w-10 text-ink-3"
+        aria-hidden="true"
+      />
+      <h2 className="text-title font-semibold text-ink">
+        No cars match {query ? `“${query}”` : "these filters"}
+      </h2>
+
+      {relaxations.length > 0 ? (
+        <>
+          <p className="mx-auto mt-2 max-w-prose text-body-sm text-ink-3">
+            Removing one filter brings results back:
+          </p>
+          <ul className="mx-auto mt-5 flex max-w-md flex-col gap-2">
+            {relaxations.map((r) => (
+              <li key={r.key}>
+                <ClearFiltersLink
+                  keys={[r.key]}
+                  className="flex min-h-11 w-full items-center justify-between gap-3 rounded-control border border-line-control bg-surface px-4 text-body-sm text-ink transition-colors hover:bg-surface-2"
+                >
+                  <span>Drop {r.label}</span>
+                  <span className="font-semibold tabular-nums text-brand-strong">
+                    {formatNumber(r.count)} cars
+                  </span>
+                </ClearFiltersLink>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p className="mx-auto mt-2 max-w-prose text-body-sm text-ink-3">
+          Nothing on the site matches this combination yet.
+        </p>
+      )}
+
+      <div className="mt-6">
+        <ClearFiltersLink className="text-body-sm font-semibold text-brand-strong hover:underline">
+          Clear all filters
+        </ClearFiltersLink>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A sensible default name for a saved search, built from what the buyer
+ * actually filtered on, so they are not staring at an empty text box.
+ */
+function suggestSearchName(
+  filters: ReturnType<typeof vehicleFilterSchema.parse>,
+  raw: SearchParams
+): string {
+  const parts: string[] = [];
+  if (filters.q) parts.push(filters.q);
+  if (filters.brand?.length) parts.push(filters.brand.join(", "));
+  if (filters.bodyType?.length) parts.push(filters.bodyType.join(", ").toLowerCase());
+  if (filters.maxPrice) parts.push(`under ${formatNumber(filters.maxPrice)} JOD`);
+  if (filters.agency) parts.push("agency import");
+
+  const name = parts.join(" · ");
+  if (name) return name.slice(0, 60);
+  return typeof raw.dealer === "string" ? `Cars from ${raw.dealer}` : "All cars";
+}
+
+/* ─── Fallbacks ─────────────────────────────────────────────────────── */
+
+function ResultsFallback() {
+  return (
+    <>
+      <div
+        aria-hidden="true"
+        className="mb-4 h-5 w-28 animate-pulse rounded bg-surface-2"
+      />
+      <CarGridSkeleton />
+    </>
+  );
+}
+
+function FilterSkeleton() {
+  return (
+    <div aria-hidden="true" className="space-y-4 p-4">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="space-y-2">
+          <div className="h-5 w-24 animate-pulse rounded bg-surface-2" />
+          <div className="h-9 w-full animate-pulse rounded-control bg-surface-2" />
+        </div>
+      ))}
+    </div>
+  );
+}
+

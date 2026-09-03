@@ -15,13 +15,13 @@ export default async function AdminVehiclesPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100 mb-1">All Vehicles</h1>
-          <p className="text-zinc-400">
+          <h1 className="text-2xl font-bold text-ink mb-1">All Vehicles</h1>
+          <p className="text-ink-3">
             {vehicles.length} vehicle{vehicles.length !== 1 ? "s" : ""} platform-wide.
           </p>
         </div>
         <Link href="/dashboard/admin/vehicles/new">
-          <Button className="bg-amber-500 text-zinc-950 hover:bg-amber-400">
+          <Button className="bg-brand text-brand-ink hover:bg-brand-hover">
             <Plus className="mr-2 h-4 w-4" />
             Add Vehicle
           </Button>

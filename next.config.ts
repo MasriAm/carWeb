@@ -5,7 +5,10 @@ const csp = [
   "script-src 'self' 'unsafe-inline' https://www.instagram.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' https: data: blob: https://res.cloudinary.com",
-  "font-src 'self'",
+  // Self-hosted and Cloudinary video only. Without this, `default-src 'self'`
+  // applies to media and the browser silently refuses every listing video.
+  "media-src 'self' blob: https://res.cloudinary.com",
+  "font-src 'self' data:",
   "connect-src 'self' https://api.cloudinary.com",
   "frame-src 'self' https://www.instagram.com",
   "frame-ancestors 'none'",
@@ -14,6 +17,7 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  cacheComponents: true,
   poweredByHeader: false,
   compiler: {
     removeConsole:

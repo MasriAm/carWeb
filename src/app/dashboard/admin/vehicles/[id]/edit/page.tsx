@@ -1,5 +1,5 @@
 import { requireRole } from "@/lib/auth-utils";
-import { getVehicleById } from "@/lib/actions/vehicles";
+import { getVehicleById } from "@/lib/data/vehicles";
 import VehicleForm from "@/components/dashboard/vehicle-form";
 import { notFound } from "next/navigation";
 
@@ -18,10 +18,10 @@ export default async function AdminEditVehiclePage({ params }: EditVehiclePagePr
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-zinc-100 mb-1">
+      <h1 className="text-2xl font-bold text-ink mb-1">
         Edit: {vehicle.brand} {vehicle.model}
       </h1>
-      <p className="text-zinc-400 mb-8">Update this vehicle listing.</p>
+      <p className="text-ink-3 mb-8">Update this vehicle listing.</p>
       <div className="max-w-3xl">
         <VehicleForm vehicle={vehicle} />
       </div>

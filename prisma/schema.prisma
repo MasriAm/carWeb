@@ -46,6 +46,18 @@ enum FuelType {
   HYBRID
 }
 
+/// Regional specification a car was built for. One of the strongest trust
+/// signals in the Jordanian market, and previously only expressed as free
+/// text inside the description, where it could not be filtered or badged.
+enum SpecOrigin {
+  GCC
+  US
+  EU
+  KOREAN
+  JAPANESE
+  OTHER
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -100,6 +112,7 @@ model User {
   dealership    Dealership?
   vehicles      Vehicle[]
   savedVehicles SavedVehicle[]
+  savedSearches SavedSearch[]
 }
 
 model Dealership {
@@ -147,6 +160,7 @@ model Vehicle {
 
   fa7s             String?       @db.Text
   waredWakaleh     Boolean       @default(false)
+  specOrigin       SpecOrigin?
   isPromoted       Boolean       @default(false)
 
   detailedSpecs    Json          @default("[]")
@@ -154,20 +168,47 @@ model Vehicle {
   publicationDate  DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
+  /// Generated full-text search column. Postgres maintains it; the migration
+  /// defines the expression (brand and model weighted above description).
+  /// Prisma has no representation for GENERATED ALWAYS columns, so it is
+  /// declared Unsupported and never written to from application code.
+  searchVector     Unsupported("tsvector")?
+
   user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   dealership  Dealership?    @relation(fields: [dealershipId], references: [id], onDelete: SetNull)
   savedBy     SavedVehicle[]
 
-  @@index([brand])
-  @@index([price])
-  @@index([status])
+  // Composite indexes matching the queries the marketplace actually runs.
+  // Every listing query filters on status and orders by publicationDate;
+  // there was previously no index on publicationDate at all, and ten
+  // single-column indexes that no listing query could use.
+  @@index([status, publicationDate(sort: Desc)])
+  @@index([status, brand, publicationDate(sort: Desc)])
+  @@index([status, price])
+  @@index([status, productionYear(sort: Desc)])
+  @@index([status, mileageKm])
+  @@index([status, bodyType, publicationDate(sort: Desc)])
+  @@index([status, isPromoted, publicationDate(sort: Desc)])
+  // Ownership and relation lookups.
   @@index([dealershipId])
   @@index([userId])
-  @@index([productionYear])
-  @@index([condition])
-  @@index([bodyType])
-  @@index([fuelType])
-  @@index([isPromoted])
+  @@index([searchVector], type: Gin)
+}
+
+/// A filter set a buyer wants to come back to, stored as the URL query
+/// string so re-running it is just a navigation and the encoding stays the
+/// single source of truth.
+model SavedSearch {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  query     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, query])
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 model SavedVehicle {

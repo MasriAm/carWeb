@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth-utils";
-import { getVehicleById } from "@/lib/actions/vehicles";
+import { getVehicleById } from "@/lib/data/vehicles";
 import { auth } from "@/lib/auth";
 import VehicleForm from "@/components/dashboard/vehicle-form";
 
@@ -24,7 +24,7 @@ export default async function EditVehiclePage({ params }: Props) {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-zinc-100 mb-6">Edit Vehicle</h1>
+      <h1 className="text-2xl font-bold text-ink mb-6">Edit Vehicle</h1>
       <VehicleForm
         vehicle={vehicle as Parameters<typeof VehicleForm>[0]["vehicle"]}
         redirectTo="/dashboard/vehicles"
