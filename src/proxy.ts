@@ -26,7 +26,7 @@ export default auth((req) => {
   );
 
   if (isSuspended) {
-    return NextResponse.redirect(new URL("/login?error=suspended", nextUrl));
+    return NextResponse.redirect(new URL("/login?error=suspended", req.url));
   }
 
   if (isProtectedRoute || isProtectedApi) {
@@ -36,12 +36,12 @@ export default auth((req) => {
       }
       const callbackUrl = encodeURIComponent(nextUrl.pathname + nextUrl.search);
       return NextResponse.redirect(
-        new URL(`/login?callbackUrl=${callbackUrl}`, nextUrl)
+        new URL(`/login?callbackUrl=${callbackUrl}`, req.url)
       );
     }
 
     if (nextUrl.pathname.startsWith("/dashboard/admin") && role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/dashboard", nextUrl));
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
     if (
@@ -49,7 +49,7 @@ export default auth((req) => {
       role !== "DEALER" &&
       role !== "ADMIN"
     ) {
-      return NextResponse.redirect(new URL("/dashboard", nextUrl));
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
     if (
@@ -57,12 +57,12 @@ export default auth((req) => {
       role !== "DEALER" &&
       role !== "ADMIN"
     ) {
-      return NextResponse.redirect(new URL("/dashboard", nextUrl));
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
   }
 
   if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", nextUrl));
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   return NextResponse.next();
