@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Save, Loader2 } from "lucide-react";
+import VideoField from "@/components/dashboard/video-field";
 
 type VehicleData = {
   id: string;
@@ -161,32 +162,32 @@ export default function VehicleForm({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="brand" className={labelCls}>Brand *</Label>
-              <Input id="brand" name="brand" required defaultValue={vehicle?.brand ?? ""} placeholder="Mercedes-Benz" className={inputCls} />
+              <Input id="brand" name="brand" required defaultValue={vehicle?.brand ?? ""} className={inputCls} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="model" className={labelCls}>Model *</Label>
-              <Input id="model" name="model" required defaultValue={vehicle?.model ?? ""} placeholder="G63 AMG" className={inputCls} />
+              <Input id="model" name="model" required defaultValue={vehicle?.model ?? ""} className={inputCls} />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="price" className={labelCls}>Price (JOD) *</Label>
-              <Input id="price" name="price" type="number" required defaultValue={vehicle?.price ?? ""} placeholder="75000" className={inputCls} />
+              <Input id="price" name="price" type="number" required defaultValue={vehicle?.price ?? ""} className={inputCls} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="productionYear" className={labelCls}>Year *</Label>
-              <Input id="productionYear" name="productionYear" type="number" required defaultValue={vehicle?.productionYear ?? ""} placeholder="2024" className={inputCls} />
+              <Input id="productionYear" name="productionYear" type="number" required defaultValue={vehicle?.productionYear ?? ""} className={inputCls} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="mileageKm" className={labelCls}>Mileage (km) *</Label>
-              <Input id="mileageKm" name="mileageKm" type="number" required defaultValue={vehicle?.mileageKm ?? ""} placeholder="15000" className={inputCls} />
+              <Input id="mileageKm" name="mileageKm" type="number" required defaultValue={vehicle?.mileageKm ?? ""} className={inputCls} />
             </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="shortDescription" className={labelCls}>Short Description *</Label>
-            <Textarea id="shortDescription" name="shortDescription" rows={2} required defaultValue={vehicle?.shortDescription ?? ""} placeholder="Brief description of the vehicle..." className={inputCls} />
+            <Textarea id="shortDescription" name="shortDescription" rows={2} required defaultValue={vehicle?.shortDescription ?? ""} className={inputCls} />
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -233,7 +234,7 @@ export default function VehicleForm({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="engineCapacityCC" className={labelCls}>Engine CC *</Label>
-              <Input id="engineCapacityCC" name="engineCapacityCC" type="number" required defaultValue={vehicle?.engineCapacityCC ?? ""} placeholder="3000" className={inputCls} />
+              <Input id="engineCapacityCC" name="engineCapacityCC" type="number" required defaultValue={vehicle?.engineCapacityCC ?? ""} className={inputCls} />
             </div>
             {vehicle && (
               <div className="space-y-2">
@@ -251,7 +252,7 @@ export default function VehicleForm({
 
           <div className="space-y-2">
             <Label htmlFor="fa7s" className={labelCls}>Inspection Report (فحص)</Label>
-            <Textarea id="fa7s" name="fa7s" rows={3} defaultValue={vehicle?.fa7s ?? ""} placeholder="Vehicle inspection details..." className={inputCls} />
+            <Textarea id="fa7s" name="fa7s" rows={3} defaultValue={vehicle?.fa7s ?? ""} className={inputCls} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -282,29 +283,29 @@ export default function VehicleForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="videoUrl" className={labelCls}>Video URL</Label>
-            <Input id="videoUrl" name="videoUrl" type="url" defaultValue={vehicle?.videoUrl ?? ""} placeholder="https://res.cloudinary.com/.../video.mp4" className={inputCls} />
-            <p className="text-caption text-ink-3">Direct MP4 or WebM only; a YouTube link will not play.</p>
+            <Label htmlFor="videoUrl" className={labelCls}>Video</Label>
+            <VideoField defaultValue={vehicle?.videoUrl} inputClassName={inputCls} />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="instagramVideoUrl" className={labelCls}>Instagram Reel URL</Label>
-            <Input id="instagramVideoUrl" name="instagramVideoUrl" type="url" defaultValue={vehicle?.instagramVideoUrl ?? ""} placeholder="https://www.instagram.com/reel/..." className={inputCls} />
+            <Label htmlFor="instagramVideoUrl" className={labelCls}>Instagram Reel</Label>
+            <Input id="instagramVideoUrl" name="instagramVideoUrl" type="url" defaultValue={vehicle?.instagramVideoUrl ?? ""} className={inputCls} />
+            <p className="text-caption text-ink-3">The reel or post link. A share link with tracking on the end works.</p>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="imageUrls" className={labelCls}>Image URLs (one per line) *</Label>
-            <Textarea id="imageUrls" name="imageUrls" rows={4} required defaultValue={existingImages} placeholder={"https://example.com/img1.jpg\nhttps://example.com/img2.jpg"} className={inputCls} />
+            <Textarea id="imageUrls" name="imageUrls" rows={4} required defaultValue={existingImages} className={inputCls} />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="detailedSpecs" className={labelCls}>Detailed Specs (one per line)</Label>
-            <Textarea id="detailedSpecs" name="detailedSpecs" rows={4} defaultValue={existingSpecs} placeholder={"360° Camera System\nAdaptive Cruise Control"} className={inputCls} />
+            <Textarea id="detailedSpecs" name="detailedSpecs" rows={4} defaultValue={existingSpecs} className={inputCls} />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="specificWhatsapp" className={labelCls}>Direct WhatsApp (optional)</Label>
-            <Input id="specificWhatsapp" name="specificWhatsapp" defaultValue={vehicle?.specificWhatsapp ?? ""} placeholder="079XXXXXXX or 962791234567" className={inputCls} />
+            <Input id="specificWhatsapp" name="specificWhatsapp" defaultValue={vehicle?.specificWhatsapp ?? ""} className={inputCls} />
             <p className="text-xs text-ink-3">Leave blank to use the dealership default.</p>
           </div>
 
