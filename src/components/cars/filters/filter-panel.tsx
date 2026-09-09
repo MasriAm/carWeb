@@ -1,10 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Check } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { BrandFacet } from "@/lib/data/facets";
-import type { MarketBounds } from "@/lib/data/facets";
+import type { BrandFacet, MarketBounds } from "@/lib/data/facets";
 import {
   clearFilters,
   readList,
@@ -12,8 +10,8 @@ import {
   toggleInList,
 } from "@/lib/filter-params";
 import { kmStops, priceStops } from "@/lib/filter-scale";
-import { formatNumber } from "@/lib/vehicle-format";
 import { cn } from "@/lib/utils";
+import Chip from "./filter-chip";
 import FilterSection from "./filter-section";
 import RangeFilter from "./range-filter";
 import { useFilterNav } from "./use-filter-nav";
@@ -55,57 +53,30 @@ const SPEC_OPTIONS = [
   { value: "OTHER", label: "Other" },
 ];
 
-/** Multi-select chip. Toggles a value inside a comma list in the URL. */
-function Chip({
-  label,
-  active,
-  count,
-  onToggle,
-}: {
-  label: string;
-  active: boolean;
-  count?: number;
-  onToggle: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-pressed={active}
-      className={cn(
-        "inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3 text-body-sm transition-colors",
-        active
-          ? "border-brand bg-brand-soft font-semibold text-ink"
-          : "border-line-control bg-surface text-ink-2 hover:border-ink-3 hover:text-ink"
-      )}
-    >
-      {active && <Check className="h-3.5 w-3.5 text-brand-strong" aria-hidden="true" />}
-      {label}
-      {count != null && (
-        <span className="text-caption text-ink-3 tabular-nums">{count}</span>
-      )}
-    </button>
-  );
-}
+/**
+ * How many brands the collapsed list shows. The full list runs to every brand
+ * on the site, which buries the price and body-type filters below the fold on
+ * a phone; the ones worth surfacing unprompted are the ones with stock.
+ */
+const COLLAPSED_BRANDS = 8;
 
 export default function FilterPanel({
   brands,
   bounds,
-  models,
+  modelSlot,
   onApplied,
 }: {
   brands: BrandFacet[];
   bounds: MarketBounds;
-  models: { model: string; count: number }[];
+  modelSlot?: React.ReactNode;
   onApplied?: () => void;
 }) {
-  const { searchParams, commit, commitDebounced } = useFilterNav();
+  const { searchParams, commit, commitDebounced, isPending } = useFilterNav();
   const [showAllBrands, setShowAllBrands] = useState(false);
 
   const selected = useMemo(
     () => ({
       brand: readList(searchParams, "brand"),
-      model: readList(searchParams, "model"),
       bodyType: readList(searchParams, "bodyType"),
       fuelType: readList(searchParams, "fuelType"),
       condition: readList(searchParams, "condition"),
@@ -130,7 +101,23 @@ export default function FilterPanel({
     return out.length > 1 ? out : [bounds.minYear, bounds.minYear + 1];
   }, [bounds.minYear, bounds.maxYear]);
 
-  const visibleBrands = showAllBrands ? brands : brands.slice(0, 12);
+  /**
+   * Collapsed, the list is the brands with the most cars — the first eight
+   * alphabetically say nothing about what is actually for sale. A selected
+   * brand is always kept on screen, or collapsing the list would hide a
+   * filter that is still applied.
+   */
+  const visibleBrands = useMemo(() => {
+    if (showAllBrands) return brands;
+    const top = [...brands]
+      .sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand))
+      .slice(0, COLLAPSED_BRANDS);
+    const shown = new Set(top.map((b) => b.brand));
+    const pinned = brands.filter(
+      (b) => selected.brand.includes(b.brand) && !shown.has(b.brand)
+    );
+    return [...top, ...pinned].sort((a, b) => a.brand.localeCompare(b.brand));
+  }, [brands, showAllBrands, selected.brand]);
 
   const toggle = (key: string, value: string) => {
     commit((p) => toggleInList(p, key, value));
@@ -138,7 +125,13 @@ export default function FilterPanel({
   };
 
   return (
-    <div className="px-4">
+    <div
+      aria-busy={isPending}
+      className={cn(
+        "px-4 transition-opacity duration-150",
+        isPending && "opacity-60"
+      )}
+    >
       <FilterSection title="Brand" count={selected.brand.length}>
         <div className="flex flex-wrap gap-1.5">
           {visibleBrands.map((b) => (
@@ -151,7 +144,7 @@ export default function FilterPanel({
             />
           ))}
         </div>
-        {brands.length > 12 && (
+        {brands.length > visibleBrands.length || showAllBrands ? (
           <button
             type="button"
             onClick={() => setShowAllBrands((v) => !v)}
@@ -161,24 +154,10 @@ export default function FilterPanel({
               ? "Show fewer brands"
               : `Show all ${brands.length} brands`}
           </button>
-        )}
+        ) : null}
       </FilterSection>
 
-      {models.length > 0 && (
-        <FilterSection title="Model" count={selected.model.length}>
-          <div className="scrollbar-thin flex max-h-56 flex-wrap gap-1.5 overflow-y-auto">
-            {models.map((m) => (
-              <Chip
-                key={m.model}
-                label={m.model}
-                count={m.count}
-                active={selected.model.includes(m.model)}
-                onToggle={() => toggle("model", m.model)}
-              />
-            ))}
-          </div>
-        </FilterSection>
-      )}
+      {modelSlot}
 
       <FilterSection title="Price">
         <RangeFilter
@@ -356,5 +335,3 @@ function numberOrUndefined(raw: string | null): number | undefined {
   const n = Number(raw);
   return Number.isFinite(n) ? n : undefined;
 }
-
-export { formatNumber };

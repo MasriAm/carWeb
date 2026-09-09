@@ -1,15 +1,17 @@
 "use client";
 
-import { useCallback, useRef, useTransition } from "react";
+import { useCallback, useMemo, useOptimistic, useRef, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { resetPage } from "@/lib/filter-params";
 
 /**
  * Applies filter changes to the URL.
  *
- * `isPending` is surfaced to callers and actually rendered — the previous
- * implementation computed a pending flag and never used it, so a filter tap
- * on a slow connection looked like the site had frozen.
+ * The params returned here are optimistic: they carry the change as soon as it
+ * is made rather than after the server round trip. Reading committed
+ * `useSearchParams()` directly left a tapped chip visually unselected until new
+ * results arrived, so on a slow connection every filter looked like a dead
+ * button — the change had registered, but nothing on screen said so.
  *
  * `commit` pushes immediately (chips, toggles); `commitDebounced` waits for a
  * pause (text input, slider drags) so dragging a range does not fire a server
@@ -18,44 +20,51 @@ import { resetPage } from "@/lib/filter-params";
 export function useFilterNav() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const committed = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [query, setQuery] = useOptimistic(committed.toString());
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const push = useCallback(
     (params: URLSearchParams) => {
-      const query = params.toString();
+      const next = params.toString();
       startTransition(() => {
-        router.push(query ? `${pathname}?${query}` : pathname, {
-          scroll: false,
-        });
+        setQuery(next);
+        router.push(next ? `${pathname}?${next}` : pathname, { scroll: false });
       });
     },
-    [pathname, router]
+    [pathname, router, setQuery]
   );
 
-  /** Mutate a copy of the current params, then navigate. */
-  const commit = useCallback(
-    (mutate: (params: URLSearchParams) => void) => {
-      const params = new URLSearchParams(searchParams.toString());
+  /**
+   * Mutate a copy of the pending params, then navigate. Building on the
+   * optimistic params rather than the committed ones is what lets two quick
+   * taps accumulate instead of the second overwriting the first.
+   */
+  const apply = useCallback(
+    (mutate: (params: URLSearchParams) => void, delay?: number) => {
+      const params = new URLSearchParams(query);
       mutate(params);
       resetPage(params);
       if (timer.current) clearTimeout(timer.current);
-      push(params);
+      if (delay == null) push(params);
+      else timer.current = setTimeout(() => push(params), delay);
     },
-    [searchParams, push]
+    [query, push]
+  );
+
+  const commit = useCallback(
+    (mutate: (params: URLSearchParams) => void) => apply(mutate),
+    [apply]
   );
 
   const commitDebounced = useCallback(
-    (mutate: (params: URLSearchParams) => void, delay = 350) => {
-      const params = new URLSearchParams(searchParams.toString());
-      mutate(params);
-      resetPage(params);
-      if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => push(params), delay);
-    },
-    [searchParams, push]
+    (mutate: (params: URLSearchParams) => void, delay = 350) =>
+      apply(mutate, delay),
+    [apply]
   );
+
+  const searchParams = useMemo(() => new URLSearchParams(query), [query]);
 
   return { searchParams, commit, commitDebounced, isPending };
 }

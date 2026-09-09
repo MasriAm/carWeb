@@ -28,11 +28,11 @@ const QUICK = [
 export default function MobileFilters({
   brands,
   bounds,
-  models,
+  modelSlot,
 }: {
   brands: BrandFacet[];
   bounds: MarketBounds;
-  models: { model: string; count: number }[];
+  modelSlot?: React.ReactNode;
 }) {
   const { searchParams, commit } = useFilterNav();
   const [open, setOpen] = useState(false);
@@ -101,7 +101,7 @@ export default function MobileFilters({
           </SheetHeader>
 
           <div className="scrollbar-thin flex-1 overflow-y-auto">
-            <FilterPanel brands={brands} bounds={bounds} models={models} />
+            <FilterPanel brands={brands} bounds={bounds} modelSlot={modelSlot} />
           </div>
 
           <div className="border-t border-line bg-surface p-4">
