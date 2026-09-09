@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { Loader2, Send } from "lucide-react";
 import ImageDropzone from "@/components/dashboard/image-dropzone";
+import VideoField from "@/components/dashboard/video-field";
 
 const BODY_TYPES = ["SUV", "SEDAN", "COUPE", "HATCHBACK", "CONVERTIBLE", "PICKUP", "VAN", "WAGON"];
 const FUEL_OPTIONS = [
@@ -124,17 +125,13 @@ export default function DealerVehicleForm() {
             <h2 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Media</h2>
             <ImageDropzone images={imageUrls} onChange={setImageUrls} />
             <div className="mt-4 space-y-2">
-              <Label htmlFor="videoUrl" className={labelCls}>Video URL (optional)</Label>
-              <p className="text-caption text-ink-3">
-                A direct MP4 or WebM file — a Cloudinary upload works. A
-                YouTube or Instagram page link will not play; use the
-                Instagram field below for reels.
-              </p>
-              <Input id="videoUrl" name="videoUrl" type="url" placeholder="https://res.cloudinary.com/.../video.mp4" className={inputCls} />
+              <Label htmlFor="videoUrl" className={labelCls}>Video (optional)</Label>
+              <VideoField inputClassName={inputCls} />
             </div>
             <div className="mt-4 space-y-2">
-              <Label htmlFor="instagramVideoUrl" className={labelCls}>Instagram Reel URL (optional)</Label>
-              <Input id="instagramVideoUrl" name="instagramVideoUrl" type="url" placeholder="https://www.instagram.com/reel/..." className={inputCls} />
+              <Label htmlFor="instagramVideoUrl" className={labelCls}>Instagram Reel (optional)</Label>
+              <Input id="instagramVideoUrl" name="instagramVideoUrl" type="url" className={inputCls} />
+              <p className="text-caption text-ink-3">The reel or post link. A share link with tracking on the end works.</p>
             </div>
           </div>
 
@@ -142,15 +139,15 @@ export default function DealerVehicleForm() {
             <h2 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Description</h2>
             <div className="space-y-2">
               <Label htmlFor="shortDescription" className={labelCls}>Short Description *</Label>
-              <Textarea id="shortDescription" name="shortDescription" rows={3} required placeholder="Gulf-spec 2024 G63 AMG, matte black, full carbon package..." className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3" />
+              <Textarea id="shortDescription" name="shortDescription" rows={3} required className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3" />
             </div>
             <div className="mt-4 space-y-2">
               <Label htmlFor="fa7s" className={labelCls}>Inspection Report — فحص (optional)</Label>
-              <Textarea id="fa7s" name="fa7s" rows={3} placeholder="Vehicle inspection details..." className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3" />
+              <Textarea id="fa7s" name="fa7s" rows={3} className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3" />
             </div>
             <div className="mt-4 space-y-2">
               <Label htmlFor="detailedSpecs" className={labelCls}>Features & Specs (one per line)</Label>
-              <Textarea id="detailedSpecs" name="detailedSpecs" rows={5} placeholder={"360° Camera\nAdaptive Cruise Control\nBurmester Sound"} className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3" />
+              <Textarea id="detailedSpecs" name="detailedSpecs" rows={5} className="bg-surface-2 border-line-control text-ink placeholder:text-ink-3" />
             </div>
           </div>
         </div>
@@ -161,19 +158,19 @@ export default function DealerVehicleForm() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="brand" className={labelCls}>Brand *</Label>
-                <Input id="brand" name="brand" required placeholder="Mercedes-Benz" className={inputCls} />
+                <Input id="brand" name="brand" required className={inputCls} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="model" className={labelCls}>Model *</Label>
-                <Input id="model" name="model" required placeholder="G63 AMG" className={inputCls} />
+                <Input id="model" name="model" required className={inputCls} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="price" className={labelCls}>Price (JOD) *</Label>
-                <Input id="price" name="price" type="number" required placeholder="115000" className={inputCls} />
+                <Input id="price" name="price" type="number" required className={inputCls} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="productionYear" className={labelCls}>Production Year *</Label>
-                <Input id="productionYear" name="productionYear" type="number" required placeholder="2024" className={inputCls} />
+                <Input id="productionYear" name="productionYear" type="number" required className={inputCls} />
               </div>
             </div>
           </div>
@@ -247,11 +244,11 @@ export default function DealerVehicleForm() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="engineCapacityCC" className={labelCls}>Engine CC *</Label>
-                <Input id="engineCapacityCC" name="engineCapacityCC" type="number" required placeholder="3982" className={inputCls} />
+                <Input id="engineCapacityCC" name="engineCapacityCC" type="number" required className={inputCls} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="mileageKm" className={labelCls}>Mileage (km) *</Label>
-                <Input id="mileageKm" name="mileageKm" type="number" required placeholder="12500" className={inputCls} />
+                <Input id="mileageKm" name="mileageKm" type="number" required className={inputCls} />
               </div>
             </div>
           </div>
@@ -260,7 +257,7 @@ export default function DealerVehicleForm() {
             <h2 className="text-sm font-semibold text-brand-strong uppercase tracking-wider mb-4">Contact</h2>
             <div className="space-y-2">
               <Label htmlFor="specificWhatsapp" className={labelCls}>Direct WhatsApp for this car (optional)</Label>
-              <Input id="specificWhatsapp" name="specificWhatsapp" placeholder="079XXXXXXX or 962791234567" className={inputCls} />
+              <Input id="specificWhatsapp" name="specificWhatsapp" className={inputCls} />
               <p className="text-xs text-ink-3">Leave blank to use your dealership&apos;s default WhatsApp number.</p>
             </div>
           </div>

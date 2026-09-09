@@ -2,11 +2,16 @@
 
 import { useState, useCallback, useRef } from "react";
 import Image from "next/image";
-import { uploadImage } from "@/lib/actions/upload";
+import {
+  ACCEPT_ATTR,
+  MAX_UPLOAD_BYTES,
+  formatBytes,
+  uploadToCloudinary,
+} from "@/lib/cloudinary-upload";
 import { Upload, X, Loader2, AlertCircle } from "lucide-react";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const MAX_SIZE = 5 * 1024 * 1024;
+const MAX_SIZE = MAX_UPLOAD_BYTES.image;
 
 export default function ImageDropzone({
   images,
@@ -31,7 +36,7 @@ export default function ImageDropzone({
           return;
         }
         if (file.size > MAX_SIZE) {
-          setError(`${file.name}: exceeds 5MB limit.`);
+          setError(`${file.name}: exceeds the ${formatBytes(MAX_SIZE)} limit.`);
           return;
         }
         valid.push(file);
@@ -42,16 +47,12 @@ export default function ImageDropzone({
       setUploading(true);
       const newUrls: string[] = [];
 
-      for (const file of valid) {
-        const form = new FormData();
-        form.append("file", file);
-        const result = await uploadImage(form);
-        if (result.success) {
-          newUrls.push(result.url);
-        } else {
-          setError(result.error);
-          break;
+      try {
+        for (const file of valid) {
+          newUrls.push(await uploadToCloudinary(file, "image"));
         }
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Upload failed.");
       }
 
       if (newUrls.length > 0) {
@@ -93,7 +94,7 @@ export default function ImageDropzone({
         <input
           ref={inputRef}
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept={ACCEPT_ATTR.image}
           multiple
           className="hidden"
           onChange={(e) => e.target.files && processFiles(e.target.files)}
@@ -109,7 +110,7 @@ export default function ImageDropzone({
           {uploading ? "Uploading..." : "Drop images here or click to browse"}
         </p>
         <p className="text-xs text-ink-3 mt-1">
-          JPEG, PNG, WebP &middot; Max 5MB each
+          JPEG, PNG, WebP &middot; Max {formatBytes(MAX_SIZE)} each
         </p>
       </div>
 

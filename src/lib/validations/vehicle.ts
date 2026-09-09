@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { instagramEmbedUrl } from "@/lib/instagram";
 
 export const VehicleStatusEnum = z.enum(["ON_SALE", "SOLD"]);
 export const ConditionEnum = z.enum(["NEW", "USED"]);
@@ -15,7 +16,16 @@ export const createVehicleSchema = z.object({
   dealershipId: z.string().cuid().optional(),
 
   videoUrl: z.string().url().optional().or(z.literal("")),
-  instagramVideoUrl: z.string().url().optional().or(z.literal("")),
+  // Rejected here rather than left to render as nothing on the detail page:
+  // a profile or story link looks saved but never shows a reel.
+  instagramVideoUrl: z
+    .string()
+    .url()
+    .refine((v) => instagramEmbedUrl(v) !== null, {
+      message: "Use an Instagram post or reel link, like instagram.com/reel/…",
+    })
+    .optional()
+    .or(z.literal("")),
   imageUrls: z.array(z.string().url()).min(1, "At least one image is required"),
 
   brand: z.string().min(1, "Brand is required").max(50),

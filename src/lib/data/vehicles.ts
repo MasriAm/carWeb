@@ -253,8 +253,18 @@ export async function getFeaturedVehicles(take = 8): Promise<ListVehicle[]> {
 }
 
 /**
- * Cars a buyer looking at this one would also consider: same body type within
- * 20% of the price, then anything from the same brand to fill the row.
+ * Cars a buyer looking at this one would also consider, ranked by how close
+ * the asking price is.
+ *
+ * Price is the whole criterion. Falling back to the same brand, as this used
+ * to, filled the row with the same badge at unrelated money — a 20,000 JOD
+ * C-Class under a 130,000 JOD G63 — which says nothing about what else the
+ * buyer's budget reaches. Body type only breaks ties between equally close
+ * prices.
+ *
+ * Walking outward from the price in each direction keeps this on the price
+ * index; the `take` nearest below and `take` nearest above always contain the
+ * `take` nearest overall.
  */
 export async function getSimilarVehicles(
   vehicleId: string,
@@ -266,39 +276,43 @@ export async function getSimilarVehicles(
 
   const base = await db.vehicle.findUnique({
     where: { id: vehicleId },
-    select: { id: true, brand: true, bodyType: true, price: true },
+    select: { id: true, bodyType: true, price: true },
   });
   if (!base) return [];
 
-  const nearPrice = await db.vehicle.findMany({
-    where: {
-      status: "ON_SALE",
-      id: { not: base.id },
-      bodyType: base.bodyType,
-      price: {
-        gte: Math.round(base.price * 0.8),
-        lte: Math.round(base.price * 1.2),
+  const [cheaper, dearer] = await Promise.all([
+    db.vehicle.findMany({
+      where: {
+        status: "ON_SALE",
+        id: { not: base.id },
+        price: { lte: base.price },
       },
-    },
-    orderBy: [{ isPromoted: "desc" }, { publicationDate: "desc" }],
-    take,
-    select: listSelect,
-  });
+      orderBy: [{ price: "desc" }, { id: "asc" }],
+      take,
+      select: listSelect,
+    }),
+    db.vehicle.findMany({
+      where: {
+        status: "ON_SALE",
+        id: { not: base.id },
+        price: { gt: base.price },
+      },
+      orderBy: [{ price: "asc" }, { id: "asc" }],
+      take,
+      select: listSelect,
+    }),
+  ]);
 
-  if (nearPrice.length >= take) return nearPrice;
-
-  const sameBrand = await db.vehicle.findMany({
-    where: {
-      status: "ON_SALE",
-      brand: base.brand,
-      id: { notIn: [base.id, ...nearPrice.map((v) => v.id)] },
-    },
-    orderBy: [{ isPromoted: "desc" }, { publicationDate: "desc" }],
-    take: take - nearPrice.length,
-    select: listSelect,
-  });
-
-  return [...nearPrice, ...sameBrand];
+  return [...cheaper, ...dearer]
+    .sort((a, b) => {
+      const byPrice =
+        Math.abs(a.price - base.price) - Math.abs(b.price - base.price);
+      if (byPrice !== 0) return byPrice;
+      const aBody = a.bodyType === base.bodyType ? 0 : 1;
+      const bBody = b.bodyType === base.bodyType ? 0 : 1;
+      return aBody - bBody;
+    })
+    .slice(0, take);
 }
 
 /**

@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { SearchX } from "lucide-react";
 import {
-  getBrandFacets,
   getBrandsAlphabetical,
   getMarketBounds,
   getModelsForBrands,
@@ -22,6 +21,7 @@ import CarGridSkeleton from "@/components/cars/car-grid-skeleton";
 import Pagination from "@/components/cars/pagination";
 import ActiveFilterChips from "@/components/cars/filters/active-filter-chips";
 import FilterPanel from "@/components/cars/filters/filter-panel";
+import ModelFilter from "@/components/cars/filters/model-filter";
 import MobileFilters from "@/components/cars/filters/mobile-filters";
 import SearchInput from "@/components/cars/filters/search-input";
 import SortSelect from "@/components/cars/filters/sort-select";
@@ -106,26 +106,34 @@ export default function CarsPage({
 }
 
 /* ─── Filter slots ──────────────────────────────────────────────────────
-   Facets are cached; the model list depends on which brands are selected,
-   so these read searchParams and stream in behind their own boundary.
+   The brand list and the market bounds are the same for every visitor, so
+   the panel builds from cached data and prerenders with the page. Only the
+   model list depends on which brands are selected. Keeping it in its own
+   boundary is what stops a filter tap from re-rendering and re-sending the
+   whole sidebar.
    ─────────────────────────────────────────────────────────────────────── */
 
-async function loadFacets(searchParams: Promise<SearchParams>) {
+async function ModelFilterSlot({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
   const raw = await searchParams;
-  const selectedBrands = readList(
-    new URLSearchParams(
-      Object.entries(raw)
-        .filter(([, v]) => typeof v === "string")
-        .map(([k, v]) => [k, v as string])
-    ),
-    "brand"
+  const params = new URLSearchParams(
+    Object.entries(raw)
+      .filter(([, v]) => typeof v === "string")
+      .map(([k, v]) => [k, v as string])
   );
+  const models = await getModelsForBrands(readList(params, "brand"));
+  return <ModelFilter models={models} />;
+}
 
-  const [bounds, models] = await Promise.all([
-    getMarketBounds(),
-    getModelsForBrands(selectedBrands),
-  ]);
-  return { bounds, models };
+function modelSlotFor(searchParams: Promise<SearchParams>) {
+  return (
+    <Suspense fallback={null}>
+      <ModelFilterSlot searchParams={searchParams} />
+    </Suspense>
+  );
 }
 
 async function SidebarFilterSlot({
@@ -133,11 +141,17 @@ async function SidebarFilterSlot({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const [brands, { bounds, models }] = await Promise.all([
+  const [brands, bounds] = await Promise.all([
     getBrandsAlphabetical(),
-    loadFacets(searchParams),
+    getMarketBounds(),
   ]);
-  return <FilterPanel brands={brands} bounds={bounds} models={models} />;
+  return (
+    <FilterPanel
+      brands={brands}
+      bounds={bounds}
+      modelSlot={modelSlotFor(searchParams)}
+    />
+  );
 }
 
 async function MobileFilterSlot({
@@ -145,11 +159,17 @@ async function MobileFilterSlot({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const [brands, { bounds, models }] = await Promise.all([
-    getBrandFacets(),
-    loadFacets(searchParams),
+  const [brands, bounds] = await Promise.all([
+    getBrandsAlphabetical(),
+    getMarketBounds(),
   ]);
-  return <MobileFilters brands={brands} bounds={bounds} models={models} />;
+  return (
+    <MobileFilters
+      brands={brands}
+      bounds={bounds}
+      modelSlot={modelSlotFor(searchParams)}
+    />
+  );
 }
 
 /* ─── Results (depends on the request) ──────────────────────────────── */
