@@ -12,39 +12,61 @@
     "  \"Honda Civic\": [\"https://images.unsplash.com/photo-XXXXXXXXXXXXX\"]"
   ],
   "_provenance": [
+    "This file is now the only source of listing photos. Eight listings used",
+    "to carry their own inline imageUrls in seed.ts, which bypassed the",
+    "checking done here — and 23 of those 25 photos showed a different car:",
+    "a Ferrari and an Audi R8 on the Kia EV6, a McLaren, a Camaro and a",
+    "Mustang on the Range Rover, two BMW M4s and a Range Rover on the Land",
+    "Cruiser, a Bugatti Chiron and a 911 on the Macan, a Tesla and a Nissan",
+    "Juke on the G63. Two of the two dozen were right and were moved here",
+    "(the BMW M4 and the Toyota Camry); the rest are gone and those listings",
+    "now show their body-type silhouette. Two more were dead 404s on",
+    "Unsplash and rendered as broken images.",
+    "",
     "Every URL below was downloaded and looked at before being pasted here.",
     "Photos that turned out to show a different car were discarded: a Hyundai",
     "Sonata offered for the Elantra, a Toyota Tacoma for the Hilux, a Golf R",
     "and a plain Mk7.5 Golf for the GTI, a Civic Type R for the Civic, a GR",
     "Corolla and an AE86 for the Corolla, a BYD Dolphin for the Atto 3.",
     "",
-    "Five listings are still empty because Unsplash has no photo of that car:",
+    "Seven listings are empty because no photo of that car survived checking:",
     "Kia Rio (only sedans of other generations), Nissan Sunny, Mitsubishi",
     "Lancer (only Evolution models, which is a different car), Chevrolet",
-    "Malibu, BYD Atto 3 (only Dolphin, Seal and Song). They keep the",
-    "body-type silhouette, which is honest about what it does not know.",
+    "Malibu, BYD Atto 3 (only Dolphin, Seal and Song), plus the Elantra and",
+    "Golf GTI cleared below. They keep the body-type silhouette, which is",
+    "honest about what it does not know.",
     "",
-    "Right model, different generation than the listing year — swap these out",
-    "if an exact-year photo turns up:",
-    "  Hyundai Elantra — listing is 2019 (AD); photos are CN7 (2021+)",
-    "  Volkswagen Golf GTI — listing is 2019 (Mk7.5); photos are Mk6",
-    "  Ford Mustang — the orange car is a 2018+ facelift GT and matches;",
-    "                 the other two are 2015-17 S550 GTs",
+    "Cleared on review. Each showed a different generation than the listing",
+    "year, which on a car listing reads as a different car — worse than no",
+    "photo, because it looks like the seller is showing something they are",
+    "not selling:",
+    "  Hyundai Elantra — listing is 2019 (AD); all three photos were the",
+    "                    CN7 (2021+), a visibly sharper, different body.",
+    "  Volkswagen Golf GTI — listing is 2019 (Mk7.5); both photos were the",
+    "                        Mk6 (2009-13), a decade and a full generation",
+    "                        off, with completely different headlights.",
+    "  Toyota Corolla — dropped one chrome front-corner macro that does not",
+    "                   match the car in the other two photos and reads as",
+    "                   an Avalon or an Asian-market Altis.",
+    "",
+    "Kept: right model, and no more than a facelift from the listing year.",
+    "  Ford Mustang — one 2018+ facelift GT, two 2015-17 S550 GTs",
     "  MG ZS EV — listing is 2023; photos are the 2019-21 pre-facelift",
     "",
-    "  Removed after a second look: a 10th-gen Civic hatchback that was",
-    "  correctly identified as a Civic but sits on a listing whose bodyType",
-    "  is SEDAN, so it would show a hatchback to anyone filtering for sedans."
+    "  Removed earlier: a 10th-gen Civic hatchback that was correctly",
+    "  identified as a Civic but sits on a listing whose bodyType is SEDAN,",
+    "  so it would show a hatchback to anyone filtering for sedans."
   ],
-  "Hyundai Elantra": [
-    "https://images.unsplash.com/photo-1721002913303-7dac5b3b69c4?w=1600&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1707325653284-49057765e44c?w=1600&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1724217556692-5388bf475634?w=1600&q=80&auto=format&fit=crop"
+  "BMW M4 Competition": [
+    "https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=1600&q=80&auto=format&fit=crop"
   ],
+  "Toyota Camry Hybrid": [
+    "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=1600&q=80&auto=format&fit=crop"
+  ],
+  "Hyundai Elantra": [],
   "Kia Rio": [],
   "Toyota Corolla": [
     "https://images.unsplash.com/photo-1623869675781-80aa31012a5a?w=1600&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1686082344567-6f0dbee591f5?w=1600&q=80&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1691994877641-36e673ad4236?w=1600&q=80&auto=format&fit=crop"
   ],
   "Nissan Sunny": [],
@@ -80,10 +102,7 @@
     "https://images.unsplash.com/photo-1631377875413-b1e3e660bfa2?w=1600&q=80&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1714213624189-9a9fc8a0736a?w=1600&q=80&auto=format&fit=crop"
   ],
-  "Volkswagen Golf GTI": [
-    "https://images.unsplash.com/photo-1679251930798-58f80d64352a?w=1600&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1679252069474-0a17dbebf1f1?w=1600&q=80&auto=format&fit=crop"
-  ],
+  "Volkswagen Golf GTI": [],
   "Ford Mustang": [
     "https://images.unsplash.com/photo-1649274749460-5851a718dd2a?w=1600&q=80&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1600138336992-d9fcd4280aa5?w=1600&q=80&auto=format&fit=crop",
