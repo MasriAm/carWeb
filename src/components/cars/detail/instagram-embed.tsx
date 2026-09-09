@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Play } from "lucide-react";
 import { InstagramIcon } from "@/components/ui/brand-icons";
+import { instagramEmbedUrl } from "@/lib/instagram";
 
 /**
  * Click-to-load Instagram reel.
@@ -13,7 +14,11 @@ import { InstagramIcon } from "@/components/ui/brand-icons";
  */
 export default function InstagramEmbed({ url }: { url: string }) {
   const [loaded, setLoaded] = useState(false);
-  const embedSrc = `${url.replace(/\/$/, "")}/embed`;
+  const embedSrc = instagramEmbedUrl(url);
+
+  // A link that is not a post or reel would render an iframe showing a login
+  // wall. Nothing is better than that.
+  if (!embedSrc) return null;
 
   return (
     <section className="rounded-card border border-line bg-surface p-5">
